@@ -10,10 +10,15 @@
                     "description": "Personal Access Token",
                     "type": "string",
                     "pattern": "^[a-zA-Z0-9]+\\.[a-zA-Z0-9]{24}\\.[a-zA-Z0-9]{64}$"
+                },
+                "DynatraceEndpoint": {
+                    "description": "Endpoint URL to access Dynatrace API",
+                    "type": "string"
                 }
             },
             "required": [
-                "AccessToken"
+                "AccessToken",
+                "Endpoint"
             ],
             "additionalProperties": false
         },
@@ -179,6 +184,10 @@
             "type": "string",
             "pattern": "^[a-zA-Z0-9]+\\.[a-zA-Z0-9]{24}\\.[a-zA-Z0-9]{64}$"
         },
+        "DynatraceEndpoint": {
+            "description": "Endpoint URL to access Dynatrace API",
+            "type": "string"
+        },
         "Metadata": {
             "$ref": "#/definitions/Metadata"
         },
@@ -195,8 +204,14 @@
     },
     "additionalProperties": false,
     "required": [
+        "DynatraceAccess",
+        "DynatraceEndpoint",
         "DashboardMetadata",
         "Tiles"
+    ],
+    "createOnlyProperties": [
+        "DynatraceAccess",
+        "DynatraceEndpoint"
     ],
     "readOnlyProperties": [
         "/properties/Id"

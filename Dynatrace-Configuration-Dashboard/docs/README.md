@@ -13,6 +13,7 @@ To declare this entity in your AWS CloudFormation template, use the following sy
     "Type" : "Dynatrace::Configuration::Dashboard",
     "Properties" : {
         "<a href="#dynatraceaccess" title="DynatraceAccess">DynatraceAccess</a>" : <i>String</i>,
+        "<a href="#dynatraceendpoint" title="DynatraceEndpoint">DynatraceEndpoint</a>" : <i>String</i>,
         "<a href="#metadata" title="Metadata">Metadata</a>" : <i><a href="metadata.md">Metadata</a></i>,
         "<a href="#dashboardmetadata" title="DashboardMetadata">DashboardMetadata</a>" : <i><a href="dashboardmetadata.md">DashboardMetadata</a></i>,
         "<a href="#tiles" title="Tiles">Tiles</a>" : <i>[ String, ... ]</i>
@@ -26,6 +27,7 @@ To declare this entity in your AWS CloudFormation template, use the following sy
 Type: Dynatrace::Configuration::Dashboard
 Properties:
     <a href="#dynatraceaccess" title="DynatraceAccess">DynatraceAccess</a>: <i>String</i>
+    <a href="#dynatraceendpoint" title="DynatraceEndpoint">DynatraceEndpoint</a>: <i>String</i>
     <a href="#metadata" title="Metadata">Metadata</a>: <i><a href="metadata.md">Metadata</a></i>
     <a href="#dashboardmetadata" title="DashboardMetadata">DashboardMetadata</a>: <i><a href="dashboardmetadata.md">DashboardMetadata</a></i>
     <a href="#tiles" title="Tiles">Tiles</a>: <i>
@@ -38,11 +40,21 @@ Properties:
 
 Personal Access Token
 
-_Required_: No
+_Required_: Yes
 
 _Type_: String
 
 _Pattern_: <code>^[a-zA-Z0-9]+\.[a-zA-Z0-9]{24}\.[a-zA-Z0-9]{64}$</code>
+
+_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
+
+#### DynatraceEndpoint
+
+Endpoint URL to access Dynatrace API
+
+_Required_: Yes
+
+_Type_: String
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 

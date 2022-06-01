@@ -3,7 +3,6 @@ import {
     BaseResource,
     exceptions,
     handlerEvent,
-    HandlerErrorCode,
     LoggerProxy,
     OperationStatus,
     Optional,
@@ -11,11 +10,45 @@ import {
     ResourceHandlerRequest,
     SessionProxy,
 } from '@amazon-web-services-cloudformation/cloudformation-cli-typescript-lib';
-import { ResourceModel } from './models';
+import {ResourceModel} from './models';
+import {DynatraceClient, DynatraceClientError} from "../../Common/dynatrace-client";
 
-interface CallbackContext extends Record<string, any> {}
+interface CallbackContext extends Record<string, any> {
+}
 
 class Resource extends BaseResource<ResourceModel> {
+
+    private async getDashboard(model: ResourceModel, request: ResourceHandlerRequest<ResourceModel>): Promise<ResourceModel> {
+        try {
+            const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess)
+                .doRequest('GET', `/api/config/v1/dashboards/${model.id}`);
+            return await response.json();
+        } catch (e) {
+            this.processDynatraceClientError(e, request);
+        }
+    }
+
+    private async assertDashboardExists(model: ResourceModel, request: ResourceHandlerRequest<ResourceModel>) {
+        try {
+            await this.getDashboard(model, request);
+        } catch (e) {
+            return false;
+        }
+        return true;
+    }
+
+    private processDynatraceClientError(e: DynatraceClientError, request: ResourceHandlerRequest<ResourceModel>) {
+        switch (e.status) {
+            case 401:
+                throw new exceptions.AccessDenied(`Access denied, please check your API token: ${e.message}`);
+            case 404:
+                throw new exceptions.NotFound(this.typeName, request.logicalResourceIdentifier);
+            case 429:
+                throw new exceptions.ServiceLimitExceeded(e.message);
+            default:
+                throw new exceptions.InternalFailure(`Unexpected error occurred while talking to the Dynatrace API (HTTP status ${e.status}) => ${e.message}`);
+        }
+    }
 
     /**
      * CloudFormation invokes this handler when the resource is initially created
@@ -35,24 +68,22 @@ class Resource extends BaseResource<ResourceModel> {
         logger: LoggerProxy
     ): Promise<ProgressEvent<ResourceModel, CallbackContext>> {
         const model = new ResourceModel(request.desiredResourceState);
-        const progress = ProgressEvent.progress<ProgressEvent<ResourceModel, CallbackContext>>(model);
-        // TODO: put code here
 
-        // Example:
-        try {
-            if (session instanceof SessionProxy) {
-                const client = session.client('S3');
-            }
-            // Setting Status to success will signal to CloudFormation that the operation is complete
-            progress.status = OperationStatus.Success;
-        } catch(err) {
-            logger.log(err);
-            // exceptions module lets CloudFormation know the type of failure that occurred
-            throw new exceptions.InternalFailure(err.message);
-            // this can also be done by returning a failed progress event
-            // return ProgressEvent.failed(HandlerErrorCode.InternalFailure, err.message);
+        if (await this.assertDashboardExists(model, request)) {
+            throw new exceptions.AlreadyExists(this.typeName, request.logicalResourceIdentifier);
         }
-        return progress;
+
+        try {
+            const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess)
+                .doRequest('POST', `/api/config/v1/dashboards`);
+            const dashboard = await response.json() as ResourceModel;
+
+            model.id = dashboard.id;
+
+            return ProgressEvent.success<ProgressEvent<ResourceModel, CallbackContext>>(model);
+        } catch (e) {
+            this.processDynatraceClientError(e, request);
+        }
     }
 
     /**
@@ -73,10 +104,19 @@ class Resource extends BaseResource<ResourceModel> {
         logger: LoggerProxy
     ): Promise<ProgressEvent<ResourceModel, CallbackContext>> {
         const model = new ResourceModel(request.desiredResourceState);
-        const progress = ProgressEvent.progress<ProgressEvent<ResourceModel, CallbackContext>>(model);
-        // TODO: put code here
-        progress.status = OperationStatus.Success;
-        return progress;
+
+        if (!(await this.assertDashboardExists(model, request))) {
+            throw new exceptions.NotFound(this.typeName, request.logicalResourceIdentifier);
+        }
+
+        try {
+            await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess)
+                .doRequest('PUT', `/api/config/v1/dashboards/${model.id}`, model);
+
+            return ProgressEvent.success<ProgressEvent<ResourceModel, CallbackContext>>(model);
+        } catch (e) {
+            this.processDynatraceClientError(e, request);
+        }
     }
 
     /**
@@ -98,10 +138,19 @@ class Resource extends BaseResource<ResourceModel> {
         logger: LoggerProxy
     ): Promise<ProgressEvent<ResourceModel, CallbackContext>> {
         const model = new ResourceModel(request.desiredResourceState);
-        const progress = ProgressEvent.progress<ProgressEvent<ResourceModel, CallbackContext>>();
-        // TODO: put code here
-        progress.status = OperationStatus.Success;
-        return progress;
+
+        if (!(await this.assertDashboardExists(model, request))) {
+            throw new exceptions.NotFound(this.typeName, request.logicalResourceIdentifier);
+        }
+
+        try {
+            await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess)
+                .doRequest('DELETE', `/api/config/v1/dashboards/${model.id}`);
+
+            return ProgressEvent.success<ProgressEvent<ResourceModel, CallbackContext>>();
+        } catch (e) {
+            this.processDynatraceClientError(e, request);
+        }
     }
 
     /**
@@ -122,9 +171,15 @@ class Resource extends BaseResource<ResourceModel> {
         logger: LoggerProxy
     ): Promise<ProgressEvent<ResourceModel, CallbackContext>> {
         const model = new ResourceModel(request.desiredResourceState);
-        // TODO: put code here
-        const progress = ProgressEvent.success<ProgressEvent<ResourceModel, CallbackContext>>(model);
-        return progress;
+
+        const dashboard = await this.getDashboard(model, request);
+
+        model.id = dashboard.id;
+        model.metadata = dashboard.metadata;
+        model.dashboardMetadata = dashboard.dashboardMetadata;
+        model.tiles = dashboard.tiles;
+
+        return ProgressEvent.success<ProgressEvent<ResourceModel, CallbackContext>>(model);
     }
 
     /**
@@ -145,12 +200,18 @@ class Resource extends BaseResource<ResourceModel> {
         logger: LoggerProxy
     ): Promise<ProgressEvent<ResourceModel, CallbackContext>> {
         const model = new ResourceModel(request.desiredResourceState);
-        // TODO: put code here
-        const progress = ProgressEvent.builder<ProgressEvent<ResourceModel, CallbackContext>>()
-            .status(OperationStatus.Success)
-            .resourceModels([model])
-            .build();
-        return progress;
+
+        try {
+            const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess)
+                .doRequest('GET', `/api/config/v1/dashboards`);
+
+            return ProgressEvent.builder<ProgressEvent<ResourceModel, CallbackContext>>()
+                .status(OperationStatus.Success)
+                .resourceModels(await response.json())
+                .build();
+        } catch (e) {
+            this.processDynatraceClientError(e, request);
+        }
     }
 }
 

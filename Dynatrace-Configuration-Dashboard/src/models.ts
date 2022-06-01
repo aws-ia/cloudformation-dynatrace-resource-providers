@@ -20,6 +20,15 @@ export class ResourceModel extends BaseModel {
         }
     )
     dynatraceAccess?: Optional<string>;
+    @Expose({ name: 'DynatraceEndpoint' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'dynatraceEndpoint', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    dynatraceEndpoint?: Optional<string>;
     @Expose({ name: 'Metadata' })
     @Type(() => Metadata)
     metadata?: Optional<Metadata>;
