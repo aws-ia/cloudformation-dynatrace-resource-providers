@@ -32,6 +32,18 @@ export class ResourceModel extends BaseModel {
     @Expose({ name: 'Metadata' })
     @Type(() => Metadata)
     metadata?: Optional<Metadata>;
+    @Expose({ name: 'DashboardMetadata' })
+    @Type(() => DashboardMetadata)
+    dashboardMetadata?: Optional<DashboardMetadata>;
+    @Expose({ name: 'Tiles' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'tiles', value, obj, [Array]),
+        {
+            toClassOnly: true,
+        }
+    )
+    tiles?: Optional<Array<string>>;
     @Expose({ name: 'Id' })
     @Transform(
         (value: any, obj: any) =>
@@ -41,18 +53,15 @@ export class ResourceModel extends BaseModel {
         }
     )
     id?: Optional<string>;
-    @Expose({ name: 'DashboardMetadata' })
-    @Type(() => DashboardMetadata)
-    dashboardMetadata?: Optional<DashboardMetadata>;
-    @Expose({ name: 'Tiles' })
+    @Expose({ name: 'Dashboard' })
     @Transform(
         (value: any, obj: any) =>
-            transformValue(String, 'tiles', value, obj, [Set]),
+            transformValue(Object, 'dashboard', value, obj, [Map]),
         {
             toClassOnly: true,
         }
     )
-    tiles?: Optional<Set<string>>;
+    dashboard?: Optional<Map<string, object>>;
 
     @Exclude()
     public getPrimaryIdentifier(): Dict {
@@ -80,21 +89,21 @@ export class Metadata extends BaseModel {
     @Expose({ name: 'ConfigurationVersions' })
     @Transform(
         (value: any, obj: any) =>
-            transformValue(Integer, 'configurationVersions', value, obj, [Set]),
+            transformValue(Integer, 'configurationVersions', value, obj, [Array]),
         {
             toClassOnly: true,
         }
     )
-    configurationVersions?: Optional<Set<integer>>;
+    configurationVersions?: Optional<Array<integer>>;
     @Expose({ name: 'CurrentConfigurationVersions' })
     @Transform(
         (value: any, obj: any) =>
-            transformValue(String, 'currentConfigurationVersions', value, obj, [Set]),
+            transformValue(String, 'currentConfigurationVersions', value, obj, [Array]),
         {
             toClassOnly: true,
         }
     )
-    currentConfigurationVersions?: Optional<Set<string>>;
+    currentConfigurationVersions?: Optional<Array<string>>;
     @Expose({ name: 'ClusterVersion' })
     @Transform(
         (value: any, obj: any) =>
@@ -159,9 +168,9 @@ export class DashboardMetadata extends BaseModel {
         }
     )
     preset?: Optional<boolean>;
-    @Expose({ name: 'DynamicFilter' })
-    @Type(() => DynamicFilter)
-    dynamicFilter?: Optional<DynamicFilter>;
+    @Expose({ name: 'DynamicFilters' })
+    @Type(() => DynamicFilters)
+    dynamicFilters?: Optional<DynamicFilters>;
     @Expose({ name: 'TilesNameSize' })
     @Transform(
         (value: any, obj: any) =>
@@ -227,8 +236,8 @@ export class EntityShortRepresentation extends BaseModel {
 
 }
 
-export class DynamicFilter extends BaseModel {
-    ['constructor']: typeof DynamicFilter;
+export class DynamicFilters extends BaseModel {
+    ['constructor']: typeof DynamicFilters;
 
 
     @Expose({ name: 'Filters' })
@@ -240,15 +249,15 @@ export class DynamicFilter extends BaseModel {
         }
     )
     filters?: Optional<Set<string>>;
-    @Expose({ name: 'TagSuggestionType' })
+    @Expose({ name: 'TagSuggestionTypes' })
     @Transform(
         (value: any, obj: any) =>
-            transformValue(String, 'tagSuggestionType', value, obj, [Set]),
+            transformValue(String, 'tagSuggestionTypes', value, obj, [Set]),
         {
             toClassOnly: true,
         }
     )
-    tagSuggestionType?: Optional<Set<string>>;
+    tagSuggestionTypes?: Optional<Set<string>>;
 
 }
 

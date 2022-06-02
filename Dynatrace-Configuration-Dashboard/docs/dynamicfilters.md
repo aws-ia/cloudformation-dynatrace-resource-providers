@@ -1,4 +1,4 @@
-# Dynatrace::Configuration::Dashboard DynamicFilter
+# Dynatrace::Configuration::Dashboard DynamicFilters
 
 Dashboard filter configuration of a dashboard.
 
@@ -11,7 +11,7 @@ To declare this entity in your AWS CloudFormation template, use the following sy
 <pre>
 {
     "<a href="#filters" title="Filters">Filters</a>" : <i>[ String, ... ]</i>,
-    "<a href="#tagsuggestiontype" title="TagSuggestionType">TagSuggestionType</a>" : <i>[ String, ... ]</i>
+    "<a href="#tagsuggestiontypes" title="TagSuggestionTypes">TagSuggestionTypes</a>" : <i>[ String, ... ]</i>
 }
 </pre>
 
@@ -20,7 +20,7 @@ To declare this entity in your AWS CloudFormation template, use the following sy
 <pre>
 <a href="#filters" title="Filters">Filters</a>: <i>
       - String</i>
-<a href="#tagsuggestiontype" title="TagSuggestionType">TagSuggestionType</a>: <i>
+<a href="#tagsuggestiontypes" title="TagSuggestionTypes">TagSuggestionTypes</a>: <i>
       - String</i>
 </pre>
 
@@ -36,7 +36,7 @@ _Type_: List of String
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
-#### TagSuggestionType
+#### TagSuggestionTypes
 
 A set of entities applied for tag filter suggestions. You can fetch the list of possible values with the GET all entity types request.
 

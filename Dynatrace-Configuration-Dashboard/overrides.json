@@ -1,0 +1,58 @@
+{
+  "CREATE": {
+    "/DynatraceAccess": "dt0c01.IKSPCAGPNVGW6S3F3QABJS7N.WQ7XFOPLVRFVVU7C5LK6LL6YOMJWHJYW6ISECTQGJIUTX4AKEZRGTOHJYPRQG2J3",
+    "/DynatraceEndpoint": "https://rkq46655.live.dynatrace.com",
+    "/Metadata": {
+      "ConfigurationVersions": [4, 2],
+      "ClusterVersion": "Mock version"
+    },
+    "/DashboardMetadata": {
+      "Name": "End-to-End Dashboard (created by Dynatrace::Configuration::Dashboard)",
+      "Owner": "CloudFormation",
+      "Shared": true,
+      "Tags": [
+        "CloudFormation"
+      ],
+      "DynamicFilters": {
+        "Filters": [
+          "SERVICE_TYPE"
+        ],
+        "TagSuggestionTypes": [
+          "HOST_LIKE"
+        ]
+      }
+    },
+    "/Tiles": [
+      "{\"name\":\"Hosts\",\"tileType\":\"HEADER\",\"configured\":true,\"bounds\":{\"top\":0,\"left\":0,\"width\":304,\"height\":38},\"tileFilter\":{}}",
+      "{\"name\":\"Applications\",\"tileType\":\"HEADER\",\"configured\":true,\"bounds\":{\"top\":0,\"left\":304,\"width\":304,\"height\":38},\"tileFilter\":{}}",
+      "{\"name\":\"Host health\",\"tileType\":\"HOSTS\",\"configured\":true,\"bounds\":{\"top\":38,\"left\":0,\"width\":304,\"height\":304},\"tileFilter\":{\"managementZone\":{\"id\":\"3438779970106539862\",\"name\":\"Example Management Zone\"}},\"chartVisible\":true}",
+      "{\"name\":\"Application health\",\"tileType\":\"APPLICATIONS\",\"configured\":true,\"bounds\":{\"top\":38,\"left\":304,\"width\":304,\"height\":304},\"tileFilter\":{\"managementZone\":{\"id\":\"3438779970106539862\",\"name\":\"Example Management Zone\"}},\"chartVisible\":true}"
+    ]
+  },
+  "UPDATE": {
+    "/Metadata": {
+      "ConfigurationVersions": [4, 2],
+      "ClusterVersion": "Mock version"
+    },
+    "/DashboardMetadata": {
+      "Name": "End-to-End Dashboard (created by Dynatrace::Configuration::Dashboard) – UPDATED",
+      "Owner": "Someone",
+      "Shared": false,
+      "Tags": [
+        "CloudFormation"
+      ],
+      "DynamicFilters": {
+        "Filters": [
+          "SERVICE_TYPE"
+        ],
+        "TagSuggestionTypes": [
+          "HOST_LIKE"
+        ]
+      }
+    },
+    "/Tiles": [
+      "{\"name\":\"Hosts\",\"tileType\":\"HEADER\",\"configured\":true,\"bounds\":{\"top\":0,\"left\":0,\"width\":304,\"height\":38},\"tileFilter\":{}}",
+      "{\"name\":\"Host health\",\"tileType\":\"HOSTS\",\"configured\":true,\"bounds\":{\"top\":38,\"left\":0,\"width\":304,\"height\":304},\"tileFilter\":{\"managementZone\":{\"id\":\"3438779970106539862\",\"name\":\"Example Management Zone\"}},\"chartVisible\":true}"
+    ]
+  }
+}
