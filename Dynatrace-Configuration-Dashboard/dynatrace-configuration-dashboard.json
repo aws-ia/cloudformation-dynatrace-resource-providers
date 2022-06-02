@@ -29,7 +29,7 @@
                 "ConfigurationVersions": {
                     "description": "A sorted list of the version numbers of the configuration.",
                     "type": "array",
-                    "uniqueItems": true,
+                    "uniqueItems": false,
                     "insertionOrder": false,
                     "items": {
                         "type": "integer"
@@ -38,7 +38,7 @@
                 "CurrentConfigurationVersions": {
                     "description": "A sorted list of version numbers of the configuration.",
                     "type": "array",
-                    "uniqueItems": true,
+                    "uniqueItems": false,
                     "insertionOrder": false,
                     "items": {
                         "type": "string"
@@ -83,8 +83,8 @@
                     "description": "The dashboard is a preset (true) or a custom (false) dashboard.",
                     "type": "boolean"
                 },
-                "DynamicFilter": {
-                    "$ref": "#/definitions/DynamicFilter"
+                "DynamicFilters": {
+                    "$ref": "#/definitions/DynamicFilters"
                 },
                 "TilesNameSize": {
                     "description": "The general size of the tiles tile. Default value is medium",
@@ -136,7 +136,7 @@
             },
             "additionalProperties": false
         },
-        "DynamicFilter": {
+        "DynamicFilters": {
             "description": "Dashboard filter configuration of a dashboard.",
             "type": "object",
             "properties": {
@@ -149,7 +149,7 @@
                         "type": "string"
                     }
                 },
-                "TagSuggestionType": {
+                "TagSuggestionTypes": {
                     "description": "A set of entities applied for tag filter suggestions. You can fetch the list of possible values with the GET all entity types request.\n\nOnly applicable if the filters set includes TAG_KEY:<tagname>.",
                     "type": "array",
                     "uniqueItems": true,
@@ -167,8 +167,8 @@
         "Tiles": {
             "description": "The list of tiles on the dashboard.",
             "type": "array",
-            "uniqueItems": true,
-            "insertionOrder": false,
+            "uniqueItems": false,
+            "insertionOrder": true,
             "items": {
                 "$ref": "#/definitions/Tile"
             }
@@ -176,6 +176,10 @@
         "Tile": {
             "description": "Configuration of a tile.\n\nThe actual set of fields depends on the type of the tile. Find the list of actual objects in the description of the tileType field or see Dashboards API - Tile JSON models (https://dt-url.net/2wc3spx).",
             "type": "string"
+        },
+        "Dashboard": {
+            "description": "Dashboard object returned by dynatrace",
+            "type": "object"
         }
     },
     "properties": {
@@ -191,15 +195,18 @@
         "Metadata": {
             "$ref": "#/definitions/Metadata"
         },
-        "Id": {
-            "description": "The ID of the dashboard.",
-            "type": "string"
-        },
         "DashboardMetadata": {
             "$ref": "#/definitions/DashboardMetadata"
         },
         "Tiles": {
             "$ref": "#/definitions/Tiles"
+        },
+        "Id": {
+            "description": "The ID of the dashboard.",
+            "type": "string"
+        },
+        "Dashboard": {
+            "$ref": "#/definitions/Dashboard"
         }
     },
     "additionalProperties": false,
@@ -210,11 +217,12 @@
         "Tiles"
     ],
     "createOnlyProperties": [
-        "DynatraceAccess",
-        "DynatraceEndpoint"
+        "/properties/DynatraceAccess",
+        "/properties/DynatraceEndpoint"
     ],
     "readOnlyProperties": [
-        "/properties/Id"
+        "/properties/Id",
+        "/properties/Dashboard"
     ],
     "primaryIdentifier": [
         "/properties/Id"
