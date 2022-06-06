@@ -10,27 +10,13 @@ import {
     ResourceHandlerRequest,
     SessionProxy,
 } from '@amazon-web-services-cloudformation/cloudformation-cli-typescript-lib';
-import {DashboardMetadata, Metadata, ResourceModel} from './models';
-import {DynatraceClient} from "./dynatrace-client";
+import {ResourceModel} from './models';
+import {ApiErrorResponse, DynatraceClient} from "../../Dynatrace-Common/src/dynatrace-client";
 import {AxiosError} from "axios";
 
 interface CallbackContext extends Record<string, any> {
 }
 
-type ApiErrorResponse = {
-    error: ApiError
-}
-type ApiError = {
-    code: number
-    message: string
-    constraintViolations?: ConstraintViolation[]
-}
-type ConstraintViolation = {
-    path: string
-    message: string
-    parameterLocation: string
-    location?: string
-}
 type DashboardResponse = {
     id: string
     metadata?: {}
@@ -78,7 +64,7 @@ class Resource extends BaseResource<ResourceModel> {
         }
     }
 
-    private transformModelToPayload(model: {[key: string]: any}) {
+    private transformModelToPayload(model: { [key: string]: any }) {
         return Object.keys(model).reduce((map, key) => {
             let value = model[key];
             if (value instanceof Object && !(value instanceof Array) && !(value instanceof Set)) {
@@ -89,7 +75,7 @@ class Resource extends BaseResource<ResourceModel> {
             }
             map[key.substring(0, 1).toLocaleLowerCase() + key.substring(1)] = value;
             return map;
-        }, {} as {[key: string]: any})
+        }, {} as { [key: string]: any })
     }
 
     private processDynatraceClientError(e: AxiosError, request: ResourceHandlerRequest<ResourceModel>) {

@@ -11,7 +11,7 @@ import {
     SessionProxy,
 } from '@amazon-web-services-cloudformation/cloudformation-cli-typescript-lib';
 import {ResourceModel} from './models';
-import {ApiErrorResponse, DynatraceClient, PaginatedResponseType} from "./dynatrace-client";
+import {ApiErrorResponse, DynatraceClient, PaginatedResponseType} from "../../Dynatrace-Common/src/dynatrace-client";
 import {AxiosError} from "axios";
 
 interface CallbackContext extends Record<string, any> {
