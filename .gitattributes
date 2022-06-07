@@ -1,2 +1,1 @@
-*/overrides.json filter=dynatrace-token
-*/overrides.json filter=dynatrace-endpoint
+*/overrides.json filter=dynatrace

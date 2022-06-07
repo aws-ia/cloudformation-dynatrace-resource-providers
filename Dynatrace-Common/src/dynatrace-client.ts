@@ -34,7 +34,7 @@ export class DynatraceClient {
             url: `${this.baseUrl}${path}`,
             params: params,
             method: method,
-            data: body,
+            data: this.sanitizePayload(body),
             headers: {
                 Authorization: `Api-Token ${this.apiToken}`,
                 'Content-type': 'application/json; charset=utf-8'
@@ -56,5 +56,23 @@ export class DynatraceClient {
         }
 
         return results;
+    }
+
+    private sanitizePayload(model: { [key: string]: any }) {
+        if (!model) {
+            return model;
+        }
+
+        return Object.keys(model).reduce((map, key) => {
+            let value = model[key];
+            if (value && value instanceof Object && !(value instanceof Array) && !(value instanceof Set)) {
+                value = this.sanitizePayload(value);
+            }
+            if (value && value instanceof Set) {
+                value = Array.of(...value);
+            }
+            map[key.substring(0, 1).toLocaleLowerCase() + key.substring(1)] = value;
+            return map;
+        }, {} as { [key: string]: any })
     }
 }
