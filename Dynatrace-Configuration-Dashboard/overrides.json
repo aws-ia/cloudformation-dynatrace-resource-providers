@@ -1,7 +1,7 @@
 {
   "CREATE": {
-    "/DynatraceAccess": "dt0c01.IKSPCAGPNVGW6S3F3QABJS7N.WQ7XFOPLVRFVVU7C5LK6LL6YOMJWHJYW6ISECTQGJIUTX4AKEZRGTOHJYPRQG2J3",
-    "/DynatraceEndpoint": "https://rkq46655.live.dynatrace.com",
+    "/DynatraceAccess": "<DYNATRACE_TOKEN>",
+    "/DynatraceEndpoint": "<DYNATRACE_ENDPOINT>",
     "/Metadata": {
       "ConfigurationVersions": [4, 2],
       "ClusterVersion": "Mock version"

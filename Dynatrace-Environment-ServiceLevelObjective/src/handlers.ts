@@ -11,78 +11,59 @@ import {
     SessionProxy,
 } from '@amazon-web-services-cloudformation/cloudformation-cli-typescript-lib';
 import {ResourceModel} from './models';
-import {ApiErrorResponse, DynatraceClient} from "../../Dynatrace-Common/src/dynatrace-client";
+import {ApiErrorResponse, DynatraceClient, PaginatedResponseType} from "../../Dynatrace-Common/src/dynatrace-client";
 import {AxiosError} from "axios";
 
 interface CallbackContext extends Record<string, any> {
 }
 
-type DashboardResponse = {
-    id: string
-    metadata?: {}
-    dashboardMetadata?: {}
-    tiles?: string[]
-}
+type PaginatedSlos = {
+    slo: ResourceModel[]
+} & PaginatedResponseType;
 
 class Resource extends BaseResource<ResourceModel> {
 
-    private async getDashboard(model: ResourceModel, request: ResourceHandlerRequest<ResourceModel>): Promise<DashboardResponse> {
+    private async get(model: ResourceModel, request: ResourceHandlerRequest<ResourceModel>) {
         try {
-            const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess).doRequest<DashboardResponse>(
-                'get',
-                `/api/config/v1/dashboards/${model.id}`);
-            return response.data;
+            const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess).doRequest<ResourceModel>('get', `/api/v2/slo/${model.id}`);
+            return new ResourceModel({
+                ...model,
+                id: response.data.id,
+                enabled: response.data.enabled,
+                burnRateMetricKey: response.data.burnRateMetricKey,
+                numeratorValue: response.data.numeratorValue,
+                denominatorValue: response.data.denominatorValue,
+                problemFilter: response.data.problemFilter,
+                relatedOpenProblems: response.data.relatedOpenProblems,
+                relatedTotalProblems: response.data.relatedTotalProblems,
+                evaluatedPercentage: response.data.evaluatedPercentage,
+                errorBudget: response.data.errorBudget,
+                metricKey: response.data.metricKey,
+                status: response.data.status,
+                error: response.data.error
+            });
         } catch (e) {
             this.processDynatraceClientError(e, request);
         }
     }
 
-    private async assertDashboardExists(model: ResourceModel, request: ResourceHandlerRequest<ResourceModel>) {
+    private async assertResourceExists(model: ResourceModel, request: ResourceHandlerRequest<ResourceModel>) {
         try {
-            await this.getDashboard(model, request);
+            await this.get(model, request);
         } catch (e) {
             return false;
         }
         return true;
     }
 
-    private assertAllTilesAreJson(tiles?: string[]) {
-        if (!tiles) {
-            return true;
-        }
-        const errors = tiles.map((tile, index) => {
-            try {
-                JSON.parse(tile);
-                return null;
-            } catch (e) {
-                return `Tile #${index + 1} is not a valid JSON: ${e.message}`;
+    private processDynatraceClientError(e: AxiosError<ApiErrorResponse>, request: ResourceHandlerRequest<ResourceModel>) {
+        let errorMessage = e.message;
+        if (e.response) {
+            const apiErrorResponse = e.response.data;
+            errorMessage = apiErrorResponse.error.message;
+            if (apiErrorResponse.error.constraintViolations) {
+                errorMessage += '\n' + apiErrorResponse.error.constraintViolations.map(cv => `[PATH: ${cv.path}] ${cv.message}`).join('\n');
             }
-        }).filter(error => error !== null);
-
-        if (errors.length > 0) {
-            throw new exceptions.InvalidRequest(`Input "Titles" is not valid:\n${errors.join('\n')}`);
-        }
-    }
-
-    private transformModelToPayload(model: { [key: string]: any }) {
-        return Object.keys(model).reduce((map, key) => {
-            let value = model[key];
-            if (value instanceof Object && !(value instanceof Array) && !(value instanceof Set)) {
-                value = this.transformModelToPayload(value);
-            }
-            if (value instanceof Set) {
-                value = Array.of(...value);
-            }
-            map[key.substring(0, 1).toLocaleLowerCase() + key.substring(1)] = value;
-            return map;
-        }, {} as { [key: string]: any })
-    }
-
-    private processDynatraceClientError(e: AxiosError, request: ResourceHandlerRequest<ResourceModel>) {
-        const apiErrorResponse = e.response.data as ApiErrorResponse;
-        let errorMessage = apiErrorResponse.error.message;
-        if (apiErrorResponse.error.constraintViolations) {
-            errorMessage += '\n' + apiErrorResponse.error.constraintViolations.map(cv => `[PATH: ${cv.path}] ${cv.message}`).join('\n');
         }
 
         const status = e.status
@@ -102,24 +83,18 @@ class Resource extends BaseResource<ResourceModel> {
         }
     }
 
-    private setModelFromResponse(model: ResourceModel, dashboardResponse: DashboardResponse) {
-        if (dashboardResponse.id) {
-            model.id = dashboardResponse.id
-        }
-
-        const dashboardMap = new Map();
-        if (dashboardResponse.metadata) {
-            dashboardMap.set('metadata', dashboardResponse.metadata);
-        }
-        if (dashboardResponse.dashboardMetadata) {
-            dashboardMap.set('dashboardMetadata', dashboardResponse.dashboardMetadata);
-        }
-        if (dashboardResponse.tiles) {
-            dashboardMap.set('tiles', dashboardResponse.tiles);
-        }
-        model.dashboard = dashboardMap;
-
-        return model;
+    private transformModelToPayload(model: {[key: string]: any}) {
+        return Object.keys(model).reduce((map, key) => {
+            let value = model[key];
+            if (value instanceof Object && !(value instanceof Array) && !(value instanceof Set)) {
+                value = this.transformModelToPayload(value);
+            }
+            if (value instanceof Set) {
+                value = Array.of(...value);
+            }
+            map[key.substring(0, 1).toLocaleLowerCase() + key.substring(1)] = value;
+            return map;
+        }, {} as {[key: string]: any})
     }
 
     /**
@@ -141,22 +116,18 @@ class Resource extends BaseResource<ResourceModel> {
     ): Promise<ProgressEvent<ResourceModel, CallbackContext>> {
         let model = new ResourceModel(request.desiredResourceState);
 
-        if (await this.assertDashboardExists(model, request)) {
+        if (await this.assertResourceExists(model, request)) {
             throw new exceptions.AlreadyExists(this.typeName, request.logicalResourceIdentifier);
         }
 
-        this.assertAllTilesAreJson(model.tiles);
-
         try {
-            const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess).doRequest<DashboardResponse>(
-                'post',
-                `/api/config/v1/dashboards`,
-                {
-                    metadata: this.transformModelToPayload(model.metadata.serialize()),
-                    dashboardMetadata: this.transformModelToPayload(model.dashboardMetadata.serialize()),
-                    tiles: model.tiles.map(tile => JSON.parse(tile))
-                });
-            model = this.setModelFromResponse(model, response.data);
+            const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess).doRequest<ResourceModel>('post', '/api/v2/slo', {}, this.transformModelToPayload({
+                ...model.toJSON(),
+                // This is required because a GET doesn't return disabled SLO!
+                enabled: true
+            }));
+            model.id = response.headers.location.substring(response.headers.location.lastIndexOf('/') + 1);
+            model = await this.get(model, request);
         } catch (e) {
             this.processDynatraceClientError(e, request);
         }
@@ -183,23 +154,9 @@ class Resource extends BaseResource<ResourceModel> {
     ): Promise<ProgressEvent<ResourceModel, CallbackContext>> {
         let model = new ResourceModel(request.desiredResourceState);
 
-        if (!(await this.assertDashboardExists(model, request))) {
-            throw new exceptions.NotFound(this.typeName, request.logicalResourceIdentifier);
-        }
-
-        this.assertAllTilesAreJson(model.tiles);
-
         try {
-            const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess).doRequest<DashboardResponse>(
-                'put',
-                `/api/config/v1/dashboards/${model.id}`,
-                {
-                    id: model.id,
-                    metadata: this.transformModelToPayload(model.metadata),
-                    dashboardMetadata: this.transformModelToPayload(model.dashboardMetadata),
-                    tiles: model.tiles.map(tile => JSON.parse(tile))
-                });
-            model = this.setModelFromResponse(model, response.data);
+            await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess).doRequest<ResourceModel>('put', `/api/v2/slo/${model.id}`, {}, this.transformModelToPayload(model.toJSON()));
+            model = await this.get(model, request);
         } catch (e) {
             this.processDynatraceClientError(e, request);
         }
@@ -225,16 +182,10 @@ class Resource extends BaseResource<ResourceModel> {
         callbackContext: CallbackContext,
         logger: LoggerProxy
     ): Promise<ProgressEvent<ResourceModel, CallbackContext>> {
-        const model = new ResourceModel(request.desiredResourceState);
-
-        if (!(await this.assertDashboardExists(model, request))) {
-            throw new exceptions.NotFound(this.typeName, request.logicalResourceIdentifier);
-        }
+        let model = new ResourceModel(request.desiredResourceState);
 
         try {
-            await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess).doRequest(
-                'delete',
-                `/api/config/v1/dashboards/${model.id}`);
+            await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess).doRequest('delete', `/api/v2/slo/${model.id}`);
         } catch (e) {
             this.processDynatraceClientError(e, request);
         }
@@ -261,11 +212,9 @@ class Resource extends BaseResource<ResourceModel> {
     ): Promise<ProgressEvent<ResourceModel, CallbackContext>> {
         let model = new ResourceModel(request.desiredResourceState);
 
-        const dashboard = await this.getDashboard(model, request);
+        const newModel = await this.get(model, request);
 
-        model = this.setModelFromResponse(model, dashboard);
-
-        return ProgressEvent.success<ProgressEvent<ResourceModel, CallbackContext>>(model);
+        return ProgressEvent.success<ProgressEvent<ResourceModel, CallbackContext>>(newModel);
     }
 
     /**
@@ -288,16 +237,16 @@ class Resource extends BaseResource<ResourceModel> {
         const model = new ResourceModel(request.desiredResourceState);
 
         try {
-            const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess).doRequest<{ dashboards: DashboardResponse[] }>(
+            const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess).paginate<PaginatedSlos, ResourceModel>(
                 'get',
-                `/api/config/v1/dashboards`);
-
+                '/api/v2/slo',
+                pagedResponse => pagedResponse.data && pagedResponse.data.slo
+                    ? pagedResponse.data.slo.map(slo => new ResourceModel({...model, ...slo}))
+                    : [],
+                {enabledSlos: 'all'});
             return ProgressEvent.builder<ProgressEvent<ResourceModel, CallbackContext>>()
                 .status(OperationStatus.Success)
-                .resourceModels(response.data.dashboards.map(dashboard => new ResourceModel({
-                    ...model,
-                    ...dashboard
-                })))
+                .resourceModels(response)
                 .build();
         } catch (e) {
             this.processDynatraceClientError(e, request);

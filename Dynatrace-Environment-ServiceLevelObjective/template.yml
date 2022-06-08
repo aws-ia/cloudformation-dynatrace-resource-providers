@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
-Description: AWS SAM template for the Dynatrace::Configuration::Dashboard resource type
+Description: AWS SAM template for the Dynatrace::Environment::ServiceLevelObjective resource type
 
 Globals:
   Function:
@@ -11,14 +11,14 @@ Resources:
   TestEntrypoint:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: dist/Dynatrace-Configuration-Dashboard/src/handlers.testEntrypoint
+      Handler: dist/Dynatrace-Environment-ServiceLevelObjective/src/handlers.testEntrypoint
       Runtime: nodejs12.x
       CodeUri: ./
 
   TypeFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: dist/Dynatrace-Configuration-Dashboard/src/handlers.entrypoint
+      Handler: dist/Dynatrace-Environment-ServiceLevelObjective/src/handlers.entrypoint
       Runtime: nodejs12.x
       CodeUri: ./
 

@@ -1,7 +1,7 @@
 {
-    "name": "dynatrace-configuration-dashboard",
+    "name": "dynatrace-environment-servicelevelobjective",
     "version": "0.1.0",
-    "description": "AWS custom resource provider named Dynatrace::Configuration::Dashboard.",
+    "description": "AWS custom resource provider named Dynatrace::Environment::ServiceLevelObjective.",
     "private": true,
     "main": "dist/handlers.js",
     "files": [
@@ -9,6 +9,7 @@
     ],
     "scripts": {
         "build": "npx tsc",
+        "watch": "npx tsc -w",
         "prepack": "npm run build",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
