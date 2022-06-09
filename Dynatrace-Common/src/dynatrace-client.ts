@@ -71,6 +71,11 @@ export class DynatraceClient {
             if (value && value instanceof Set) {
                 value = Array.of(...value);
             }
+            if (value && Array.isArray(value)) {
+                value = value.map(item => item && item instanceof Object && !(item instanceof Array) && !(item instanceof Set)
+                    ? this.sanitizePayload(item)
+                    : item);
+            }
             map[key.substring(0, 1).toLocaleLowerCase() + key.substring(1)] = value;
             return map;
         }, {} as { [key: string]: any })
