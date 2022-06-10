@@ -1,6 +1,6 @@
 {
   "typeName": "Dynatrace::Environment::SyntheticLocation",
-  "description": "An example resource schema demonstrating some basic constructs and validation rules.",
+  "description": "Manage a synthetic location (V1) in Dynatrace.",
   "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
   "definitions": {
     "DynatraceAccess": {
@@ -221,6 +221,9 @@
     }
   },
   "additionalProperties": false,
+  "tagging": {
+    "taggable": false
+  },
   "required": [
     "DynatraceAccess",
     "DynatraceEndpoint",
