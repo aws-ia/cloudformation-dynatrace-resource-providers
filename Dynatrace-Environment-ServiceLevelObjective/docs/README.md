@@ -1,6 +1,6 @@
 # Dynatrace::Environment::ServiceLevelObjective
 
-An example resource schema demonstrating some basic constructs and validation rules.
+Manage a Service Level Objective in Dynatrace.
 
 ## Syntax
 
@@ -28,7 +28,6 @@ To declare this entity in your AWS CloudFormation template, use the following sy
         "<a href="#metricrate" title="MetricRate">MetricRate</a>" : <i>String</i>,
         "<a href="#metricnumerator" title="MetricNumerator">MetricNumerator</a>" : <i>String</i>,
         "<a href="#metricdenominator" title="MetricDenominator">MetricDenominator</a>" : <i>String</i>,
-        "<a href="#hasaccess" title="HasAccess">HasAccess</a>" : <i>Boolean</i>,
     }
 }
 </pre>
@@ -54,7 +53,6 @@ Properties:
     <a href="#metricrate" title="MetricRate">MetricRate</a>: <i>String</i>
     <a href="#metricnumerator" title="MetricNumerator">MetricNumerator</a>: <i>String</i>
     <a href="#metricdenominator" title="MetricDenominator">MetricDenominator</a>: <i>String</i>
-    <a href="#hasaccess" title="HasAccess">HasAccess</a>: <i>Boolean</i>
 </pre>
 
 ## Properties
@@ -117,7 +115,9 @@ _Required_: No
 
 _Type_: String
 
-_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
+_Pattern_: <code>^[a-z][a-z0-9\_]*$</code>
+
+_Update requires_: [Replacement](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-replacement)
 
 #### MetricExpression
 
@@ -252,16 +252,6 @@ _Type_: String
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
-#### HasAccess
-
-The SLO is accessible through the settings if hasAccess is true.
-
-_Required_: No
-
-_Type_: Boolean
-
-_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
-
 ## Return Values
 
 ### Ref
@@ -278,66 +268,7 @@ For more information about using the `Fn::GetAtt` intrinsic function, see [Fn::G
 
 Id of the SLO.
 
-#### Enabled
+#### Slo
 
-The SLO is enabled (true) or disabled (false).
-
-#### BurnRateMetricKey
-
-The error budget burn rate key for a metric expression.
-
-#### NumeratorValue
-
-DEPRECATED
-
-The numerator value used to evaluate the SLO when useRateMetric is set to false.
-
-#### DenominatorValue
-
-DEPRECATED
-
-The denominator value used to evaluate the SLO when useRateMetric is set to false.
-
-#### ProblemFilter
-
-The entity filter for fetching the number of problems related to an SLO. Auto-generated in case no filter has been added to the SLO.
-
-#### RelatedOpenProblems
-
-Number of OPEN problems related to the SLO.
-
-Has the value of -1 if there's an error with fetching SLO related problems.
-
-#### RelatedTotalProblems
-
-Total number of problems related to the SLO.
-
-Has the value of -1 if there's an error with fetching SLO related problems.
-
-#### EvaluatedPercentage
-
-The calculated value of the SLO. Has the value of the evaluated SLO or the value of -1:
-
-    If there is an error with the SLO calculation; in that case check the value of the error property.
-    If the evaluate parameter has not been set to true; in that case the error property will contain no error.
-
-#### ErrorBudget
-
-The error budget of the calculated SLO.
-
-The error budget is the difference between the calculated and target values. A positive number means all is good; a negative number means trouble.
-
-#### MetricKey
-
-The key for a metric expression. Once created, metric keys can't be changed.
-
-#### Status
-
-The status of the calculated SLO.
-
-#### Error
-
-The error of the SLO calculation.
-
-If the value differs from NONE there's something wrong with the SLO calculation.
+Parameters of a service-level objective (SLO).
 
