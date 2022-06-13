@@ -3,7 +3,10 @@
     "/DynatraceAccess": "<DYNATRACE_TOKEN>",
     "/DynatraceEndpoint": "<DYNATRACE_ENDPOINT>",
     "/Metadata": {
-      "ConfigurationVersions": [4, 2],
+      "ConfigurationVersions": [
+        4,
+        2
+      ],
       "ClusterVersion": "Mock version"
     },
     "/DashboardMetadata": {
@@ -23,15 +26,74 @@
       }
     },
     "/Tiles": [
-      "{\"name\":\"Hosts\",\"tileType\":\"HEADER\",\"configured\":true,\"bounds\":{\"top\":0,\"left\":0,\"width\":304,\"height\":38},\"tileFilter\":{}}",
-      "{\"name\":\"Applications\",\"tileType\":\"HEADER\",\"configured\":true,\"bounds\":{\"top\":0,\"left\":304,\"width\":304,\"height\":38},\"tileFilter\":{}}",
-      "{\"name\":\"Host health\",\"tileType\":\"HOSTS\",\"configured\":true,\"bounds\":{\"top\":38,\"left\":0,\"width\":304,\"height\":304},\"tileFilter\":{\"managementZone\":{\"id\":\"3438779970106539862\",\"name\":\"Example Management Zone\"}},\"chartVisible\":true}",
-      "{\"name\":\"Application health\",\"tileType\":\"APPLICATIONS\",\"configured\":true,\"bounds\":{\"top\":38,\"left\":304,\"width\":304,\"height\":304},\"tileFilter\":{\"managementZone\":{\"id\":\"3438779970106539862\",\"name\":\"Example Management Zone\"}},\"chartVisible\":true}"
+      {
+        "name": "Hosts",
+        "tileType": "HEADER",
+        "configured": true,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "width": 304,
+          "height": 38
+        },
+        "tileFilter": {}
+      },
+      {
+        "name": "Applications",
+        "tileType": "HEADER",
+        "configured": true,
+        "bounds": {
+          "top": 0,
+          "left": 304,
+          "width": 304,
+          "height": 38
+        },
+        "tileFilter": {}
+      },
+      {
+        "name": "Host health",
+        "tileType": "HOSTS",
+        "configured": true,
+        "bounds": {
+          "top": 38,
+          "left": 0,
+          "width": 304,
+          "height": 304
+        },
+        "tileFilter": {
+          "managementZone": {
+            "id": "3438779970106539862",
+            "name": "Example Management Zone"
+          }
+        },
+        "chartVisible": true
+      },
+      {
+        "name": "Application health",
+        "tileType": "APPLICATIONS",
+        "configured": true,
+        "bounds": {
+          "top": 38,
+          "left": 304,
+          "width": 304,
+          "height": 304
+        },
+        "tileFilter": {
+          "managementZone": {
+            "id": "3438779970106539862",
+            "name": "Example Management Zone"
+          }
+        },
+        "chartVisible": true
+      }
     ]
   },
   "UPDATE": {
     "/Metadata": {
-      "ConfigurationVersions": [4, 2],
+      "ConfigurationVersions": [
+        4,
+        2
+      ],
       "ClusterVersion": "Mock version"
     },
     "/DashboardMetadata": {
@@ -51,8 +113,36 @@
       }
     },
     "/Tiles": [
-      "{\"name\":\"Hosts\",\"tileType\":\"HEADER\",\"configured\":true,\"bounds\":{\"top\":0,\"left\":0,\"width\":304,\"height\":38},\"tileFilter\":{}}",
-      "{\"name\":\"Host health\",\"tileType\":\"HOSTS\",\"configured\":true,\"bounds\":{\"top\":38,\"left\":0,\"width\":304,\"height\":304},\"tileFilter\":{\"managementZone\":{\"id\":\"3438779970106539862\",\"name\":\"Example Management Zone\"}},\"chartVisible\":true}"
+      {
+        "name": "Hosts",
+        "tileType": "HEADER",
+        "configured": true,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "width": 304,
+          "height": 38
+        },
+        "tileFilter": {}
+      },
+      {
+        "name": "Host health",
+        "tileType": "HOSTS",
+        "configured": true,
+        "bounds": {
+          "top": 38,
+          "left": 0,
+          "width": 304,
+          "height": 304
+        },
+        "tileFilter": {
+          "managementZone": {
+            "id": "3438779970106539862",
+            "name": "Example Management Zone"
+          }
+        },
+        "chartVisible": true
+      }
     ]
   }
 }
