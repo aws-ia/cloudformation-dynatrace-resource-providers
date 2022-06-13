@@ -2,7 +2,6 @@
   "CREATE": {
     "/DynatraceAccess": "<DYNATRACE_TOKEN>",
     "/DynatraceEndpoint": "<DYNATRACE_ENDPOINT>",
-    "/MetricName": "my_new_synthetic_objective_end_to_end_tests",
     "/MetricExpression": "(100)*(builtin:service.errors.server.successCount:splitBy())/(builtin:service.requestCount.server:splitBy())",
     "/Filter": "type(\"SERVICE\"),entityName(\"My service\")",
     "/Target": 75,
@@ -14,9 +13,6 @@
     "/Timeframe": "-1w"
   },
   "UPDATE": {
-    "/Name": "Payment service availability",
-    "/Description": "Rate of successful payments per week",
-    "/MetricName": "my_new_synthetic_objective_end_to_end_tests",
     "/MetricExpression": "(100)*(builtin:service.errors.server.successCount:splitBy())/(builtin:service.requestCount.server:splitBy())",
     "/Filter": "type(\"SERVICE\"),entityName(\"My service\")",
     "/Target": 99.98,

@@ -1,6 +1,6 @@
 # Dynatrace::Environment::SyntheticLocation
 
-An example resource schema demonstrating some basic constructs and validation rules.
+Manage a synthetic location (V1) in Dynatrace.
 
 ## Syntax
 
@@ -99,6 +99,8 @@ _Allowed Values_: <code>PUBLIC</code> | <code>PRIVATE</code> | <code>CLUSTER</co
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
 #### Name
+
+The name of the location.
 
 _Required_: Yes
 
@@ -244,6 +246,8 @@ _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormati
 
 #### Location
 
+Configuration of a synthetic location.
+
 _Required_: No
 
 _Type_: <a href="syntheticlocation.md">SyntheticLocation</a>
@@ -268,5 +272,5 @@ The Dynatrace entity ID of the location.
 
 #### Location
 
-Returns the <code>Location</code> value.
+Configuration of a synthetic location.
 

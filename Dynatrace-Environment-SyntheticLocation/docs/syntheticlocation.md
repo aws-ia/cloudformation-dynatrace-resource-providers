@@ -1,5 +1,7 @@
 # Dynatrace::Environment::SyntheticLocation SyntheticLocation
 
+Configuration of a synthetic location.
+
 ## Syntax
 
 To declare this entity in your AWS CloudFormation template, use the following syntax:
@@ -76,6 +78,8 @@ _Allowed Values_: <code>PUBLIC</code> | <code>PRIVATE</code> | <code>CLUSTER</co
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
 #### Name
+
+The name of the location.
 
 _Required_: No
 

@@ -16,7 +16,7 @@ To declare this entity in your AWS CloudFormation template, use the following sy
         "<a href="#dynatraceendpoint" title="DynatraceEndpoint">DynatraceEndpoint</a>" : <i>String</i>,
         "<a href="#metadata" title="Metadata">Metadata</a>" : <i><a href="metadata.md">Metadata</a></i>,
         "<a href="#dashboardmetadata" title="DashboardMetadata">DashboardMetadata</a>" : <i><a href="dashboardmetadata.md">DashboardMetadata</a></i>,
-        "<a href="#tiles" title="Tiles">Tiles</a>" : <i>[ String, ... ]</i>,
+        "<a href="#tiles" title="Tiles">Tiles</a>" : <i>[ Map, ... ]</i>,
     }
 }
 </pre>
@@ -31,7 +31,7 @@ Properties:
     <a href="#metadata" title="Metadata">Metadata</a>: <i><a href="metadata.md">Metadata</a></i>
     <a href="#dashboardmetadata" title="DashboardMetadata">DashboardMetadata</a>: <i><a href="dashboardmetadata.md">DashboardMetadata</a></i>
     <a href="#tiles" title="Tiles">Tiles</a>: <i>
-      - String</i>
+      - Map</i>
 </pre>
 
 ## Properties
@@ -84,7 +84,7 @@ The list of tiles on the dashboard.
 
 _Required_: Yes
 
-_Type_: List of String
+_Type_: List of Map
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
