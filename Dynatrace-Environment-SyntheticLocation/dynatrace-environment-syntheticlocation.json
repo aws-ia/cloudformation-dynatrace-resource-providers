@@ -229,10 +229,6 @@
     "DynatraceEndpoint",
     "Name"
   ],
-  "createOnlyProperties": [
-    "/properties/DynatraceAccess",
-    "/properties/DynatraceEndpoint"
-  ],
   "readOnlyProperties": [
     "/properties/EntityId",
     "/properties/Location"

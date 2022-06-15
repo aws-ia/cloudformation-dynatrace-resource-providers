@@ -3,8 +3,8 @@
     "typeName": "Dynatrace::Environment::ServiceLevelObjective",
     "language": "typescript",
     "runtime": "nodejs12.x",
-    "entrypoint": "dist/handlers.entrypoint",
-    "testEntrypoint": "dist/handlers.testEntrypoint",
+    "entrypoint": "dist/Dynatrace-Environment-ServiceLevelObjective/src/handlers.entrypoint",
+    "testEntrypoint": "dist/Dynatrace-Environment-ServiceLevelObjective/src/handlers.testEntrypoint",
     "settings": {
         "version": false,
         "subparser_name": null,

@@ -10,9 +10,9 @@ import {AbstractBasedResource} from "./abstract-base-resource";
 export abstract class AbstractDynatraceResource<ResourceModelType extends BaseModel, GetResponseData, CreateResponseData, UpdateResponseData> extends AbstractBasedResource<ResourceModelType, GetResponseData, CreateResponseData, UpdateResponseData, AxiosError<ApiErrorResponse>> {
 
     processRequestException(e: AxiosError<ApiErrorResponse>, request: ResourceHandlerRequest<ResourceModelType>) {
-        const apiErrorResponse = e.response.data;
-        let errorMessage = apiErrorResponse.error.message;
-        if (apiErrorResponse.error.constraintViolations) {
+        const apiErrorResponse = e.response?.data;
+        let errorMessage = apiErrorResponse?.error.message || e.message;
+        if (Array.isArray(apiErrorResponse?.error.constraintViolations)) {
             errorMessage += '\n' + apiErrorResponse.error.constraintViolations.map(cv => `[PATH: ${cv.path}] ${cv.message}`).join('\n');
         }
 
