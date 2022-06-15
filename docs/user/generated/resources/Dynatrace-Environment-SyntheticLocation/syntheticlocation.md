@@ -1,6 +1,6 @@
-# Dynatrace::Environment::SyntheticLocation
+# Dynatrace::Environment::SyntheticLocation SyntheticLocation
 
-Manage a synthetic location (V1) in Dynatrace.
+Configuration of a synthetic location.
 
 ## Syntax
 
@@ -10,73 +10,52 @@ To declare this entity in your AWS CloudFormation template, use the following sy
 
 <pre>
 {
-    "Type" : "Dynatrace::Environment::SyntheticLocation",
-    "Properties" : {
-        "<a href="#dynatraceaccess" title="DynatraceAccess">DynatraceAccess</a>" : <i>String</i>,
-        "<a href="#dynatraceendpoint" title="DynatraceEndpoint">DynatraceEndpoint</a>" : <i>String</i>,
-        "<a href="#type" title="Type">Type</a>" : <i>String</i>,
-        "<a href="#name" title="Name">Name</a>" : <i>String</i>,
-        "<a href="#countrycode" title="CountryCode">CountryCode</a>" : <i>String</i>,
-        "<a href="#regioncode" title="RegionCode">RegionCode</a>" : <i>String</i>,
-        "<a href="#city" title="City">City</a>" : <i>String</i>,
-        "<a href="#latitude" title="Latitude">Latitude</a>" : <i>Double</i>,
-        "<a href="#longitude" title="Longitude">Longitude</a>" : <i>Double</i>,
-        "<a href="#status" title="Status">Status</a>" : <i>String</i>,
-        "<a href="#nodes" title="Nodes">Nodes</a>" : <i>[ String, ... ]</i>,
-        "<a href="#availabilitylocationoutage" title="AvailabilityLocationOutage">AvailabilityLocationOutage</a>" : <i>Boolean</i>,
-        "<a href="#availabilitynodeoutage" title="AvailabilityNodeOutage">AvailabilityNodeOutage</a>" : <i>Boolean</i>,
-        "<a href="#locationnodeoutagedelayinminutes" title="LocationNodeOutageDelayInMinutes">LocationNodeOutageDelayInMinutes</a>" : <i>Integer</i>,
-        "<a href="#availabilitynotificationsenabled" title="AvailabilityNotificationsEnabled">AvailabilityNotificationsEnabled</a>" : <i>Boolean</i>,
-        "<a href="#autoupdatechromium" title="AutoUpdateChromium">AutoUpdateChromium</a>" : <i>Boolean</i>,
-        "<a href="#location" title="Location">Location</a>" : <i><a href="syntheticlocation.md">SyntheticLocation</a></i>
-    }
+    "<a href="#entityid" title="EntityId">EntityId</a>" : <i>String</i>,
+    "<a href="#type" title="Type">Type</a>" : <i>String</i>,
+    "<a href="#name" title="Name">Name</a>" : <i>String</i>,
+    "<a href="#countrycode" title="CountryCode">CountryCode</a>" : <i>String</i>,
+    "<a href="#regioncode" title="RegionCode">RegionCode</a>" : <i>String</i>,
+    "<a href="#city" title="City">City</a>" : <i>String</i>,
+    "<a href="#latitude" title="Latitude">Latitude</a>" : <i>Double</i>,
+    "<a href="#longitude" title="Longitude">Longitude</a>" : <i>Double</i>,
+    "<a href="#status" title="Status">Status</a>" : <i>String</i>,
+    "<a href="#nodes" title="Nodes">Nodes</a>" : <i>[ String, ... ]</i>,
+    "<a href="#availabilitylocationoutage" title="AvailabilityLocationOutage">AvailabilityLocationOutage</a>" : <i>Boolean</i>,
+    "<a href="#availabilitynodeoutage" title="AvailabilityNodeOutage">AvailabilityNodeOutage</a>" : <i>Boolean</i>,
+    "<a href="#locationnodeoutagedelayinminutes" title="LocationNodeOutageDelayInMinutes">LocationNodeOutageDelayInMinutes</a>" : <i>Integer</i>,
+    "<a href="#availabilitynotificationsenabled" title="AvailabilityNotificationsEnabled">AvailabilityNotificationsEnabled</a>" : <i>Boolean</i>,
+    "<a href="#autoupdatechromium" title="AutoUpdateChromium">AutoUpdateChromium</a>" : <i>Boolean</i>
 }
 </pre>
 
 ### YAML
 
 <pre>
-Type: Dynatrace::Environment::SyntheticLocation
-Properties:
-    <a href="#dynatraceaccess" title="DynatraceAccess">DynatraceAccess</a>: <i>String</i>
-    <a href="#dynatraceendpoint" title="DynatraceEndpoint">DynatraceEndpoint</a>: <i>String</i>
-    <a href="#type" title="Type">Type</a>: <i>String</i>
-    <a href="#name" title="Name">Name</a>: <i>String</i>
-    <a href="#countrycode" title="CountryCode">CountryCode</a>: <i>String</i>
-    <a href="#regioncode" title="RegionCode">RegionCode</a>: <i>String</i>
-    <a href="#city" title="City">City</a>: <i>String</i>
-    <a href="#latitude" title="Latitude">Latitude</a>: <i>Double</i>
-    <a href="#longitude" title="Longitude">Longitude</a>: <i>Double</i>
-    <a href="#status" title="Status">Status</a>: <i>String</i>
-    <a href="#nodes" title="Nodes">Nodes</a>: <i>
+<a href="#entityid" title="EntityId">EntityId</a>: <i>String</i>
+<a href="#type" title="Type">Type</a>: <i>String</i>
+<a href="#name" title="Name">Name</a>: <i>String</i>
+<a href="#countrycode" title="CountryCode">CountryCode</a>: <i>String</i>
+<a href="#regioncode" title="RegionCode">RegionCode</a>: <i>String</i>
+<a href="#city" title="City">City</a>: <i>String</i>
+<a href="#latitude" title="Latitude">Latitude</a>: <i>Double</i>
+<a href="#longitude" title="Longitude">Longitude</a>: <i>Double</i>
+<a href="#status" title="Status">Status</a>: <i>String</i>
+<a href="#nodes" title="Nodes">Nodes</a>: <i>
       - String</i>
-    <a href="#availabilitylocationoutage" title="AvailabilityLocationOutage">AvailabilityLocationOutage</a>: <i>Boolean</i>
-    <a href="#availabilitynodeoutage" title="AvailabilityNodeOutage">AvailabilityNodeOutage</a>: <i>Boolean</i>
-    <a href="#locationnodeoutagedelayinminutes" title="LocationNodeOutageDelayInMinutes">LocationNodeOutageDelayInMinutes</a>: <i>Integer</i>
-    <a href="#availabilitynotificationsenabled" title="AvailabilityNotificationsEnabled">AvailabilityNotificationsEnabled</a>: <i>Boolean</i>
-    <a href="#autoupdatechromium" title="AutoUpdateChromium">AutoUpdateChromium</a>: <i>Boolean</i>
-    <a href="#location" title="Location">Location</a>: <i><a href="syntheticlocation.md">SyntheticLocation</a></i>
+<a href="#availabilitylocationoutage" title="AvailabilityLocationOutage">AvailabilityLocationOutage</a>: <i>Boolean</i>
+<a href="#availabilitynodeoutage" title="AvailabilityNodeOutage">AvailabilityNodeOutage</a>: <i>Boolean</i>
+<a href="#locationnodeoutagedelayinminutes" title="LocationNodeOutageDelayInMinutes">LocationNodeOutageDelayInMinutes</a>: <i>Integer</i>
+<a href="#availabilitynotificationsenabled" title="AvailabilityNotificationsEnabled">AvailabilityNotificationsEnabled</a>: <i>Boolean</i>
+<a href="#autoupdatechromium" title="AutoUpdateChromium">AutoUpdateChromium</a>: <i>Boolean</i>
 </pre>
 
 ## Properties
 
-#### DynatraceAccess
+#### EntityId
 
-Personal Access Token
+The Dynatrace entity ID of the location.
 
-_Required_: Yes
-
-_Type_: String
-
-_Pattern_: <code>^[a-zA-Z0-9]+\.[a-zA-Z0-9]{24}\.[a-zA-Z0-9]{64}$</code>
-
-_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
-
-#### DynatraceEndpoint
-
-Endpoint URL to access Dynatrace API
-
-_Required_: Yes
+_Required_: No
 
 _Type_: String
 
@@ -102,7 +81,7 @@ _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormati
 
 The name of the location.
 
-_Required_: Yes
+_Required_: No
 
 _Type_: String
 
@@ -243,34 +222,4 @@ _Required_: No
 _Type_: Boolean
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
-
-#### Location
-
-Configuration of a synthetic location.
-
-_Required_: No
-
-_Type_: <a href="syntheticlocation.md">SyntheticLocation</a>
-
-_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
-
-## Return Values
-
-### Ref
-
-When you pass the logical ID of this resource to the intrinsic `Ref` function, Ref returns the EntityId.
-
-### Fn::GetAtt
-
-The `Fn::GetAtt` intrinsic function returns a value for a specified attribute of this type. The following are the available attributes and sample return values.
-
-For more information about using the `Fn::GetAtt` intrinsic function, see [Fn::GetAtt](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getatt.html).
-
-#### EntityId
-
-The Dynatrace entity ID of the location.
-
-#### Location
-
-Configuration of a synthetic location.
 
