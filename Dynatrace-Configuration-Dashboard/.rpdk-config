@@ -3,8 +3,8 @@
     "typeName": "Dynatrace::Configuration::Dashboard",
     "language": "typescript",
     "runtime": "nodejs12.x",
-    "entrypoint": "dist/handlers.entrypoint",
-    "testEntrypoint": "dist/handlers.testEntrypoint",
+    "entrypoint": "dist/Dynatrace-Configuration-Dashboard/src/handlers.entrypoint",
+    "testEntrypoint": "dist/Dynatrace-Configuration-Dashboard/src/handlers.testEntrypoint",
     "settings": {
         "version": false,
         "subparser_name": null,

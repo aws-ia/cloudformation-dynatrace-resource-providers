@@ -361,8 +361,6 @@
     "Timeframe"
   ],
   "createOnlyProperties": [
-    "/properties/DynatraceAccess",
-    "/properties/DynatraceEndpoint",
     "/properties/MetricName"
   ],
   "readOnlyProperties": [

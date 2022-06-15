@@ -3,8 +3,8 @@
     "typeName": "Dynatrace::Environment::SyntheticLocation",
     "language": "typescript",
     "runtime": "nodejs12.x",
-    "entrypoint": "dist/handlers.entrypoint",
-    "testEntrypoint": "dist/handlers.testEntrypoint",
+    "entrypoint": "dist/Dynatrace-Environment-SyntheticLocation/src/handlers.entrypoint",
+    "testEntrypoint": "dist/Dynatrace-Environment-SyntheticLocation/src/handlers.testEntrypoint",
     "settings": {
         "version": false,
         "subparser_name": null,
