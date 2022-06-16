@@ -5,9 +5,9 @@ import {
     ResourceHandlerRequest
 } from "@amazon-web-services-cloudformation/cloudformation-cli-typescript-lib";
 import {AxiosError} from "axios";
-import {AbstractBasedResource} from "./abstract-base-resource";
+import {AbstractBaseResource} from "./abstract-base-resource";
 
-export abstract class AbstractDynatraceResource<ResourceModelType extends BaseModel, GetResponseData, CreateResponseData, UpdateResponseData> extends AbstractBasedResource<ResourceModelType, GetResponseData, CreateResponseData, UpdateResponseData, AxiosError<ApiErrorResponse>> {
+export abstract class AbstractDynatraceResource<ResourceModelType extends BaseModel, GetResponseData, CreateResponseData, UpdateResponseData> extends AbstractBaseResource<ResourceModelType, GetResponseData, CreateResponseData, UpdateResponseData, AxiosError<ApiErrorResponse>> {
 
     processRequestException(e: AxiosError<ApiErrorResponse>, request: ResourceHandlerRequest<ResourceModelType>) {
         const apiErrorResponse = e.response?.data;
