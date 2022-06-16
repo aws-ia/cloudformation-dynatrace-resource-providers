@@ -17,7 +17,7 @@ export interface RetryableCallbackContext {
     retry?: number
 }
 
-export abstract class AbstractBasedResource<ResourceModelType extends BaseModel, GetResponseData, CreateResponseData, UpdateResponseData, ErrorType extends Error> extends BaseResource<ResourceModelType> {
+export abstract class AbstractBaseResource<ResourceModelType extends BaseModel, GetResponseData, CreateResponseData, UpdateResponseData, ErrorType extends Error> extends BaseResource<ResourceModelType> {
 
     private maxRetries = 5;
 
@@ -133,7 +133,7 @@ export abstract class AbstractBasedResource<ResourceModelType extends BaseModel,
                 this.processRequestException(e, request);
             } catch (e) {
                 if (e instanceof NotFound) {
-                    if (callbackContext.retry < this.maxRetries) {
+                    if (callbackContext.retry <= this.maxRetries) {
                         return ProgressEvent.progress<ProgressEvent<ResourceModelType, RetryableCallbackContext>>(model, {
                             retry: callbackContext.retry + 1
                         });
@@ -228,7 +228,7 @@ export abstract class AbstractBasedResource<ResourceModelType extends BaseModel,
             }
         }
 
-        if (callbackContext.retry < this.maxRetries) {
+        if (callbackContext.retry <= this.maxRetries) {
             return ProgressEvent.progress<ProgressEvent<ResourceModelType, RetryableCallbackContext>>(model, {
                 retry: callbackContext.retry + 1
             });
