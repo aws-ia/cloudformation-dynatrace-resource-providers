@@ -21,8 +21,8 @@ export type PaginatedResponseType = {
 }
 
 export class DynatraceClient {
-    private baseUrl: string;
-    private apiToken: string;
+    private readonly baseUrl: string;
+    private readonly apiToken: string;
 
     constructor(baseUrl: string, apiToken: string) {
         this.baseUrl = baseUrl;
@@ -46,12 +46,16 @@ export class DynatraceClient {
         const results: ResultType[] = [];
 
         let page = 1;
-        params.nexPageToken = undefined;
+        let delegateParams = {...params};
+        delete delegateParams.nextPageToken;
 
-        while (params.nexPageToken || page === 1) {
-            const response = await this.doRequest<ResponseType>(method, `${path}`);
+        while (delegateParams.nextPageToken || page === 1) {
+            const response = await this.doRequest<ResponseType>(method, path, delegateParams, body);
             results.push(...transform(response))
-            params.nexPageToken = response.data ? response.data.nextPageKey : undefined;
+            delegateParams = {
+                ...delegateParams,
+                nextPageToken: response.data ? response.data.nextPageKey : undefined
+            };
             page++;
         }
 
