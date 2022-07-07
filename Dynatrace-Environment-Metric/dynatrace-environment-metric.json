@@ -1,0 +1,244 @@
+{
+  "typeName": "Dynatrace::Environment::Metric",
+  "description": "Manage a timeseries metric (V1) in Dynatrace.",
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "definitions": {
+    "DynatraceAccess": {
+      "type": "object",
+      "properties": {
+        "AccessToken": {
+          "description": "Personal Access Token",
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9]+\\.[a-zA-Z0-9]{24}\\.[a-zA-Z0-9]{64}$"
+        },
+        "DynatraceEndpoint": {
+          "description": "Endpoint URL to access Dynatrace API",
+          "type": "string"
+        }
+      },
+      "required": [
+        "AccessToken",
+        "Endpoint"
+      ],
+      "additionalProperties": false
+    },
+    "Id": {
+      "description": "The ID of the metric.",
+      "type": "string",
+      "pattern": "^custom\\:[A-Za-z\\.\\-\\_]([A-Za-z0-9]|([\\.\\-\\_][A-Za-z\\.\\-\\_])){1,248}$"
+    },
+    "DisplayName": {
+      "description": "The name of the metric in the user interface. It is limited to 256 characters.",
+      "type": "string",
+      "maxLength": 256
+    },
+    "Unit": {
+      "description": "The unit of the metric.",
+      "type": "string",
+      "enum": [
+        "Bit",
+        "BitPerHour",
+        "BitPerMinute",
+        "BitPerSecond",
+        "Byte",
+        "BytePerHour",
+        "BytePerMinute",
+        "BytePerSecond",
+        "Cores",
+        "Count",
+        "Day",
+        "DecibelMilliWatt",
+        "G",
+        "GibiByte",
+        "GigaByte",
+        "Hour",
+        "KibiByte",
+        "KibiBytePerHour",
+        "KibiBytePerMinute",
+        "KibiBytePerSecond",
+        "KiloByte",
+        "KiloBytePerHour",
+        "KiloBytePerMinute",
+        "KiloBytePerSecond",
+        "M",
+        "MSU",
+        "MebiByte",
+        "MebiBytePerHour",
+        "MebiBytePerMinute",
+        "MebiBytePerSecond",
+        "MegaByte",
+        "MegaBytePerHour",
+        "MegaBytePerMinute",
+        "MegaBytePerSecond",
+        "MicroSecond",
+        "MilliSecond",
+        "MilliSecondPerMinute",
+        "Minute",
+        "Month",
+        "N/A",
+        "NanoSecond",
+        "NanoSecondPerMinute",
+        "PerHour",
+        "PerMinute",
+        "PerSecond",
+        "Percent",
+        "Pixel",
+        "Promille",
+        "Ratio",
+        "Second",
+        "State",
+        "Unspecified",
+        "Week",
+        "Year",
+        "k",
+        "mCores"
+      ]
+    },
+    "Dimensions": {
+      "description": "The metric dimension key that will be used to report multiple dimensions. For example, a dimension key to report the metric for different network cards for the same firewall.\n\nThe CUSTOM_DEVICE dimension is added to each new custom metric automatically.",
+      "type": "array",
+      "uniqueItems": false,
+      "insertionOrder": false,
+      "maxItems": 10,
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9\\.\\-\\_]{1,128}$"
+      }
+    },
+    "Types": {
+      "description": "The definition of the technology type. It is used to group metrics under a logical technology name in the UI.\n\nMetrics must be assigned a software technology type that is identical to the technology type of the custom device you are sending the metric to.\n\nFor example, if you define your custom device using type F5-Firewall you must also register all related custom metrics as type F5-Firewall.\n\nThe field is required when creating a new metric.",
+      "type": "array",
+      "uniqueItems": false,
+      "insertionOrder": false,
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "Metric": {
+      "description": "The configuration of a metric with all its parameters.",
+      "type": "object",
+      "properties": {
+        "TimeseriesId": {
+          "$ref": "#/definitions/Id"
+        },
+        "DisplayName": {
+          "$ref": "#/definitions/DisplayName"
+        },
+        "Dimensions": {
+          "$ref": "#/definitions/Dimensions"
+        },
+        "AggregationTypes": {
+          "description": "The list of allowed aggregations for this metric.",
+          "type": "array",
+          "insertionOrder": false,
+          "items": {
+            "type": "string"
+          }
+        },
+        "Unit": {
+          "$ref": "#/definitions/Unit"
+        },
+        "Filter": {
+          "description": "The feature, where the metric originates.",
+          "type": "string"
+        },
+        "DetailedSource": {
+          "description": "The feature, where the metric originates.",
+          "type": "string"
+        },
+        "PluginId": {
+          "description": "The ID of the plugin, where the metric originates.",
+          "type": "string"
+        },
+        "Types": {
+          "$ref": "#/definitions/Types"
+        },
+        "Warnings": {
+          "description": "The warnings that occurred while creating the metric.",
+          "type": "array",
+          "insertionOrder": false,
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "typeConfiguration": {
+    "properties": {
+      "DynatraceAccess": {
+        "$ref": "#/definitions/DynatraceAccess"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "DynatraceAccess"
+    ]
+  },
+  "properties": {
+    "DynatraceAccess": {
+      "description": "Personal Access Token",
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9]+\\.[a-zA-Z0-9]{24}\\.[a-zA-Z0-9]{64}$"
+    },
+    "DynatraceEndpoint": {
+      "description": "Endpoint URL to access Dynatrace API",
+      "type": "string"
+    },
+    "Id": {
+      "$ref": "#/definitions/Id"
+    },
+    "DisplayName": {
+      "$ref": "#/definitions/DisplayName"
+    },
+    "Unit": {
+      "$ref": "#/definitions/Unit"
+    },
+    "Dimensions": {
+      "$ref": "#/definitions/Dimensions"
+    },
+    "Types": {
+      "$ref": "#/definitions/Types"
+    },
+    "Metric": {
+      "$ref": "#/definitions/Metric"
+    }
+  },
+  "tagging": {
+    "taggable": false
+  },
+  "additionalProperties": false,
+  "required": [
+    "DynatraceAccess",
+    "DynatraceEndpoint"
+  ],
+  "createOnlyProperties": [
+    "/properties/Id",
+    "/properties/Dimensions"
+  ],
+  "readOnlyProperties": [
+    "/properties/Metric"
+  ],
+  "primaryIdentifier": [
+    "/properties/Id"
+  ],
+  "handlers": {
+    "create": {
+      "permissions": []
+    },
+    "read": {
+      "permissions": []
+    },
+    "update": {
+      "permissions": []
+    },
+    "delete": {
+      "permissions": []
+    },
+    "list": {
+      "permissions": []
+    }
+  }
+}
