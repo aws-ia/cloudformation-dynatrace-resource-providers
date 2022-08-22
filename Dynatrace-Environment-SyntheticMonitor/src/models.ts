@@ -460,3 +460,38 @@ export class ManagementZone extends BaseModel {
 
 }
 
+export class TypeConfigurationModel extends BaseModel {
+    ['constructor']: typeof TypeConfigurationModel;
+
+
+    @Expose({ name: 'DynatraceAccess' })
+    @Type(() => DynatraceAccess)
+    dynatraceAccess?: Optional<DynatraceAccess>;
+
+}
+
+export class DynatraceAccess extends BaseModel {
+    ['constructor']: typeof DynatraceAccess;
+
+
+    @Expose({ name: 'AccessToken' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'accessToken', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    accessToken?: Optional<string>;
+    @Expose({ name: 'DynatraceEndpoint' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'dynatraceEndpoint', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    dynatraceEndpoint?: Optional<string>;
+
+}
+

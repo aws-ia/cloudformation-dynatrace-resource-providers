@@ -8,28 +8,32 @@ import {AbstractDynatraceResource} from '../../Dynatrace-Common/src/abstract-dyn
 import {AxiosError} from "axios";
 import {InvalidRequest} from "@amazon-web-services-cloudformation/cloudformation-cli-typescript-lib/dist/exceptions";
 
+import {version} from "../package.json";
+
 type SyntheticLocations = {
     locations: SyntheticLocation[];
 }
 
 class Resource extends AbstractDynatraceResource<ResourceModel, SyntheticLocation, SyntheticLocation, void> {
 
+    private userAgent = `AWS CloudFormation (+https://aws.amazon.com/cloudformation/) CloudFormation resource ${this.typeName}/${version}`;
+
     async get(model: ResourceModel): Promise<SyntheticLocation> {
-        const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess).doRequest<SyntheticLocation>(
+        const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess, this.userAgent).doRequest<SyntheticLocation>(
             'get',
             `/api/v1/synthetic/locations/${model.entityId}`);
         return new SyntheticLocation(response.data);
     }
 
     async list(model: ResourceModel): Promise<ResourceModel[]> {
-        const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess).doRequest<SyntheticLocations>(
+        const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess, this.userAgent).doRequest<SyntheticLocations>(
             'get',
             `/api/v1/synthetic/locations`);
         return response.data.locations.map(location => this.setModelFrom(new ResourceModel(), new SyntheticLocation(location)));
     }
 
     async create(model: ResourceModel): Promise<SyntheticLocation> {
-        const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess).doRequest<SyntheticLocation>(
+        const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess, this.userAgent).doRequest<SyntheticLocation>(
             'post',
             '/api/v1/synthetic/locations',
             {},
@@ -38,7 +42,7 @@ class Resource extends AbstractDynatraceResource<ResourceModel, SyntheticLocatio
     }
 
     async update(model: ResourceModel): Promise<void> {
-        await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess).doRequest(
+        await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess, this.userAgent).doRequest(
             'put',
             `/api/v1/synthetic/locations/${model.entityId}`,
             {},
@@ -46,7 +50,7 @@ class Resource extends AbstractDynatraceResource<ResourceModel, SyntheticLocatio
     }
 
     async delete(model: ResourceModel): Promise<void> {
-        await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess).doRequest(
+        await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess, this.userAgent).doRequest(
             'delete',
             `/api/v1/synthetic/locations/${model.entityId}`);
     }

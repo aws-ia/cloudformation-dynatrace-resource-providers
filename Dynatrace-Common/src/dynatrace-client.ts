@@ -23,10 +23,12 @@ export type PaginatedResponseType = {
 export class DynatraceClient {
     private readonly baseUrl: string;
     private readonly apiToken: string;
+    private readonly userAgent: string;
 
-    constructor(baseUrl: string, apiToken: string) {
+    constructor(baseUrl: string, apiToken: string, userAgent?: string) {
         this.baseUrl = baseUrl;
         this.apiToken = apiToken;
+        this.userAgent = userAgent;
     }
 
     public async doRequest<ResponseType>(method: 'get' | 'put' | 'post' | 'delete', path: string, params: any = {}, body?: {}): Promise<AxiosResponse<ResponseType>> {
@@ -36,6 +38,7 @@ export class DynatraceClient {
             method: method,
             data: this.sanitizePayload(body),
             headers: {
+                'User-Agent': this.userAgent || "AWS CloudFormation (+https://aws.amazon.com/cloudformation/) CloudFormation custom resource",
                 Authorization: `Api-Token ${this.apiToken}`,
                 'Content-type': 'application/json; charset=utf-8'
             }

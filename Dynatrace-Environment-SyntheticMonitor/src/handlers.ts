@@ -2,28 +2,32 @@ import {ResourceModel, SyntheticMonitor} from './models';
 import {AbstractDynatraceResource} from '../../Dynatrace-Common/src/abstract-dynatrace-resource';
 import {DynatraceClient} from '../../Dynatrace-Common/src/dynatrace-client';
 
+import {version} from "../package.json";
+
 type SyntheticMonitors = {
     monitors: SyntheticMonitor[]
 }
 
 class Resource extends AbstractDynatraceResource<ResourceModel, SyntheticMonitor, SyntheticMonitor, SyntheticMonitor> {
 
+    private userAgent = `AWS CloudFormation (+https://aws.amazon.com/cloudformation/) CloudFormation resource ${this.typeName}/${version}`;
+
     async get(model: ResourceModel): Promise<SyntheticMonitor> {
-        const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess).doRequest<SyntheticMonitor>(
+        const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess, this.userAgent).doRequest<SyntheticMonitor>(
             'get',
             `/api/v1/synthetic/monitors/${model.entityId}`);
         return new SyntheticMonitor(response.data);
     }
 
     async list(model: ResourceModel): Promise<ResourceModel[]> {
-        const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess).doRequest<SyntheticMonitors>(
+        const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess, this.userAgent).doRequest<SyntheticMonitors>(
             'get',
             `/api/v1/synthetic/monitors`);
         return response.data.monitors.map(monitor => this.setModelFrom(new ResourceModel(), new SyntheticMonitor(monitor)))
     }
 
     async create(model: ResourceModel): Promise<SyntheticMonitor> {
-        const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess).doRequest<SyntheticMonitor>(
+        const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess, this.userAgent).doRequest<SyntheticMonitor>(
             'post',
             '/api/v1/synthetic/monitors',
             {},
@@ -32,7 +36,7 @@ class Resource extends AbstractDynatraceResource<ResourceModel, SyntheticMonitor
     }
 
     async update(model: ResourceModel): Promise<SyntheticMonitor> {
-        let response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess).doRequest<SyntheticMonitor>(
+        let response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess, this.userAgent).doRequest<SyntheticMonitor>(
             'put',
             `/api/v1/synthetic/monitors/${model.entityId}`,
             {},
@@ -41,7 +45,7 @@ class Resource extends AbstractDynatraceResource<ResourceModel, SyntheticMonitor
     }
 
     async delete(model: ResourceModel): Promise<void> {
-        await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess).doRequest<SyntheticMonitor>(
+        await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess, this.userAgent).doRequest<SyntheticMonitor>(
             'delete',
             `/api/v1/synthetic/monitors/${model.entityId}`);
     }

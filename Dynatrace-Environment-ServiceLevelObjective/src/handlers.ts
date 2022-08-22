@@ -2,21 +2,25 @@ import {ResourceModel, Slo} from './models';
 import {DynatraceClient, PaginatedResponseType} from "../../Dynatrace-Common/src/dynatrace-client";
 import {AbstractDynatraceResource} from "../../Dynatrace-Common/src/abstract-dynatrace-resource";
 
+import {version} from "../package.json";
+
 type PaginatedSlos = {
     slo: ResourceModel[]
 } & PaginatedResponseType;
 
 class Resource extends AbstractDynatraceResource<ResourceModel, Slo, Slo, void> {
 
+    private userAgent = `AWS CloudFormation (+https://aws.amazon.com/cloudformation/) CloudFormation resource ${this.typeName}/${version}`;
+
     async get(model: ResourceModel): Promise<Slo> {
-        const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess).doRequest<Slo>(
+        const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess, this.userAgent).doRequest<Slo>(
             'get',
             `/api/v2/slo/${model.id}`);
         return new Slo(response.data);
     }
 
     async list(model: ResourceModel): Promise<ResourceModel[]> {
-        return await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess).paginate<PaginatedSlos, ResourceModel>(
+        return await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess, this.userAgent).paginate<PaginatedSlos, ResourceModel>(
             'get',
             '/api/v2/slo',
             pagedResponse => pagedResponse.data && pagedResponse.data.slo
@@ -26,7 +30,7 @@ class Resource extends AbstractDynatraceResource<ResourceModel, Slo, Slo, void> 
     }
 
     async create(model: ResourceModel): Promise<Slo> {
-        const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess).doRequest(
+        const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess, this.userAgent).doRequest(
             'post',
             '/api/v2/slo',
             {},
@@ -42,7 +46,7 @@ class Resource extends AbstractDynatraceResource<ResourceModel, Slo, Slo, void> 
     }
 
     async update(model: ResourceModel): Promise<void> {
-        await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess).doRequest(
+        await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess, this.userAgent).doRequest(
             'put',
             `/api/v2/slo/${model.id}`,
             {},
@@ -55,7 +59,7 @@ class Resource extends AbstractDynatraceResource<ResourceModel, Slo, Slo, void> 
     }
 
     async delete(model: ResourceModel): Promise<void> {
-        await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess).doRequest(
+        await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess, this.userAgent).doRequest(
             'delete',
             `/api/v2/slo/${model.id}`);
     }

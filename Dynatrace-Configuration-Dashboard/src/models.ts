@@ -286,3 +286,10 @@ export class Dashboard extends BaseModel {
 
 }
 
+export class TypeConfigurationModel extends BaseModel {
+    ['constructor']: typeof TypeConfigurationModel;
+
+
+
+}
+

@@ -2,17 +2,21 @@ import {Metric, ResourceModel} from './models';
 import {DynatraceClient} from '../../Dynatrace-Common/src/dynatrace-client';
 import {AbstractDynatraceResource} from '../../Dynatrace-Common/src/abstract-dynatrace-resource';
 
+import {version} from "../package.json";
+
 class Resource extends AbstractDynatraceResource<ResourceModel, Metric, Metric, Metric> {
 
+    private userAgent = `AWS CloudFormation (+https://aws.amazon.com/cloudformation/) CloudFormation resource ${this.typeName}/${version}`;
+
     async get(model: ResourceModel): Promise<Metric> {
-        const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess).doRequest<Metric>(
+        const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess, this.userAgent).doRequest<Metric>(
             'get',
             `/api/v1/timeseries/${model.id}`);
         return new Metric(response.data);
     }
 
     async list(model: ResourceModel): Promise<ResourceModel[]> {
-        const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess).doRequest<Metric[]>(
+        const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess, this.userAgent).doRequest<Metric[]>(
             'get',
             `/api/v1/timeseries`,
             {source: 'CUSTOM'});
@@ -21,7 +25,7 @@ class Resource extends AbstractDynatraceResource<ResourceModel, Metric, Metric, 
     }
 
     async create(model: ResourceModel): Promise<Metric> {
-        const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess).doRequest<Metric>(
+        const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess, this.userAgent).doRequest<Metric>(
             'put',
             `/api/v1/timeseries/${model.id}`,
             {},
@@ -34,7 +38,7 @@ class Resource extends AbstractDynatraceResource<ResourceModel, Metric, Metric, 
     }
 
     async delete(model: ResourceModel): Promise<void> {
-        await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess).doRequest(
+        await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess, this.userAgent).doRequest(
             'delete',
             `/api/v1/timeseries/${model.id}`);
     }
