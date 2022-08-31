@@ -1,0 +1,21 @@
+{
+    "artifact_type": "RESOURCE",
+    "typeName": "Dynatrace::Environment::ServiceLevelObjective",
+    "language": "typescript",
+    "runtime": "nodejs12.x",
+    "entrypoint": "dist/Dynatrace-Environment-ServiceLevelObjective/src/handlers.entrypoint",
+    "testEntrypoint": "dist/Dynatrace-Environment-ServiceLevelObjective/src/handlers.testEntrypoint",
+    "settings": {
+        "version": false,
+        "subparser_name": null,
+        "verbose": 0,
+        "force": false,
+        "type_name": null,
+        "artifact_type": null,
+        "endpoint_url": null,
+        "region": null,
+        "target_schemas": [],
+        "useDocker": true,
+        "protocolVersion": "2.0.0"
+    }
+}

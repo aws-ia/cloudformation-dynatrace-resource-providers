@@ -1,0 +1,227 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: |
+  The following CloudFormation Dynatrace resource types allow the creation and configuration of 
+  service level objectives, locations, monitors and metrics related to your application.
+  This allows kicking off monitoring of new projects simply, efficiently, and consistently.
+
+Parameters:
+  DynatraceAccess:
+    Type: String
+    Description: Access token for Dynatrace
+  DynatraceEndpoint:
+    Type: String
+    Description: Endpoint to target for Dynatrace
+  NodeIds:
+    Type: List<Number>
+    Description: Enter the IDs of existing nodes, capable of running monitors
+
+Resources:
+  # 1. Custom metrics
+  TimeToCompletionMetric:
+    Type: Dynatrace::Environment::Metric
+    Properties:
+      DynatraceAccess: !Ref DynatraceAccess
+      DynatraceEndpoint: !Ref DynatraceEndpoint
+      Id: custom:kpis.timeToCompletion
+      DisplayName: Average time for a customer to complete the sales process, from cart
+      Unit: Second
+      Dimensions:
+        - ACME
+        - KPIS
+      Types:
+        - Web
+  SuccessCountMetric:
+    Type: Dynatrace::Environment::Metric
+    Properties:
+      DynatraceAccess: !Ref DynatraceAccess
+      DynatraceEndpoint: !Ref DynatraceEndpoint
+      Id: custom:kpis.successCount
+      DisplayName: Number of people having something in their cart and completing the sale
+      Unit: Count
+      Dimensions:
+        - ACME
+        - KPIS
+      Types:
+        - Web
+  DropCountMetric:
+    Type: Dynatrace::Environment::Metric
+    Properties:
+      DynatraceAccess: !Ref DynatraceAccess
+      DynatraceEndpoint: !Ref DynatraceEndpoint
+      Id: custom:kpis.dropCount
+      DisplayName: Number of people having something in their cart, to failing to complete the sale
+      Unit: Count
+      Dimensions:
+        - ACME
+        - KPIS
+      Types:
+        - Web
+
+  # 2. Location and monitor
+  ActiveGateLocation:
+    Type: Dynatrace::Environment::SyntheticLocation
+    Properties:
+      DynatraceAccess: !Ref DynatraceAccess
+      DynatraceEndpoint: !Ref DynatraceEndpoint
+      Type: PRIVATE
+      Name: UK ActiveGate
+      CountryCode: GB
+      City: Edinburgh
+      Latitude: 55.9533
+      Longitude: 3.1883
+      LocationNodeOutageDelayInMinutes: 3
+      Nodes: !Ref NodeIds
+  HealthMonitor:
+    Type: Dynatrace::Environment::SyntheticMonitor
+    Properties:
+      DynatraceAccess: !Ref DynatraceAccess
+      DynatraceEndpoint: !Ref DynatraceEndpoint
+      FrequencyMin: 5
+      Name: ACME Health Monitor
+      Enabled: true
+      Type: HTTP
+      AnomalyDetection:
+        OutageHandling:
+          GlobalOutage: true
+          GlobalOutagePolicy:
+            ConsecutiveRuns: 3
+          LocalOutage: true
+          LocalOutagePolicy:
+            AffectedLocations: 1
+            ConsecutiveRuns: 3
+        LoadingTimeThresholds:
+          Enabled: true
+          Thresholds:
+            - Type: TOTAL
+              ValueMs: 100
+              RequestIndex: 1
+      Script:
+        version: 1.0
+        requests:
+          - url: https://aws.amazon.com
+            method: GET
+            description: HTTP request test
+            validation:
+              rules:
+                - type: httpStatusesList
+                  value: 500, 400
+                  passIfFound: false
+                - type: httpStatusesList
+                  value: 200, 204, 302
+                  passIfFound: true
+      Locations:
+        - !Ref ActiveGateLocation
+
+  # 3. Service level objective
+  SaleFailureServiceLevelObjective:
+    Type: Dynatrace::Environment::ServiceLevelObjective
+    DependsOn:
+      - SuccessCountMetric
+      - DropCountMetric
+    Properties:
+      DynatraceAccess: !Ref DynatraceAccess
+      DynatraceEndpoint: !Ref DynatraceEndpoint
+      Name: Sale failure
+      MetricExpression: "(100)*(ext:kpis.dropCount)/(ext:kpis.successCount)"
+      EvaluationType: AGGREGATE
+      Target: 1
+      Warning: 3
+      ErrorBudgetBurnRate:
+        FastBurnThreshold: 10
+        BurnRateVisualizationEnabled: true
+      Timeframe: "-1w"
+
+  # 4. Dashboard
+  AcmeDashboard:
+    Type: Dynatrace::Configuration::Dashboard
+    Properties:
+      DynatraceAccess: !Ref DynatraceAccess
+      DynatraceEndpoint: !Ref DynatraceEndpoint
+      DashboardMetadata:
+        Name: Acme Dashboard
+        Owner: CloudFormation
+        Shared: false
+        Tags:
+          - CloudFormation
+          - Dynatrace
+      Tiles:
+        - name: Sales failure
+          tileType: SLO
+          configured: true
+          bounds:
+            top: 0
+            left: 0
+            width: 304
+            height: 152
+          tileFilter:
+            timeframe: -1w
+          assignedEntities:
+            - !Ref SaleFailureServiceLevelObjective
+          metric: METRICS=true;LEGEND=true;PROBLEMS=true;decimals=10;customTitle=Overall sale failure;
+        - name: Uptime
+          tileType: SYNTHETIC_HTTP_MONITOR
+          configured: true
+          bounds:
+            top: 0
+            left: 304
+            width: 304
+            height: 304
+          assignedEntities:
+            - !Ref HealthMonitor
+        - name: Completion time
+          tileType: DATA_EXPLORER
+          configured: true
+          bounds:
+            top: 152
+            left: 0
+            width: 304
+            height: 304
+          customName: Data explorer results
+          queries:
+            - id: A
+              metric: ext:kpis.timeToCompletion
+              timeAggregation: DEFAULT
+              sortBy: DESC
+              limit: 100
+              enabled: true
+          visualConfig:
+            type: GRAPH_CHART
+            global:
+              hideLegend: false
+            rules:
+              - matcher: "A:"
+                properties:
+                  color: DEFAULT
+            axes:
+              xAxis:
+                displayName: ""
+                visible: true
+              yAxes:
+                - displayName: ""
+                  visible: true
+                  min: AUTO
+                  max: AUTO
+                  position: LEFT
+                  queryIds:
+                    - A
+                  defaultAxis: true
+            heatmapSettings:
+              yAxis: VALUE
+            thresholds:
+              - axisTarget: LEFT
+                rules:
+                  - color: "#7dc540"
+                  - color: "#f5d30f"
+                  - color: "#dc172a"
+                queryId: ""
+                visible: true
+            tableSettings:
+              isThresholdBackgroundAppliedToCell: false
+            graphChartSettings:
+              connectNulls: false
+            honeycombSettings:
+              showHive: true
+              showLegend: true
+              showLabels: false

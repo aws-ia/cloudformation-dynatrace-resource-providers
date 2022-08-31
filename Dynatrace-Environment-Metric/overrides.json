@@ -1,0 +1,6 @@
+{
+  "CREATE": {
+    "/DynatraceAccess": "<DYNATRACE_TOKEN>",
+    "/DynatraceEndpoint": "<DYNATRACE_ENDPOINT>"
+  }
+}

@@ -1,0 +1,390 @@
+{
+  "typeName": "Dynatrace::Environment::ServiceLevelObjective",
+  "description": "Manage a Service Level Objective in Dynatrace.",
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "definitions": {
+    "DynatraceAccess": {
+      "type": "object",
+      "properties": {
+        "AccessToken": {
+          "description": "Personal Access Token",
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9]+\\.[a-zA-Z0-9]{24}\\.[a-zA-Z0-9]{64}$"
+        },
+        "DynatraceEndpoint": {
+          "description": "Endpoint URL to access Dynatrace API",
+          "type": "string"
+        }
+      },
+      "required": [
+        "AccessToken",
+        "Endpoint"
+      ],
+      "additionalProperties": false
+    },
+    "Enabled": {
+      "description": "The SLO is enabled (true) or disabled (false).",
+      "type": "boolean"
+    },
+    "Name": {
+      "description": "The name of the SLO.",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "Description": {
+      "description": "The description of the SLO.",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 250
+    },
+    "MetricName": {
+      "description": "The name for a metric expression.",
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9\\_]*$"
+    },
+    "MetricExpression": {
+      "description": "The percentage-based metric expression for the calculation of the SLO.",
+      "type": "string"
+    },
+    "EvaluationType": {
+      "description": "The evaluation type of the SLO.",
+      "type": "string",
+      "enum": [
+        "AGGREGATE"
+      ]
+    },
+    "Filter": {
+      "description": "The entity filter for the SLO evaluation. Use the syntax of entity selector (https://dt-url.net/entityselector).",
+      "type": "string"
+    },
+    "Target": {
+      "description": "The target value of the SLO.",
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "Warning": {
+      "description": "The warning value of the SLO.\n\nAt warning state the SLO is still fulfilled but is getting close to failure.",
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "ErrorBudgetBurnRate": {
+      "description": "Error budget burn rate configuration of a service-level objective (SLO).",
+      "type": "object",
+      "properties": {
+        "FastBurnThreshold": {
+          "description": "The threshold between a slow and a fast burn rate.",
+          "type": "number"
+        },
+        "BurnRateVisualizationEnabled": {
+          "description": "The error budget burn rate visualization is enabled (true) or disabled (false).\n\nIn case of false, no calculated values will be present here.",
+          "type": "boolean"
+        },
+        "BurnRateValue": {
+          "description": "The burn rate of the SLO, calculated for the last hour.",
+          "type": "number"
+        },
+        "BurnRateType": {
+          "description": "The calculated burn rate type.\n\nHas a value of 'FAST', 'SLOW' or 'NONE'.",
+          "type": "string",
+          "enum": [
+            "FAST",
+            "SLOW",
+            "NONE"
+          ]
+        },
+        "SloValue": {
+          "description": "The calculated value of the SLO for the timeframe chosen for the burn rate calculation.",
+          "type": "number"
+        },
+        "EstimatedTimeToConsumeErrorBudget": {
+          "description": "The estimated time left to consume the error budget in hours.",
+          "type": "number"
+        }
+      },
+      "required": [
+        "FastBurnThreshold",
+        "BurnRateVisualizationEnabled"
+      ],
+      "additionalProperties": false
+    },
+    "Timeframe": {
+      "description": "The timeframe for the SLO evaluation. Use the syntax of the global timeframe selector.",
+      "type": "string"
+    },
+    "UserRateMetric": {
+      "description": "DEPRECATED\n\nThe type of the metric to use for SLO calculation:\n\n    true: An existing percentage-based metric.\n    false: A ratio of two metrics.\n\nFor a list of available metrics, see Built-in metric page or try the GET metrics API call.",
+      "type": "boolean"
+    },
+    "MetricRate": {
+      "description": "DEPRECATED\n\nThe percentage-based metric for the calculation of the SLO.\n\nRequired when the useRateMetric is set to true.",
+      "type": "string"
+    },
+    "MetricNumerator": {
+      "description": "DEPRECATED\n\nThe metric for the count of successes (the numerator in rate calculation).\n\nRequired when the useRateMetric is set to false.",
+      "type": "string"
+    },
+    "MetricDenominator": {
+      "description": "DEPRECATED\n\nThe total count metric (the denominator in rate calculation).\n\nRequired when the useRateMetric is set to false.",
+      "type": "string"
+    },
+    "Id": {
+      "description": "Id of the SLO.",
+      "type": "string"
+    },
+    "BurnRateMetricKey": {
+      "description": "The error budget burn rate key for a metric expression.",
+      "type": "string"
+    },
+    "NumeratorValue": {
+      "description": "DEPRECATED\n\nThe numerator value used to evaluate the SLO when useRateMetric is set to false.",
+      "type": "number"
+    },
+    "DenominatorValue": {
+      "description": "DEPRECATED\n\nThe denominator value used to evaluate the SLO when useRateMetric is set to false.",
+      "type": "number"
+    },
+    "ProblemFilter": {
+      "description": "The entity filter for fetching the number of problems related to an SLO. Auto-generated in case no filter has been added to the SLO.",
+      "type": "string"
+    },
+    "RelatedOpenProblems": {
+      "description": "Number of OPEN problems related to the SLO.\n\nHas the value of -1 if there's an error with fetching SLO related problems.",
+      "type": "integer"
+    },
+    "RelatedTotalProblems": {
+      "description": "Total number of problems related to the SLO.\n\nHas the value of -1 if there's an error with fetching SLO related problems.",
+      "type": "integer"
+    },
+    "HasAccess": {
+      "description": "The SLO is accessible through the settings if hasAccess is true.",
+      "type": "boolean"
+    },
+    "EvaluatedPercentage": {
+      "description": "The calculated value of the SLO. Has the value of the evaluated SLO or the value of -1:\n\n    If there is an error with the SLO calculation; in that case check the value of the error property.\n    If the evaluate parameter has not been set to true; in that case the error property will contain no error.",
+      "type": "number"
+    },
+    "ErrorBudget": {
+      "description": "The error budget of the calculated SLO.\n\nThe error budget is the difference between the calculated and target values. A positive number means all is good; a negative number means trouble.",
+      "type": "number"
+    },
+    "MetricKey": {
+      "description": "The key for a metric expression. Once created, metric keys can't be changed.",
+      "type": "string"
+    },
+    "Status": {
+      "description": "The status of the calculated SLO.",
+      "type": "string",
+      "enum": [
+        "FAILURE",
+        "SUCCESS",
+        "WARNING"
+      ]
+    },
+    "Error": {
+      "description": "The error of the SLO calculation.\n\nIf the value differs from NONE there's something wrong with the SLO calculation.",
+      "type": "string"
+    },
+    "Slo": {
+      "description": "Parameters of a service-level objective (SLO).",
+      "type": "object",
+      "properties": {
+        "Enabled": {
+          "$ref": "#/definitions/Enabled"
+        },
+        "Name": {
+          "$ref": "#/definitions/Name"
+        },
+        "Description": {
+          "$ref": "#/definitions/Description"
+        },
+        "MetricName": {
+          "$ref": "#/definitions/MetricName"
+        },
+        "MetricExpression": {
+          "$ref": "#/definitions/MetricExpression"
+        },
+        "EvaluationType": {
+          "$ref": "#/definitions/EvaluationType"
+        },
+        "Filter": {
+          "$ref": "#/definitions/Filter"
+        },
+        "Target": {
+          "$ref": "#/definitions/Target"
+        },
+        "Warning": {
+          "$ref": "#/definitions/Warning"
+        },
+        "ErrorBudgetBurnRate": {
+          "$ref": "#/definitions/ErrorBudgetBurnRate"
+        },
+        "Timeframe": {
+          "$ref": "#/definitions/Timeframe"
+        },
+        "UserRateMetric": {
+          "$ref": "#/definitions/UserRateMetric"
+        },
+        "MetricRate": {
+          "$ref": "#/definitions/MetricRate"
+        },
+        "MetricNumerator": {
+          "$ref": "#/definitions/MetricNumerator"
+        },
+        "MetricDenominator": {
+          "$ref": "#/definitions/MetricDenominator"
+        },
+        "Id": {
+          "$ref": "#/definitions/Id"
+        },
+        "BurnRateMetricKey": {
+          "$ref": "#/definitions/BurnRateMetricKey"
+        },
+        "NumeratorValue": {
+          "$ref": "#/definitions/NumeratorValue"
+        },
+        "DenominatorValue": {
+          "$ref": "#/definitions/DenominatorValue"
+        },
+        "ProblemFilter": {
+          "$ref": "#/definitions/ProblemFilter"
+        },
+        "RelatedOpenProblems": {
+          "$ref": "#/definitions/RelatedOpenProblems"
+        },
+        "RelatedTotalProblems": {
+          "$ref": "#/definitions/RelatedTotalProblems"
+        },
+        "HasAccess": {
+          "$ref": "#/definitions/HasAccess"
+        },
+        "EvaluatedPercentage": {
+          "$ref": "#/definitions/EvaluatedPercentage"
+        },
+        "ErrorBudget": {
+          "$ref": "#/definitions/ErrorBudget"
+        },
+        "MetricKey": {
+          "$ref": "#/definitions/MetricKey"
+        },
+        "Status": {
+          "$ref": "#/definitions/Status"
+        },
+        "Error": {
+          "$ref": "#/definitions/Error"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "typeConfiguration": {
+    "properties": {
+      "DynatraceAccess": {
+        "$ref": "#/definitions/DynatraceAccess"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "DynatraceAccess"
+    ]
+  },
+  "properties": {
+    "DynatraceAccess": {
+      "description": "Personal Access Token",
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9]+\\.[a-zA-Z0-9]{24}\\.[a-zA-Z0-9]{64}$"
+    },
+    "DynatraceEndpoint": {
+      "description": "Endpoint URL to access Dynatrace API",
+      "type": "string"
+    },
+    "Name": {
+      "$ref": "#/definitions/Name"
+    },
+    "Description": {
+      "$ref": "#/definitions/Description"
+    },
+    "MetricName": {
+      "$ref": "#/definitions/MetricName"
+    },
+    "MetricExpression": {
+      "$ref": "#/definitions/MetricExpression"
+    },
+    "EvaluationType": {
+      "$ref": "#/definitions/EvaluationType"
+    },
+    "Filter": {
+      "$ref": "#/definitions/Filter"
+    },
+    "Target": {
+      "$ref": "#/definitions/Target"
+    },
+    "Warning": {
+      "$ref": "#/definitions/Warning"
+    },
+    "ErrorBudgetBurnRate": {
+      "$ref": "#/definitions/ErrorBudgetBurnRate"
+    },
+    "Timeframe": {
+      "$ref": "#/definitions/Timeframe"
+    },
+    "UserRateMetric": {
+      "$ref": "#/definitions/UserRateMetric"
+    },
+    "MetricRate": {
+      "$ref": "#/definitions/MetricRate"
+    },
+    "MetricNumerator": {
+      "$ref": "#/definitions/MetricNumerator"
+    },
+    "MetricDenominator": {
+      "$ref": "#/definitions/MetricDenominator"
+    },
+    "Id": {
+      "$ref": "#/definitions/Id"
+    },
+    "Slo": {
+      "$ref": "#/definitions/Slo"
+    }
+  },
+  "additionalProperties": false,
+  "tagging": {
+    "taggable": false
+  },
+  "required": [
+    "DynatraceAccess",
+    "DynatraceEndpoint",
+    "Name",
+    "EvaluationType",
+    "Timeframe"
+  ],
+  "createOnlyProperties": [
+    "/properties/MetricName"
+  ],
+  "readOnlyProperties": [
+    "/properties/Id",
+    "/properties/Slo"
+  ],
+  "primaryIdentifier": [
+    "/properties/Id"
+  ],
+  "handlers": {
+    "create": {
+      "permissions": []
+    },
+    "read": {
+      "permissions": []
+    },
+    "update": {
+      "permissions": []
+    },
+    "delete": {
+      "permissions": []
+    },
+    "list": {
+      "permissions": []
+    }
+  }
+}

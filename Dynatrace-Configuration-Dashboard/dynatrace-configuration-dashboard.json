@@ -1,0 +1,272 @@
+{
+  "typeName": "Dynatrace::Configuration::Dashboard",
+  "description": "Manage a dashboard in Dynatrace.",
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "definitions": {
+    "DynatraceAccess": {
+      "type": "object",
+      "properties": {
+        "AccessToken": {
+          "description": "Personal Access Token",
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9]+\\.[a-zA-Z0-9]{24}\\.[a-zA-Z0-9]{64}$"
+        },
+        "DynatraceEndpoint": {
+          "description": "Endpoint URL to access Dynatrace API",
+          "type": "string"
+        }
+      },
+      "required": [
+        "AccessToken",
+        "Endpoint"
+      ],
+      "additionalProperties": false
+    },
+    "Metadata": {
+      "description": "Metadata useful for debugging.",
+      "type": "object",
+      "properties": {
+        "ConfigurationVersions": {
+          "description": "A sorted list of the version numbers of the configuration.",
+          "type": "array",
+          "uniqueItems": false,
+          "insertionOrder": false,
+          "items": {
+            "type": "integer"
+          }
+        },
+        "CurrentConfigurationVersions": {
+          "description": "A sorted list of version numbers of the configuration.",
+          "type": "array",
+          "uniqueItems": false,
+          "insertionOrder": false,
+          "items": {
+            "type": "string"
+          }
+        },
+        "ClusterVersion": {
+          "description": "Dynatrace version.",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "DashboardMetadata": {
+      "description": "Parameters of a dashboard.",
+      "type": "object",
+      "properties": {
+        "Name": {
+          "description": "The name of the dashboard.",
+          "type": "string"
+        },
+        "Shared": {
+          "description": "The dashboard is shared (true) or private (false).",
+          "type": "boolean"
+        },
+        "Owner": {
+          "description": "The owner of the dashboard.",
+          "type": "string"
+        },
+        "DashboardFilter": {
+          "$ref": "#/definitions/DashboardFilter"
+        },
+        "Tags": {
+          "description": "A set of tags assigned to the dashboard.",
+          "type": "array",
+          "uniqueItems": true,
+          "insertionOrder": false,
+          "items": {
+            "type": "string"
+          }
+        },
+        "Preset": {
+          "description": "The dashboard is a preset (true) or a custom (false) dashboard.",
+          "type": "boolean"
+        },
+        "DynamicFilters": {
+          "$ref": "#/definitions/DynamicFilters"
+        },
+        "TilesNameSize": {
+          "description": "The general size of the tiles tile. Default value is medium",
+          "type": "string",
+          "enum": [
+            "small",
+            "medium",
+            "large"
+          ],
+          "default": "medium"
+        }
+      },
+      "required": [
+        "Name",
+        "Owner"
+      ],
+      "additionalProperties": false
+    },
+    "DashboardFilter": {
+      "description": "Filters, applied to a dashboard.",
+      "type": "object",
+      "properties": {
+        "Timeframe": {
+          "description": "The default timeframe of the dashboard.",
+          "type": "string"
+        },
+        "ManagementZone": {
+          "$ref": "#/definitions/EntityShortRepresentation"
+        }
+      },
+      "additionalProperties": false
+    },
+    "EntityShortRepresentation": {
+      "description": "The short representation of a Dynatrace entity.",
+      "type": "object",
+      "properties": {
+        "Id": {
+          "description": "The ID of the Dynatrace entity.",
+          "type": "string"
+        },
+        "Name": {
+          "description": "The name of the Dynatrace entity.",
+          "type": "string"
+        },
+        "Description": {
+          "description": "A short description of the Dynatrace entity.",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "DynamicFilters": {
+      "description": "Dashboard filter configuration of a dashboard.",
+      "type": "object",
+      "properties": {
+        "Filters": {
+          "description": "A set of all possible global dashboard filters that can be applied to a dashboard.",
+          "type": "array",
+          "uniqueItems": true,
+          "insertionOrder": false,
+          "items": {
+            "type": "string"
+          }
+        },
+        "TagSuggestionTypes": {
+          "description": "A set of entities applied for tag filter suggestions. You can fetch the list of possible values with the GET all entity types request.\n\nOnly applicable if the filters set includes TAG_KEY:<tagname>.",
+          "type": "array",
+          "uniqueItems": true,
+          "insertionOrder": false,
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "Filters"
+      ],
+      "additionalProperties": false
+    },
+    "Tiles": {
+      "description": "The list of tiles on the dashboard.",
+      "type": "array",
+      "uniqueItems": false,
+      "insertionOrder": true,
+      "items": {
+        "$ref": "#/definitions/Tile"
+      }
+    },
+    "Id": {
+      "description": "The ID of the dashboard.",
+      "type": "string"
+    },
+    "Tile": {
+      "description": "Configuration of a tile.\n\nThe actual set of fields depends on the type of the tile. Find the list of actual objects in the description of the tileType field or see Dashboards API - Tile JSON models (https://dt-url.net/2wc3spx).",
+      "type": "object"
+    },
+    "Dashboard": {
+      "description": "Dashboard object returned by dynatrace",
+      "type": "object",
+      "properties": {
+        "Metadata": {
+          "$ref": "#/definitions/Metadata"
+        },
+        "Id": {
+          "$ref": "#/definitions/Id"
+        },
+        "DashboardMetadata": {
+          "$ref": "#/definitions/DashboardMetadata"
+        },
+        "Tiles": {
+          "$ref": "#/definitions/Tiles"
+        }
+      },
+      "required": [
+        "DashboardMetadata",
+        "Titles"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "DynatraceAccess": {
+      "description": "Personal Access Token",
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9]+\\.[a-zA-Z0-9]{24}\\.[a-zA-Z0-9]{64}$"
+    },
+    "DynatraceEndpoint": {
+      "description": "Endpoint URL to access Dynatrace API",
+      "type": "string"
+    },
+    "Metadata": {
+      "$ref": "#/definitions/Metadata"
+    },
+    "DashboardMetadata": {
+      "$ref": "#/definitions/DashboardMetadata"
+    },
+    "Tiles": {
+      "$ref": "#/definitions/Tiles"
+    },
+    "Id": {
+      "$ref": "#/definitions/Id"
+    },
+    "Dashboard": {
+      "$ref": "#/definitions/Dashboard"
+    }
+  },
+  "additionalProperties": false,
+  "tagging": {
+    "taggable": false
+  },
+  "required": [
+    "DynatraceAccess",
+    "DynatraceEndpoint",
+    "DashboardMetadata",
+    "Tiles"
+  ],
+  "createOnlyProperties": [
+    "/properties/DynatraceAccess",
+    "/properties/DynatraceEndpoint"
+  ],
+  "readOnlyProperties": [
+    "/properties/Id",
+    "/properties/Dashboard"
+  ],
+  "primaryIdentifier": [
+    "/properties/Id"
+  ],
+  "handlers": {
+    "create": {
+      "permissions": []
+    },
+    "read": {
+      "permissions": []
+    },
+    "update": {
+      "permissions": []
+    },
+    "delete": {
+      "permissions": []
+    },
+    "list": {
+      "permissions": []
+    }
+  }
+}
