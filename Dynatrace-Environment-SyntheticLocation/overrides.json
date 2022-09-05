@@ -1,7 +1,5 @@
 {
   "CREATE": {
-    "/DynatraceAccess": "<DYNATRACE_TOKEN>",
-    "/DynatraceEndpoint": "<DYNATRACE_ENDPOINT>",
     "/Type": "PRIVATE",
     "/Name": "End-to-end CloudFormation test (Dynatrace::Environment::SyntheticLocation)",
     "/CountryCode": "GB",

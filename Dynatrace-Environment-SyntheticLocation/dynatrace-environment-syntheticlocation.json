@@ -6,18 +6,17 @@
     "DynatraceAccess": {
       "type": "object",
       "properties": {
-        "AccessToken": {
+        "Token": {
           "description": "Personal Access Token",
-          "type": "string",
-          "pattern": "^[a-zA-Z0-9]+\\.[a-zA-Z0-9]{24}\\.[a-zA-Z0-9]{64}$"
+          "type": "string"
         },
-        "DynatraceEndpoint": {
+        "Endpoint": {
           "description": "Endpoint URL to access Dynatrace API",
           "type": "string"
         }
       },
       "required": [
-        "AccessToken",
+        "Token",
         "Endpoint"
       ],
       "additionalProperties": false
@@ -162,15 +161,6 @@
     ]
   },
   "properties": {
-    "DynatraceAccess": {
-      "description": "Personal Access Token",
-      "type": "string",
-      "pattern": "^[a-zA-Z0-9]+\\.[a-zA-Z0-9]{24}\\.[a-zA-Z0-9]{64}$"
-    },
-    "DynatraceEndpoint": {
-      "description": "Endpoint URL to access Dynatrace API",
-      "type": "string"
-    },
     "EntityId": {
       "$ref": "#/definitions/EntityId"
     },
@@ -225,8 +215,6 @@
     "taggable": false
   },
   "required": [
-    "DynatraceAccess",
-    "DynatraceEndpoint",
     "Name"
   ],
   "readOnlyProperties": [

@@ -1,7 +1,5 @@
 {
   "CREATE": {
-    "/DynatraceAccess": "<DYNATRACE_TOKEN>",
-    "/DynatraceEndpoint": "<DYNATRACE_ENDPOINT>",
     "/MetricExpression": "(100)*(builtin:service.errors.server.successCount:splitBy())/(builtin:service.requestCount.server:splitBy())",
     "/Filter": "type(\"SERVICE\"),entityName(\"My service\")",
     "/Target": 75,

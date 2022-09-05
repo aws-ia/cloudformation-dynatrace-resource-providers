@@ -12,8 +12,6 @@ To declare this entity in your AWS CloudFormation template, use the following sy
 {
     "Type" : "Dynatrace::Environment::Metric",
     "Properties" : {
-        "<a href="#dynatraceaccess" title="DynatraceAccess">DynatraceAccess</a>" : <i>String</i>,
-        "<a href="#dynatraceendpoint" title="DynatraceEndpoint">DynatraceEndpoint</a>" : <i>String</i>,
         "<a href="#id" title="Id">Id</a>" : <i>String</i>,
         "<a href="#displayname" title="DisplayName">DisplayName</a>" : <i>String</i>,
         "<a href="#unit" title="Unit">Unit</a>" : <i>String</i>,
@@ -28,8 +26,6 @@ To declare this entity in your AWS CloudFormation template, use the following sy
 <pre>
 Type: Dynatrace::Environment::Metric
 Properties:
-    <a href="#dynatraceaccess" title="DynatraceAccess">DynatraceAccess</a>: <i>String</i>
-    <a href="#dynatraceendpoint" title="DynatraceEndpoint">DynatraceEndpoint</a>: <i>String</i>
     <a href="#id" title="Id">Id</a>: <i>String</i>
     <a href="#displayname" title="DisplayName">DisplayName</a>: <i>String</i>
     <a href="#unit" title="Unit">Unit</a>: <i>String</i>
@@ -40,28 +36,6 @@ Properties:
 </pre>
 
 ## Properties
-
-#### DynatraceAccess
-
-Personal Access Token
-
-_Required_: Yes
-
-_Type_: String
-
-_Pattern_: <code>^[a-zA-Z0-9]+\.[a-zA-Z0-9]{24}\.[a-zA-Z0-9]{64}$</code>
-
-_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
-
-#### DynatraceEndpoint
-
-Endpoint URL to access Dynatrace API
-
-_Required_: Yes
-
-_Type_: String
-
-_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
 #### Id
 

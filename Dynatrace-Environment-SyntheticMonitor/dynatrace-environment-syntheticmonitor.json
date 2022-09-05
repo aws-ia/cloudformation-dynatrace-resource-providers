@@ -1,439 +1,433 @@
 {
-    "typeName": "Dynatrace::Environment::SyntheticMonitor",
-    "description": "Manage a synthetic monitor (V1) in Dynatrace.",
-    "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
-    "definitions": {
-        "DynatraceAccess": {
-            "type": "object",
-            "properties": {
-                "AccessToken": {
-                    "description": "Personal Access Token",
-                    "type": "string",
-                    "pattern": "^[a-zA-Z0-9]+\\.[a-zA-Z0-9]{24}\\.[a-zA-Z0-9]{64}$"
-                },
-                "DynatraceEndpoint": {
-                    "description": "Endpoint URL to access Dynatrace API",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "AccessToken",
-                "Endpoint"
-            ],
-            "additionalProperties": false
+  "typeName": "Dynatrace::Environment::SyntheticMonitor",
+  "description": "Manage a synthetic monitor (V1) in Dynatrace.",
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "definitions": {
+    "DynatraceAccess": {
+      "type": "object",
+      "properties": {
+        "Token": {
+          "description": "Personal Access Token",
+          "type": "string"
         },
-        "EntityId": {
-            "description": "The entity ID of the monitor.",
-            "type": "string"
+        "Endpoint": {
+          "description": "Endpoint URL to access Dynatrace API",
+          "type": "string"
+        }
+      },
+      "required": [
+        "Token",
+        "Endpoint"
+      ],
+      "additionalProperties": false
+    },
+    "EntityId": {
+      "description": "The entity ID of the monitor.",
+      "type": "string"
+    },
+    "Name": {
+      "description": "The name of the monitor.",
+      "type": "string",
+      "minLength": 1
+    },
+    "FrequencyMin": {
+      "description": "The frequency of the monitor, in minutes.\n\nYou can use one of the following values: 5, 10, 15, 30, and 60.",
+      "type": "integer",
+      "enum": [
+        5,
+        10,
+        15,
+        30,
+        60
+      ]
+    },
+    "Enabled": {
+      "description": "The monitor is enabled (true) or disabled (false).",
+      "type": "boolean"
+    },
+    "Type": {
+      "description": "Defines the actual set of fields depending on the value. See one of the following objects:\n\n    BROWSER -> BrowserSyntheticMonitor\n    HTTP -> HttpSyntheticMonitor",
+      "type": "string",
+      "enum": [
+        "BROWSER",
+        "HTTP"
+      ]
+    },
+    "CreatedFrom": {
+      "description": "The origin of a monitor",
+      "type": "string"
+    },
+    "Script": {
+      "description": "The script of a browser (https://dt-url.net/9c103rda) or HTTP monitor.",
+      "type": "object"
+    },
+    "Locations": {
+      "description": "A list of locations from which the monitor is executed.\n\nTo specify a location, use its entity ID.",
+      "type": "array",
+      "uniqueItems": true,
+      "insertionOrder": false,
+      "items": {
+        "type": "string"
+      }
+    },
+    "Tags": {
+      "description": "A set of tags assigned to the monitor.",
+      "type": "array",
+      "insertionOrder": false,
+      "items": {
+        "$ref": "#/definitions/Tag"
+      }
+    },
+    "ManagementZones": {
+      "description": "A set of management zones to which the monitor belongs to.",
+      "type": "array",
+      "insertionOrder": false,
+      "items": {
+        "$ref": "#/definitions/ManagementZone"
+      }
+    },
+    "AutomaticallyAssignedApps": {
+      "description": "A set of automatically assigned applications.",
+      "type": "array",
+      "uniqueItems": true,
+      "insertionOrder": false,
+      "items": {
+        "type": "string"
+      }
+    },
+    "ManuallyAssignedApps": {
+      "description": "A set of manually assigned applications.",
+      "type": "array",
+      "uniqueItems": true,
+      "insertionOrder": false,
+      "items": {
+        "type": "string"
+      }
+    },
+    "AnomalyDetectionPolicy": {
+      "description": "The anomaly detection configuration.",
+      "type": "object",
+      "properties": {
+        "OutageHandling": {
+          "$ref": "#/definitions/OutageHandlingPolicy"
         },
-        "Name": {
-            "description": "The name of the monitor.",
-            "type": "string",
-            "minLength": 1
-        },
-        "FrequencyMin": {
-            "description": "The frequency of the monitor, in minutes.\n\nYou can use one of the following values: 5, 10, 15, 30, and 60.",
-            "type": "integer",
-            "enum": [5, 10, 15, 30, 60]
-        },
-        "Enabled": {
-            "description": "The monitor is enabled (true) or disabled (false).",
-            "type": "boolean"
-        },
-        "Type": {
-            "description": "Defines the actual set of fields depending on the value. See one of the following objects:\n\n    BROWSER -> BrowserSyntheticMonitor\n    HTTP -> HttpSyntheticMonitor",
-            "type": "string",
-            "enum": [
-                "BROWSER",
-                "HTTP"
-            ]
-        },
-        "CreatedFrom": {
-            "description": "The origin of a monitor",
-            "type": "string"
-        },
-        "Script": {
-            "description": "The script of a browser (https://dt-url.net/9c103rda) or HTTP monitor.",
-            "type": "object"
-        },
-        "Locations": {
-            "description": "A list of locations from which the monitor is executed.\n\nTo specify a location, use its entity ID.",
-            "type": "array",
-            "uniqueItems": true,
-            "insertionOrder": false,
-            "items": {
-                "type": "string"
-            }
-        },
-        "Tags": {
-            "description": "A set of tags assigned to the monitor.",
-            "type": "array",
-            "insertionOrder": false,
-            "items": {
-                "$ref": "#/definitions/Tag"
-            }
-        },
-        "ManagementZones": {
-            "description": "A set of management zones to which the monitor belongs to.",
-            "type": "array",
-            "insertionOrder": false,
-            "items": {
-                "$ref": "#/definitions/ManagementZone"
-            }
-        },
-        "AutomaticallyAssignedApps": {
-            "description": "A set of automatically assigned applications.",
-            "type": "array",
-            "uniqueItems": true,
-            "insertionOrder": false,
-            "items": {
-                "type": "string"
-            }
-        },
-        "ManuallyAssignedApps": {
-            "description": "A set of manually assigned applications.",
-            "type": "array",
-            "uniqueItems": true,
-            "insertionOrder": false,
-            "items": {
-                "type": "string"
-            }
-        },
-        "AnomalyDetectionPolicy": {
-            "description": "The anomaly detection configuration.",
-            "type": "object",
-            "properties": {
-                "OutageHandling": {
-                    "$ref": "#/definitions/OutageHandlingPolicy"
-                },
-                "LoadingTimeThresholds": {
-                    "$ref": "#/definitions/LoadingTimeThresholdsPolicy"
-                }
-            },
-            "required": [
-                "OutageHandling",
-                "LoadingTimeThresholds"
-            ],
-            "additionalProperties": false
-        },
-        "OutageHandlingPolicy": {
-            "description": "Outage handling configuration.",
-            "type": "object",
-            "properties": {
-                "GlobalOutage": {
-                    "description": "When enabled (true), generate a problem and send an alert when the monitor is unavailable at all configured locations.",
-                    "type": "boolean"
-                },
-                "GlobalOutagePolicy": {
-                    "$ref": "#/definitions/GlobalOutagePolicy"
-                },
-                "LocalOutage": {
-                    "description": "When enabled (true), generate a problem and send an alert when the monitor is unavailable for one or more consecutive runs at any location.",
-                    "type": "boolean"
-                },
-                "LocalOutagePolicy": {
-                    "$ref": "#/definitions/LocalOutagePolicy"
-                },
-                "RetryOnError": {
-                    "description": "Schedule retry if browser monitor execution results in a fail. For HTTP monitors this property is ignored.",
-                    "type": "boolean"
-                }
-            },
-            "additionalProperties": false
+        "LoadingTimeThresholds": {
+          "$ref": "#/definitions/LoadingTimeThresholdsPolicy"
+        }
+      },
+      "required": [
+        "OutageHandling",
+        "LoadingTimeThresholds"
+      ],
+      "additionalProperties": false
+    },
+    "OutageHandlingPolicy": {
+      "description": "Outage handling configuration.",
+      "type": "object",
+      "properties": {
+        "GlobalOutage": {
+          "description": "When enabled (true), generate a problem and send an alert when the monitor is unavailable at all configured locations.",
+          "type": "boolean"
         },
         "GlobalOutagePolicy": {
-            "description": "Global outage handling configuration.",
-            "type": "object",
-            "properties": {
-                "ConsecutiveRuns": {
-                    "description": "Alert if all locations are unable to access the web application X times consecutively.",
-                    "type": "integer",
-                    "minimum": 1,
-                    "maximum": 5
-                }
-            },
-            "required": [
-                "ConsecutiveRuns"
-            ],
-            "additionalProperties": false
+          "$ref": "#/definitions/GlobalOutagePolicy"
+        },
+        "LocalOutage": {
+          "description": "When enabled (true), generate a problem and send an alert when the monitor is unavailable for one or more consecutive runs at any location.",
+          "type": "boolean"
         },
         "LocalOutagePolicy": {
-            "description": "Local outage handling configuration.\n\nAlert if affectedLocations of locations are unable to access the web application consecutiveRuns times consecutively.",
-            "type": "object",
-            "properties": {
-                "AffectedLocations": {
-                    "description": "The number of affected locations to trigger an alert.",
-                    "type": "integer",
-                    "minimum": 1
-                },
-                "ConsecutiveRuns": {
-                    "description": "The number of consecutive fails to trigger an alert.",
-                    "type": "integer",
-                    "minimum": 1,
-                    "maximum": 5
-                }
-            },
-            "required": [
-                "AffectedLocations",
-                "ConsecutiveRuns"
-            ],
-            "additionalProperties": false
+          "$ref": "#/definitions/LocalOutagePolicy"
         },
-        "LoadingTimeThresholdsPolicy": {
-            "description": "Performance thresholds configuration.",
-            "type": "object",
-            "properties": {
-                "Enabled": {
-                    "description": "Performance threshold is enabled (true) or disabled (false).",
-                    "type": "boolean"
-                },
-                "Thresholds": {
-                    "description": "The list of performance threshold rules.",
-                    "type": "array",
-                    "insertionOrder": false,
-                    "items": {
-                        "$ref": "#/definitions/LoadingTimeThreshold"
-                    }
-                }
-            },
-            "required": [
-                "Enabled",
-                "Thresholds"
-            ],
-            "additionalProperties": false
-        },
-        "LoadingTimeThreshold": {
-            "description": "The performance threshold rule.",
-            "type": "object",
-            "properties": {
-                "Type": {
-                    "description": "The type of the threshold: total loading time or action loading time.",
-                    "type": "string",
-                    "enum": [
-                        "ACTION",
-                        "TOTAL"
-                    ]
-                },
-                "ValueMs": {
-                    "description": "Notify if monitor takes longer than X milliseconds to load.",
-                    "type": "integer",
-                    "minimum": 0
-                },
-                "RequestIndex": {
-                    "description": "Specify the request to which an ACTION threshold applies.",
-                    "type": "integer",
-                    "minimum": 0
-                },
-                "EventIndex": {
-                    "description": "Specify the event to which an ACTION threshold applies.",
-                    "type": "integer",
-                    "minimum": 0
-                }
-            },
-            "required": [
-                "Type",
-                "ValueMs"
-            ],
-            "additionalProperties": false
-        },
-        "Tag": {
-            "description": "Tag with source of a Dynatrace entity.",
-            "type": "object",
-            "properties": {
-                "Source": {
-                    "description": "The source of the tag, such as USER, RULE_BASED or AUTO",
-                    "type": "string",
-                    "enum": [
-                        "AUTO",
-                        "RULE_BASED",
-                        "USER"
-                    ]
-                },
-                "Context": {
-                    "description": "The origin of the tag, such as AWS or Cloud Foundry.\n\nCustom tags use the CONTEXTLESS value.",
-                    "type": "string",
-                    "enum": [
-                        "AWS",
-                        "AWS_GENERIC",
-                        "AZURE",
-                        "CLOUD_FOUNDRY",
-                        "CONTEXTLESS",
-                        "ENVIRONMENT",
-                        "GOOGLE_CLOUD",
-                        "KUBERNETES"
-                    ]
-                },
-                "Key": {
-                    "description":"The key of the tag.\n\nCustom tags have the tag value here.",
-                    "type": "string",
-                    "minLength": 1
-                },
-                "Value": {
-                    "description": "The value of the tag.\n\nNot applicable to custom tags.",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "Context",
-                "Key"
-            ],
-            "additionalProperties": false
-        },
-        "ManagementZone": {
-            "description": "Tag with source of a Dynatrace entity.",
-            "type": "object",
-            "properties": {
-                "Id": {
-                    "description": "The ID of the management zone.",
-                    "type": "string"
-                },
-                "Name": {
-                    "description": "The name of the management zone.",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "Id",
-                "Name"
-            ],
-            "additionalProperties": false
-        },
-        "SyntheticMonitor": {
-            "description": "The synthetic monitor.",
-            "type": "object",
-            "properties": {
-                "EntityId": {
-                    "$ref": "#/definitions/EntityId"
-                },
-                "FrequencyMin": {
-                    "$ref": "#/definitions/FrequencyMin"
-                },
-                "AnomalyDetection": {
-                    "$ref": "#/definitions/AnomalyDetectionPolicy"
-                },
-                "Type": {
-                    "$ref": "#/definitions/Type"
-                },
-                "Name": {
-                    "$ref": "#/definitions/Name"
-                },
-                "Locations": {
-                    "$ref": "#/definitions/Locations"
-                },
-                "Enabled": {
-                    "$ref": "#/definitions/Enabled"
-                },
-                "Script": {
-                    "$ref": "#/definitions/Script"
-                },
-                "CreatedFrom": {
-                    "$ref": "#/definitions/CreatedFrom"
-                },
-                "ManagementZones": {
-                    "$ref": "#/definitions/ManagementZones"
-                },
-                "Tags": {
-                    "$ref": "#/definitions/Tags"
-                },
-                "ManuallyAssignedApps": {
-                    "$ref": "#/definitions/ManuallyAssignedApps"
-                },
-                "AutomaticallyAssignedApps": {
-                    "$ref": "#/definitions/AutomaticallyAssignedApps"
-                }
-            },
-            "additionalProperties": false
+        "RetryOnError": {
+          "description": "Schedule retry if browser monitor execution results in a fail. For HTTP monitors this property is ignored.",
+          "type": "boolean"
         }
+      },
+      "additionalProperties": false
     },
-    "typeConfiguration": {
-        "properties": {
-            "DynatraceAccess": {
-                "$ref": "#/definitions/DynatraceAccess"
-            }
-        },
-        "additionalProperties": false,
-        "required": [
-            "DynatraceAccess"
-        ]
+    "GlobalOutagePolicy": {
+      "description": "Global outage handling configuration.",
+      "type": "object",
+      "properties": {
+        "ConsecutiveRuns": {
+          "description": "Alert if all locations are unable to access the web application X times consecutively.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        }
+      },
+      "required": [
+        "ConsecutiveRuns"
+      ],
+      "additionalProperties": false
     },
-    "properties": {
-        "DynatraceAccess": {
-            "description": "Personal Access Token",
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9]+\\.[a-zA-Z0-9]{24}\\.[a-zA-Z0-9]{64}$"
+    "LocalOutagePolicy": {
+      "description": "Local outage handling configuration.\n\nAlert if affectedLocations of locations are unable to access the web application consecutiveRuns times consecutively.",
+      "type": "object",
+      "properties": {
+        "AffectedLocations": {
+          "description": "The number of affected locations to trigger an alert.",
+          "type": "integer",
+          "minimum": 1
         },
-        "DynatraceEndpoint": {
-            "description": "Endpoint URL to access Dynatrace API",
-            "type": "string"
+        "ConsecutiveRuns": {
+          "description": "The number of consecutive fails to trigger an alert.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        }
+      },
+      "required": [
+        "AffectedLocations",
+        "ConsecutiveRuns"
+      ],
+      "additionalProperties": false
+    },
+    "LoadingTimeThresholdsPolicy": {
+      "description": "Performance thresholds configuration.",
+      "type": "object",
+      "properties": {
+        "Enabled": {
+          "description": "Performance threshold is enabled (true) or disabled (false).",
+          "type": "boolean"
         },
-        "FrequencyMin": {
-            "$ref": "#/definitions/FrequencyMin"
-        },
-        "AnomalyDetection": {
-            "$ref": "#/definitions/AnomalyDetectionPolicy"
-        },
+        "Thresholds": {
+          "description": "The list of performance threshold rules.",
+          "type": "array",
+          "insertionOrder": false,
+          "items": {
+            "$ref": "#/definitions/LoadingTimeThreshold"
+          }
+        }
+      },
+      "required": [
+        "Enabled",
+        "Thresholds"
+      ],
+      "additionalProperties": false
+    },
+    "LoadingTimeThreshold": {
+      "description": "The performance threshold rule.",
+      "type": "object",
+      "properties": {
         "Type": {
-            "$ref": "#/definitions/Type"
+          "description": "The type of the threshold: total loading time or action loading time.",
+          "type": "string",
+          "enum": [
+            "ACTION",
+            "TOTAL"
+          ]
+        },
+        "ValueMs": {
+          "description": "Notify if monitor takes longer than X milliseconds to load.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "RequestIndex": {
+          "description": "Specify the request to which an ACTION threshold applies.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "EventIndex": {
+          "description": "Specify the event to which an ACTION threshold applies.",
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "Type",
+        "ValueMs"
+      ],
+      "additionalProperties": false
+    },
+    "Tag": {
+      "description": "Tag with source of a Dynatrace entity.",
+      "type": "object",
+      "properties": {
+        "Source": {
+          "description": "The source of the tag, such as USER, RULE_BASED or AUTO",
+          "type": "string",
+          "enum": [
+            "AUTO",
+            "RULE_BASED",
+            "USER"
+          ]
+        },
+        "Context": {
+          "description": "The origin of the tag, such as AWS or Cloud Foundry.\n\nCustom tags use the CONTEXTLESS value.",
+          "type": "string",
+          "enum": [
+            "AWS",
+            "AWS_GENERIC",
+            "AZURE",
+            "CLOUD_FOUNDRY",
+            "CONTEXTLESS",
+            "ENVIRONMENT",
+            "GOOGLE_CLOUD",
+            "KUBERNETES"
+          ]
+        },
+        "Key": {
+          "description": "The key of the tag.\n\nCustom tags have the tag value here.",
+          "type": "string",
+          "minLength": 1
+        },
+        "Value": {
+          "description": "The value of the tag.\n\nNot applicable to custom tags.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "Context",
+        "Key"
+      ],
+      "additionalProperties": false
+    },
+    "ManagementZone": {
+      "description": "Tag with source of a Dynatrace entity.",
+      "type": "object",
+      "properties": {
+        "Id": {
+          "description": "The ID of the management zone.",
+          "type": "string"
         },
         "Name": {
-            "$ref": "#/definitions/Name"
+          "description": "The name of the management zone.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "Id",
+        "Name"
+      ],
+      "additionalProperties": false
+    },
+    "SyntheticMonitor": {
+      "description": "The synthetic monitor.",
+      "type": "object",
+      "properties": {
+        "EntityId": {
+          "$ref": "#/definitions/EntityId"
+        },
+        "FrequencyMin": {
+          "$ref": "#/definitions/FrequencyMin"
+        },
+        "AnomalyDetection": {
+          "$ref": "#/definitions/AnomalyDetectionPolicy"
+        },
+        "Type": {
+          "$ref": "#/definitions/Type"
+        },
+        "Name": {
+          "$ref": "#/definitions/Name"
         },
         "Locations": {
-            "$ref": "#/definitions/Locations"
+          "$ref": "#/definitions/Locations"
         },
         "Enabled": {
-            "$ref": "#/definitions/Enabled"
+          "$ref": "#/definitions/Enabled"
         },
         "Script": {
-            "$ref": "#/definitions/Script"
+          "$ref": "#/definitions/Script"
+        },
+        "CreatedFrom": {
+          "$ref": "#/definitions/CreatedFrom"
+        },
+        "ManagementZones": {
+          "$ref": "#/definitions/ManagementZones"
         },
         "Tags": {
-            "$ref": "#/definitions/Tags"
+          "$ref": "#/definitions/Tags"
         },
         "ManuallyAssignedApps": {
-            "$ref": "#/definitions/ManuallyAssignedApps"
+          "$ref": "#/definitions/ManuallyAssignedApps"
         },
-        "EntityId": {
-            "$ref": "#/definitions/EntityId"
-        },
-        "Monitor": {
-            "$ref": "#/definitions/SyntheticMonitor"
+        "AutomaticallyAssignedApps": {
+          "$ref": "#/definitions/AutomaticallyAssignedApps"
         }
+      },
+      "additionalProperties": false
+    }
+  },
+  "typeConfiguration": {
+    "properties": {
+      "DynatraceAccess": {
+        "$ref": "#/definitions/DynatraceAccess"
+      }
     },
     "additionalProperties": false,
-    "tagging": {
-        "taggable": true
-    },
     "required": [
-        "DynatraceAccess",
-        "DynatraceEndpoint",
-        "FrequencyMin",
-        "Type",
-        "Name",
-        "Enabled"
-    ],
-    "readOnlyProperties": [
-        "/properties/EntityId",
-        "/properties/Monitor"
-    ],
-    "primaryIdentifier": [
-        "/properties/EntityId"
-    ],
-    "handlers": {
-        "create": {
-            "permissions": []
-        },
-        "read": {
-            "permissions": []
-        },
-        "update": {
-            "permissions": []
-        },
-        "delete": {
-            "permissions": []
-        },
-        "list": {
-            "permissions": []
-        }
+      "DynatraceAccess"
+    ]
+  },
+  "properties": {
+    "FrequencyMin": {
+      "$ref": "#/definitions/FrequencyMin"
+    },
+    "AnomalyDetection": {
+      "$ref": "#/definitions/AnomalyDetectionPolicy"
+    },
+    "Type": {
+      "$ref": "#/definitions/Type"
+    },
+    "Name": {
+      "$ref": "#/definitions/Name"
+    },
+    "Locations": {
+      "$ref": "#/definitions/Locations"
+    },
+    "Enabled": {
+      "$ref": "#/definitions/Enabled"
+    },
+    "Script": {
+      "$ref": "#/definitions/Script"
+    },
+    "Tags": {
+      "$ref": "#/definitions/Tags"
+    },
+    "ManuallyAssignedApps": {
+      "$ref": "#/definitions/ManuallyAssignedApps"
+    },
+    "EntityId": {
+      "$ref": "#/definitions/EntityId"
+    },
+    "Monitor": {
+      "$ref": "#/definitions/SyntheticMonitor"
     }
+  },
+  "additionalProperties": false,
+  "tagging": {
+    "taggable": true
+  },
+  "required": [
+    "FrequencyMin",
+    "Type",
+    "Name",
+    "Enabled"
+  ],
+  "readOnlyProperties": [
+    "/properties/EntityId",
+    "/properties/Monitor"
+  ],
+  "primaryIdentifier": [
+    "/properties/EntityId"
+  ],
+  "handlers": {
+    "create": {
+      "permissions": []
+    },
+    "read": {
+      "permissions": []
+    },
+    "update": {
+      "permissions": []
+    },
+    "delete": {
+      "permissions": []
+    },
+    "list": {
+      "permissions": []
+    }
+  }
 }

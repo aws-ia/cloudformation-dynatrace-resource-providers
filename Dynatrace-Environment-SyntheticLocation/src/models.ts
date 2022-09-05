@@ -11,24 +11,6 @@ export class ResourceModel extends BaseModel {
     @Exclude()
     protected readonly IDENTIFIER_KEY_ENTITYID: string = '/properties/EntityId';
 
-    @Expose({ name: 'DynatraceAccess' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'dynatraceAccess', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    dynatraceAccess?: Optional<string>;
-    @Expose({ name: 'DynatraceEndpoint' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'dynatraceEndpoint', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    dynatraceEndpoint?: Optional<string>;
     @Expose({ name: 'EntityId' })
     @Transform(
         (value: any, obj: any) =>
@@ -343,24 +325,24 @@ export class DynatraceAccess extends BaseModel {
     ['constructor']: typeof DynatraceAccess;
 
 
-    @Expose({ name: 'AccessToken' })
+    @Expose({ name: 'Token' })
     @Transform(
         (value: any, obj: any) =>
-            transformValue(String, 'accessToken', value, obj, []),
+            transformValue(String, 'token', value, obj, []),
         {
             toClassOnly: true,
         }
     )
-    accessToken?: Optional<string>;
-    @Expose({ name: 'DynatraceEndpoint' })
+    token?: Optional<string>;
+    @Expose({ name: 'Endpoint' })
     @Transform(
         (value: any, obj: any) =>
-            transformValue(String, 'dynatraceEndpoint', value, obj, []),
+            transformValue(String, 'endpoint', value, obj, []),
         {
             toClassOnly: true,
         }
     )
-    dynatraceEndpoint?: Optional<string>;
+    endpoint?: Optional<string>;
 
 }
 

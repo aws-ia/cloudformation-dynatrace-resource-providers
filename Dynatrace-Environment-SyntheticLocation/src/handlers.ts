@@ -2,11 +2,12 @@ import {
     exceptions,
     ResourceHandlerRequest,
 } from '@amazon-web-services-cloudformation/cloudformation-cli-typescript-lib';
-import {ResourceModel, SyntheticLocation} from './models';
+import {ResourceModel, SyntheticLocation, TypeConfigurationModel} from './models';
 import {ApiErrorResponse, DynatraceClient} from '../../Dynatrace-Common/src/dynatrace-client';
 import {AbstractDynatraceResource} from '../../Dynatrace-Common/src/abstract-dynatrace-resource';
 import {AxiosError} from "axios";
 import {InvalidRequest} from "@amazon-web-services-cloudformation/cloudformation-cli-typescript-lib/dist/exceptions";
+import {CaseTransformer, Transformer} from '../../Dynatrace-Common/src/util';
 
 import {version} from "../package.json";
 
@@ -14,43 +15,47 @@ type SyntheticLocations = {
     locations: SyntheticLocation[];
 }
 
-class Resource extends AbstractDynatraceResource<ResourceModel, SyntheticLocation, SyntheticLocation, void> {
+class Resource extends AbstractDynatraceResource<ResourceModel, SyntheticLocation, SyntheticLocation, void, TypeConfigurationModel> {
 
     private userAgent = `AWS CloudFormation (+https://aws.amazon.com/cloudformation/) CloudFormation resource ${this.typeName}/${version}`;
 
-    async get(model: ResourceModel): Promise<SyntheticLocation> {
-        const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess, this.userAgent).doRequest<SyntheticLocation>(
+    async get(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<SyntheticLocation> {
+        const response = await new DynatraceClient(typeConfiguration?.dynatraceAccess.endpoint, typeConfiguration?.dynatraceAccess.token, this.userAgent).doRequest<SyntheticLocation>(
             'get',
             `/api/v1/synthetic/locations/${model.entityId}`);
         return new SyntheticLocation(response.data);
     }
 
-    async list(model: ResourceModel): Promise<ResourceModel[]> {
-        const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess, this.userAgent).doRequest<SyntheticLocations>(
+    async list(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<ResourceModel[]> {
+        const response = await new DynatraceClient(typeConfiguration?.dynatraceAccess.endpoint, typeConfiguration?.dynatraceAccess.token, this.userAgent).doRequest<SyntheticLocations>(
             'get',
             `/api/v1/synthetic/locations`);
         return response.data.locations.map(location => this.setModelFrom(new ResourceModel(), new SyntheticLocation(location)));
     }
 
-    async create(model: ResourceModel): Promise<SyntheticLocation> {
-        const response = await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess, this.userAgent).doRequest<SyntheticLocation>(
+    async create(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<SyntheticLocation> {
+        const response = await new DynatraceClient(typeConfiguration?.dynatraceAccess.endpoint, typeConfiguration?.dynatraceAccess.token, this.userAgent).doRequest<SyntheticLocation>(
             'post',
             '/api/v1/synthetic/locations',
             {},
-            model.toJSON());
+            Transformer.for(model.toJSON())
+                .transformKeys(CaseTransformer.PASCAL_TO_CAMEL)
+                .transform());
         return new SyntheticLocation(response.data);
     }
 
-    async update(model: ResourceModel): Promise<void> {
-        await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess, this.userAgent).doRequest(
+    async update(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<void> {
+        await new DynatraceClient(typeConfiguration?.dynatraceAccess.endpoint, typeConfiguration?.dynatraceAccess.token, this.userAgent).doRequest(
             'put',
             `/api/v1/synthetic/locations/${model.entityId}`,
             {},
-            model.toJSON());
+            Transformer.for(model.toJSON())
+                .transformKeys(CaseTransformer.PASCAL_TO_CAMEL)
+                .transform());
     }
 
-    async delete(model: ResourceModel): Promise<void> {
-        await new DynatraceClient(model.dynatraceEndpoint, model.dynatraceAccess, this.userAgent).doRequest(
+    async delete(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<void> {
+        await new DynatraceClient(typeConfiguration?.dynatraceAccess.endpoint, typeConfiguration?.dynatraceAccess.token, this.userAgent).doRequest(
             'delete',
             `/api/v1/synthetic/locations/${model.entityId}`);
     }
@@ -63,11 +68,11 @@ class Resource extends AbstractDynatraceResource<ResourceModel, SyntheticLocatio
         if (!from) {
             return model;
         }
-        model.location = from;
-        if (!!from.entityId) {
-            model.entityId = from.entityId;
-        }
-        return model;
+
+        return new ResourceModel({
+            ...model,
+            ...from
+        })
     }
 
     // We override the default exception handler because this CRUD API specifically returns a 400 with the message
@@ -84,7 +89,7 @@ class Resource extends AbstractDynatraceResource<ResourceModel, SyntheticLocatio
     }
 }
 
-export const resource = new Resource(ResourceModel.TYPE_NAME, ResourceModel);
+export const resource = new Resource(ResourceModel.TYPE_NAME, ResourceModel, null, null, TypeConfigurationModel);
 
 // Entrypoint for production usage after registered in CloudFormation
 export const entrypoint = resource.entrypoint;
