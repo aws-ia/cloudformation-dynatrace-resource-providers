@@ -2,7 +2,7 @@
     "artifact_type": "RESOURCE",
     "typeName": "Dynatrace::Environment::Metric",
     "language": "typescript",
-    "runtime": "nodejs12.x",
+    "runtime": "nodejs14.x",
     "entrypoint": "dist/Dynatrace-Environment-Metric/src/handlers.entrypoint",
     "testEntrypoint": "dist/Dynatrace-Environment-Metric/src/handlers.testEntrypoint",
     "settings": {

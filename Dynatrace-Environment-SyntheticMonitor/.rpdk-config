@@ -2,7 +2,7 @@
     "artifact_type": "RESOURCE",
     "typeName": "Dynatrace::Environment::SyntheticMonitor",
     "language": "typescript",
-    "runtime": "nodejs12.x",
+    "runtime": "nodejs14.x",
     "entrypoint": "dist/Dynatrace-Environment-SyntheticMonitor/src/handlers.entrypoint",
     "testEntrypoint": "dist/Dynatrace-Environment-SyntheticMonitor/src/handlers.testEntrypoint",
     "settings": {

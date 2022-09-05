@@ -2,7 +2,7 @@
     "artifact_type": "RESOURCE",
     "typeName": "Dynatrace::Environment::ServiceLevelObjective",
     "language": "typescript",
-    "runtime": "nodejs12.x",
+    "runtime": "nodejs14.x",
     "entrypoint": "dist/Dynatrace-Environment-ServiceLevelObjective/src/handlers.entrypoint",
     "testEntrypoint": "dist/Dynatrace-Environment-ServiceLevelObjective/src/handlers.testEntrypoint",
     "settings": {
