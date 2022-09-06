@@ -1,42 +1,46 @@
-import {Metric, ResourceModel, TypeConfigurationModel} from './models';
+import {ResourceModel, TypeConfigurationModel} from './models';
 import {DynatraceClient} from '../../Dynatrace-Common/src/dynatrace-client';
 import {AbstractDynatraceResource} from '../../Dynatrace-Common/src/abstract-dynatrace-resource';
 import {CaseTransformer, Transformer} from '../../Dynatrace-Common/src/util';
 
 import {version} from "../package.json";
 
-class Resource extends AbstractDynatraceResource<ResourceModel, Metric, Metric, Metric, TypeConfigurationModel> {
+type MetricPayload = {
+    dimensions: any
+};
+
+class Resource extends AbstractDynatraceResource<ResourceModel, MetricPayload, MetricPayload, MetricPayload, TypeConfigurationModel> {
 
     private userAgent = `AWS CloudFormation (+https://aws.amazon.com/cloudformation/) CloudFormation resource ${this.typeName}/${version}`;
 
-    async get(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<Metric> {
-        const response = await new DynatraceClient(typeConfiguration?.dynatraceAccess.endpoint, typeConfiguration?.dynatraceAccess.token, this.userAgent).doRequest<Metric>(
+    async get(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<MetricPayload> {
+        const response = await new DynatraceClient(typeConfiguration?.dynatraceAccess.endpoint, typeConfiguration?.dynatraceAccess.token, this.userAgent).doRequest<MetricPayload>(
             'get',
             `/api/v1/timeseries/${model.id}`);
-        return new Metric(response.data);
+        return response.data;
     }
 
     async list(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<ResourceModel[]> {
-        const response = await new DynatraceClient(typeConfiguration?.dynatraceAccess.endpoint, typeConfiguration?.dynatraceAccess.token, this.userAgent).doRequest<Metric[]>(
+        const response = await new DynatraceClient(typeConfiguration?.dynatraceAccess.endpoint, typeConfiguration?.dynatraceAccess.token, this.userAgent).doRequest<MetricPayload[]>(
             'get',
             `/api/v1/timeseries`,
             {source: 'CUSTOM'});
 
-        return response.data.map(metric => this.setModelFrom(new ResourceModel(model), new Metric(metric)));
+        return response.data.map(metric => this.setModelFrom(new ResourceModel(model), metric));
     }
 
-    async create(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<Metric> {
-        const response = await new DynatraceClient(typeConfiguration?.dynatraceAccess.endpoint, typeConfiguration?.dynatraceAccess.token, this.userAgent).doRequest<Metric>(
+    async create(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<MetricPayload> {
+        const response = await new DynatraceClient(typeConfiguration?.dynatraceAccess.endpoint, typeConfiguration?.dynatraceAccess.token, this.userAgent).doRequest<MetricPayload>(
             'put',
             `/api/v1/timeseries/${model.id}`,
             {},
             Transformer.for(model.toJSON())
                 .transformKeys(CaseTransformer.PASCAL_TO_CAMEL)
                 .transform());
-        return new Metric(response.data);
+        return response.data;
     }
 
-    async update(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<Metric> {
+    async update(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<MetricPayload> {
         return this.create(model);
     }
 
@@ -50,15 +54,18 @@ class Resource extends AbstractDynatraceResource<ResourceModel, Metric, Metric, 
         return new ResourceModel(partial);
     }
 
-    setModelFrom(model: ResourceModel, from?: Metric): ResourceModel {
+    setModelFrom(model: ResourceModel, from?: MetricPayload): ResourceModel {
         if (!from) {
             return model;
         }
 
-        return new ResourceModel({
+        let resourceModel = new ResourceModel({
             ...model,
             ...from
         });
+        delete resourceModel.dimensions;
+
+        return resourceModel;
     }
 
 }

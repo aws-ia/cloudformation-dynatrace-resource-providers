@@ -69,7 +69,7 @@ _Required_: No
 
 _Type_: String
 
-_Allowed Values_: <code>Bit</code> | <code>BitPerHour</code> | <code>BitPerMinute</code> | <code>BitPerSecond</code> | <code>Byte</code> | <code>BytePerHour</code> | <code>BytePerMinute</code> | <code>BytePerSecond</code> | <code>Cores</code> | <code>Count</code> | <code>Day</code> | <code>DecibelMilliWatt</code> | <code>G</code> | <code>GibiByte</code> | <code>GigaByte</code> | <code>Hour</code> | <code>KibiByte</code> | <code>KibiBytePerHour</code> | <code>KibiBytePerMinute</code> | <code>KibiBytePerSecond</code> | <code>KiloByte</code> | <code>KiloBytePerHour</code> | <code>KiloBytePerMinute</code> | <code>KiloBytePerSecond</code> | <code>M</code> | <code>MSU</code> | <code>MebiByte</code> | <code>MebiBytePerHour</code> | <code>MebiBytePerMinute</code> | <code>MebiBytePerSecond</code> | <code>MegaByte</code> | <code>MegaBytePerHour</code> | <code>MegaBytePerMinute</code> | <code>MegaBytePerSecond</code> | <code>MicroSecond</code> | <code>MilliSecond</code> | <code>MilliSecondPerMinute</code> | <code>Minute</code> | <code>Month</code> | <code>N/A</code> | <code>NanoSecond</code> | <code>NanoSecondPerMinute</code> | <code>PerHour</code> | <code>PerMinute</code> | <code>PerSecond</code> | <code>Percent</code> | <code>Pixel</code> | <code>Promille</code> | <code>Ratio</code> | <code>Second</code> | <code>State</code> | <code>Unspecified</code> | <code>Week</code> | <code>Year</code> | <code>k</code> | <code>mCores</code>
+_Allowed Values_: <code>Billion (bilcount)</code> | <code>Bit (bit)</code> | <code>BitPerHour (bit/h)</code> | <code>BitPerMinute (bit/min)</code> | <code>BitPerSecond (bit/s)</code> | <code>Byte (B)</code> | <code>BytePerHour (B/h)</code> | <code>BytePerMinute (B/min)</code> | <code>BytePerSecond (B/s)</code> | <code>Cores</code> | <code>Count (count)</code> | <code>Day (ds)</code> | <code>DecibelMilliWatt (dBm)</code> | <code>G</code> | <code>GibiByte (GiB)</code> | <code>GigaByte (GB)</code> | <code>Hour (hs)</code> | <code>KibiByte (KiB)</code> | <code>KibiBytePerHour (KiB/h)</code> | <code>KibiBytePerMinute (KiB/min)</code> | <code>KibiBytePerSecond (KiB/s)</code> | <code>KiloByte (kB)</code> | <code>KiloBytePerHour (kB/h)</code> | <code>KiloBytePerMinute (kB/min)</code> | <code>KiloBytePerSecond (kB/s)</code> | <code>M</code> | <code>MSU</code> | <code>MebiByte (MiB)</code> | <code>MebiBytePerHour (MiB/h)</code> | <code>MebiBytePerMinute (MiB/min)</code> | <code>MebiBytePerSecond (MiB/s)</code> | <code>MegaByte (MB)</code> | <code>MegaBytePerHour (MB/h)</code> | <code>MegaBytePerMinute (MB/min)</code> | <code>MegaBytePerSecond (MB/s)</code> | <code>MicroSecond (µs)</code> | <code>MilliSecond (ms)</code> | <code>MilliSecondPerMinute (ms/min)</code> | <code>Million (milcount)</code> | <code>Minute (mins)</code> | <code>Month (mos)</code> | <code>N/A</code> | <code>NanoSecond (ns)</code> | <code>NanoSecondPerMinute (ns/min)</code> | <code>PerHour (count/h)</code> | <code>PerMinute (count/min)</code> | <code>PerSecond (count/s)</code> | <code>Percent (%)</code> | <code>Pixel (px)</code> | <code>Promille (‰)</code> | <code>Ratio</code> | <code>Second (s)</code> | <code>State</code> | <code>Unspecified</code> | <code>Week (ws)</code> | <code>Year (ys)</code> | <code>k</code> | <code>km/h</code> | <code>m/h</code> | <code>m/s</code> | <code>mCores</code>
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
@@ -83,7 +83,7 @@ _Required_: No
 
 _Type_: List of String
 
-_Update requires_: [Replacement](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-replacement)
+_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
 #### Types
 
@@ -113,7 +113,27 @@ The `Fn::GetAtt` intrinsic function returns a value for a specified attribute of
 
 For more information about using the `Fn::GetAtt` intrinsic function, see [Fn::GetAtt](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getatt.html).
 
-#### Metric
+#### TimeseriesId
 
-The configuration of a metric with all its parameters.
+The ID of the metric.
+
+#### AggregationTypes
+
+The list of allowed aggregations for this metric.
+
+#### Filter
+
+The feature, where the metric originates.
+
+#### DetailedSource
+
+The feature, where the metric originates.
+
+#### PluginId
+
+The ID of the plugin, where the metric originates.
+
+#### Warnings
+
+The warnings that occurred while creating the metric.
 
