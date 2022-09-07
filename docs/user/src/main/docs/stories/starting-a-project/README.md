@@ -1,32 +1,44 @@
----
-AWSTemplateFormatVersion: '2010-09-09'
+# Setting up a new project with service level objective, locations, monitors and metrics
 
-Description: |
-  The following CloudFormation Dynatrace resource types allow the creation and configuration of 
-  service level objectives, locations, monitors and metrics related to your application.
-  This allows kicking off monitoring of new projects simply, efficiently, and consistently.
 
+
+With the Dynatrace resources for CloudFormation, you can kick off the monitoring of new projects simply, efficiently, and consistently.
+
+Project build pipelines and other project-bootstrap infrastructure can also be included
+as part of the CloudFormation, so organizations can have a quick and common way to bootstrap a new project.
+
+This demo will use the following types:
+
+* `Dynatrace::Environment::Metric` - to monitor a part of an application in Dynatrace.
+* `Dynatrace::Environment::SyntheticMonitor` - to gather and control metrics.
+* `Dynatrace::Environmnet::SyntheticLocation` - to execute monitors, and more.
+* `Dynatrace::Environment::ServiceLevelObjective` - to define operation goals based on metrics and monitors.
+* `Dynatrace::Configuration::Dashboard` - to define a Dynatrace dashboard that will display KPIs and other vital information for the app operation.
+
+### Nodes
+
+Typically, Dynatrace will trigger and execute monitors though a series of nodes. Dynatrace provide some all around the world, but you can also provide your own through ActiveGate.
+Find or create a monitor-enabled note the Dynatrace UI, and make a note of its numeric ID. This will be the parameter `NodeIds`:
+```
 Parameters:
-  DynatraceAccess:
-    Type: String
-    Description: Access token for Dynatrace
-  DynatraceEndpoint:
-    Type: String
-    Description: Endpoint to target for Dynatrace
   NodeIds:
     Type: List<Number>
     Description: Enter the IDs of existing nodes, capable of running monitors
+```
 
-Resources:
-  # 1. Custom metrics
+### Create Metrics
+
+We can define the set of metrics we want to monitor. Imagine an "Acme" e-commerce web application for which we want to monitor specific KPIs
+like `Time to completion` and `Sale failure rate`.
+We can define metric in Dynatrace to track these as follows:
+
+```yaml
   TimeToCompletionMetric:
     Type: Dynatrace::Environment::Metric
     Properties:
-      DynatraceAccess: !Ref DynatraceAccess
-      DynatraceEndpoint: !Ref DynatraceEndpoint
       Id: custom:kpis.timeToCompletion
       DisplayName: Average time for a customer to complete the sales process, from cart
-      Unit: Second
+      Unit: Second (s)
       Dimensions:
         - ACME
         - KPIS
@@ -35,11 +47,9 @@ Resources:
   SuccessCountMetric:
     Type: Dynatrace::Environment::Metric
     Properties:
-      DynatraceAccess: !Ref DynatraceAccess
-      DynatraceEndpoint: !Ref DynatraceEndpoint
       Id: custom:kpis.successCount
       DisplayName: Number of people having something in their cart and completing the sale
-      Unit: Count
+      Unit: Count (count)
       Dimensions:
         - ACME
         - KPIS
@@ -48,23 +58,25 @@ Resources:
   DropCountMetric:
     Type: Dynatrace::Environment::Metric
     Properties:
-      DynatraceAccess: !Ref DynatraceAccess
-      DynatraceEndpoint: !Ref DynatraceEndpoint
       Id: custom:kpis.dropCount
       DisplayName: Number of people having something in their cart, to failing to complete the sale
-      Unit: Count
+      Unit: Count (count)
       Dimensions:
         - ACME
         - KPIS
       Types:
         - Web
+```
 
-  # 2. Location and monitor
+### Create a location and monitors
+
+Monitoring KPIs is crucial for all business. But the health of your application is also vital. Here we create a location
+and monitors to track this with `ActivegateLocation` and `HealthMonitor`.
+
+```yaml
   ActiveGateLocation:
     Type: Dynatrace::Environment::SyntheticLocation
     Properties:
-      DynatraceAccess: !Ref DynatraceAccess
-      DynatraceEndpoint: !Ref DynatraceEndpoint
       Type: PRIVATE
       Name: UK ActiveGate
       CountryCode: GB
@@ -76,8 +88,6 @@ Resources:
   HealthMonitor:
     Type: Dynatrace::Environment::SyntheticMonitor
     Properties:
-      DynatraceAccess: !Ref DynatraceAccess
-      DynatraceEndpoint: !Ref DynatraceEndpoint
       FrequencyMin: 5
       Name: ACME Health Monitor
       Enabled: true
@@ -96,7 +106,6 @@ Resources:
           Thresholds:
             - Type: TOTAL
               ValueMs: 100
-              RequestIndex: 1
       Script:
         version: 1.0
         requests:
@@ -113,16 +122,20 @@ Resources:
                   passIfFound: true
       Locations:
         - !Ref ActiveGateLocation
+```
 
-  # 3. Service level objective
+### Create a service level objective
+
+We can tie our custom metrics together to compose and aggregate them in a service level objective to calculate the
+sale failure rate.
+
+```yaml
   SaleFailureServiceLevelObjective:
     Type: Dynatrace::Environment::ServiceLevelObjective
     DependsOn:
       - SuccessCountMetric
       - DropCountMetric
     Properties:
-      DynatraceAccess: !Ref DynatraceAccess
-      DynatraceEndpoint: !Ref DynatraceEndpoint
       Name: Sale failure
       MetricExpression: "(100)*(ext:kpis.dropCount)/(ext:kpis.successCount)"
       EvaluationType: AGGREGATE
@@ -132,13 +145,16 @@ Resources:
         FastBurnThreshold: 10
         BurnRateVisualizationEnabled: true
       Timeframe: "-1w"
+```
 
-  # 4. Dashboard
+### Dashboard to easy consumption
+
+Finally, we can also create a dashboard to will surface – in one place –all these vital information that we have setup above 
+
+```yaml
   AcmeDashboard:
     Type: Dynatrace::Configuration::Dashboard
     Properties:
-      DynatraceAccess: !Ref DynatraceAccess
-      DynatraceEndpoint: !Ref DynatraceEndpoint
       DashboardMetadata:
         Name: Acme Dashboard
         Owner: CloudFormation
@@ -225,3 +241,17 @@ Resources:
               showHive: true
               showLegend: true
               showLabels: false
+```
+### Conclusion
+
+As a result, we have 3 custom metrics created:
+![Custom metrics](metrics.png)
+
+Our location and monitor is also added to our environment:
+![Location and monitor](location_and_monitor.png)
+
+The Service Level Objective is also set to calculate the Sale failure rate:
+![Service Level Objective](slo.png)
+
+And a dashboard is available to display this data to the user:
+![Dashboard](dashboard.png)

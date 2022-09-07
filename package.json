@@ -1,6 +1,6 @@
 {
   "name": "cloudformation-dynatrace",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "This collection of CloudFormation resource types allow Dynatrace to be controlled using AWS CloudFormation.",
   "directories": {
     "doc": "docs"
