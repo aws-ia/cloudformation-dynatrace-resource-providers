@@ -20,6 +20,15 @@ export class ResourceModel extends BaseModel {
         }
     )
     frequencyMin?: Optional<integer>;
+    @Expose({ name: 'Enabled' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(Boolean, 'enabled', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    enabled?: Optional<boolean>;
     @Expose({ name: 'AnomalyDetection' })
     @Type(() => AnomalyDetectionPolicy)
     anomalyDetection?: Optional<AnomalyDetectionPolicy>;
@@ -50,15 +59,6 @@ export class ResourceModel extends BaseModel {
         }
     )
     locations?: Optional<Set<string>>;
-    @Expose({ name: 'Enabled' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Boolean, 'enabled', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    enabled?: Optional<boolean>;
     @Expose({ name: 'Script' })
     @Transform(
         (value: any, obj: any) =>
@@ -89,9 +89,27 @@ export class ResourceModel extends BaseModel {
         }
     )
     entityId?: Optional<string>;
-    @Expose({ name: 'Monitor' })
-    @Type(() => SyntheticMonitor)
-    monitor?: Optional<SyntheticMonitor>;
+    @Expose({ name: 'CreatedFrom' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'createdFrom', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    createdFrom?: Optional<string>;
+    @Expose({ name: 'ManagementZones' })
+    @Type(() => ManagementZone)
+    managementZones?: Optional<Array<ManagementZone>>;
+    @Expose({ name: 'AutomaticallyAssignedApps' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'automaticallyAssignedApps', value, obj, [Set]),
+        {
+            toClassOnly: true,
+        }
+    )
+    automaticallyAssignedApps?: Optional<Set<string>>;
 
     @Exclude()
     public getPrimaryIdentifier(): Dict {
@@ -308,112 +326,6 @@ export class Tag extends BaseModel {
         }
     )
     value_?: Optional<string>;
-
-}
-
-export class SyntheticMonitor extends BaseModel {
-    ['constructor']: typeof SyntheticMonitor;
-
-
-    @Expose({ name: 'EntityId' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'entityId', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    entityId?: Optional<string>;
-    @Expose({ name: 'FrequencyMin' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Integer, 'frequencyMin', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    frequencyMin?: Optional<integer>;
-    @Expose({ name: 'AnomalyDetection' })
-    @Type(() => AnomalyDetectionPolicy)
-    anomalyDetection?: Optional<AnomalyDetectionPolicy>;
-    @Expose({ name: 'Type' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'type_', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    type_?: Optional<string>;
-    @Expose({ name: 'Name' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'name', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    name?: Optional<string>;
-    @Expose({ name: 'Locations' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'locations', value, obj, [Set]),
-        {
-            toClassOnly: true,
-        }
-    )
-    locations?: Optional<Set<string>>;
-    @Expose({ name: 'Enabled' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Boolean, 'enabled', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    enabled?: Optional<boolean>;
-    @Expose({ name: 'Script' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Object, 'script', value, obj, [Map]),
-        {
-            toClassOnly: true,
-        }
-    )
-    script?: Optional<Map<string, object>>;
-    @Expose({ name: 'CreatedFrom' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'createdFrom', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    createdFrom?: Optional<string>;
-    @Expose({ name: 'ManagementZones' })
-    @Type(() => ManagementZone)
-    managementZones?: Optional<Array<ManagementZone>>;
-    @Expose({ name: 'Tags' })
-    @Type(() => Tag)
-    tags?: Optional<Array<Tag>>;
-    @Expose({ name: 'ManuallyAssignedApps' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'manuallyAssignedApps', value, obj, [Set]),
-        {
-            toClassOnly: true,
-        }
-    )
-    manuallyAssignedApps?: Optional<Set<string>>;
-    @Expose({ name: 'AutomaticallyAssignedApps' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'automaticallyAssignedApps', value, obj, [Set]),
-        {
-            toClassOnly: true,
-        }
-    )
-    automaticallyAssignedApps?: Optional<Set<string>>;
 
 }
 

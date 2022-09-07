@@ -13,15 +13,14 @@ To declare this entity in your AWS CloudFormation template, use the following sy
     "Type" : "Dynatrace::Environment::SyntheticMonitor",
     "Properties" : {
         "<a href="#frequencymin" title="FrequencyMin">FrequencyMin</a>" : <i>Integer</i>,
+        "<a href="#enabled" title="Enabled">Enabled</a>" : <i>Boolean</i>,
         "<a href="#anomalydetection" title="AnomalyDetection">AnomalyDetection</a>" : <i><a href="anomalydetectionpolicy.md">AnomalyDetectionPolicy</a></i>,
         "<a href="#type" title="Type">Type</a>" : <i>String</i>,
         "<a href="#name" title="Name">Name</a>" : <i>String</i>,
         "<a href="#locations" title="Locations">Locations</a>" : <i>[ String, ... ]</i>,
-        "<a href="#enabled" title="Enabled">Enabled</a>" : <i>Boolean</i>,
         "<a href="#script" title="Script">Script</a>" : <i>Map</i>,
         "<a href="#tags" title="Tags">Tags</a>" : <i>[ <a href="tag.md">Tag</a>, ... ]</i>,
         "<a href="#manuallyassignedapps" title="ManuallyAssignedApps">ManuallyAssignedApps</a>" : <i>[ String, ... ]</i>,
-        "<a href="#monitor" title="Monitor">Monitor</a>" : <i><a href="syntheticmonitor.md">SyntheticMonitor</a></i>
     }
 }
 </pre>
@@ -32,18 +31,17 @@ To declare this entity in your AWS CloudFormation template, use the following sy
 Type: Dynatrace::Environment::SyntheticMonitor
 Properties:
     <a href="#frequencymin" title="FrequencyMin">FrequencyMin</a>: <i>Integer</i>
+    <a href="#enabled" title="Enabled">Enabled</a>: <i>Boolean</i>
     <a href="#anomalydetection" title="AnomalyDetection">AnomalyDetection</a>: <i><a href="anomalydetectionpolicy.md">AnomalyDetectionPolicy</a></i>
     <a href="#type" title="Type">Type</a>: <i>String</i>
     <a href="#name" title="Name">Name</a>: <i>String</i>
     <a href="#locations" title="Locations">Locations</a>: <i>
       - String</i>
-    <a href="#enabled" title="Enabled">Enabled</a>: <i>Boolean</i>
     <a href="#script" title="Script">Script</a>: <i>Map</i>
     <a href="#tags" title="Tags">Tags</a>: <i>
       - <a href="tag.md">Tag</a></i>
     <a href="#manuallyassignedapps" title="ManuallyAssignedApps">ManuallyAssignedApps</a>: <i>
       - String</i>
-    <a href="#monitor" title="Monitor">Monitor</a>: <i><a href="syntheticmonitor.md">SyntheticMonitor</a></i>
 </pre>
 
 ## Properties
@@ -59,6 +57,16 @@ _Required_: Yes
 _Type_: Integer
 
 _Allowed Values_: <code>5</code> | <code>10</code> | <code>15</code> | <code>30</code> | <code>60</code>
+
+_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
+
+#### Enabled
+
+The monitor is enabled (true) or disabled (false).
+
+_Required_: Yes
+
+_Type_: Boolean
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
@@ -111,16 +119,6 @@ _Type_: List of String
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
-#### Enabled
-
-The monitor is enabled (true) or disabled (false).
-
-_Required_: Yes
-
-_Type_: Boolean
-
-_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
-
 #### Script
 
 The script of a browser (https://dt-url.net/9c103rda) or HTTP monitor.
@@ -151,16 +149,6 @@ _Type_: List of String
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
-#### Monitor
-
-The synthetic monitor.
-
-_Required_: No
-
-_Type_: <a href="syntheticmonitor.md">SyntheticMonitor</a>
-
-_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
-
 ## Return Values
 
 ### Ref
@@ -177,7 +165,15 @@ For more information about using the `Fn::GetAtt` intrinsic function, see [Fn::G
 
 The entity ID of the monitor.
 
-#### Monitor
+#### CreatedFrom
 
-The synthetic monitor.
+The origin of a monitor
+
+#### ManagementZones
+
+A set of management zones to which the monitor belongs to.
+
+#### AutomaticallyAssignedApps
+
+A set of automatically assigned applications.
 
