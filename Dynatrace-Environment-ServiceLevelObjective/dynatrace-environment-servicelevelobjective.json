@@ -8,8 +8,7 @@
       "properties": {
         "Token": {
           "description": "Personal Access Token",
-          "type": "string",
-          "pattern": "^[a-zA-Z0-9]+\\.[a-zA-Z0-9]{24}\\.[a-zA-Z0-9]{64}$"
+          "type": "string"
         },
         "Endpoint": {
           "description": "Endpoint URL to access Dynatrace API",
@@ -22,10 +21,59 @@
       ],
       "additionalProperties": false
     },
-    "Enabled": {
-      "description": "The SLO is enabled (true) or disabled (false).",
-      "type": "boolean"
+    "ErrorBudgetBurnRate": {
+      "description": "Error budget burn rate configuration of a service-level objective (SLO).",
+      "type": "object",
+      "properties": {
+        "FastBurnThreshold": {
+          "description": "The threshold between a slow and a fast burn rate.",
+          "type": "number"
+        },
+        "BurnRateVisualizationEnabled": {
+          "description": "The error budget burn rate visualization is enabled (true) or disabled (false).\n\nIn case of false, no calculated values will be present here.",
+          "type": "boolean"
+        },
+        "BurnRateValue": {
+          "description": "The burn rate of the SLO, calculated for the last hour.",
+          "type": "number"
+        },
+        "BurnRateType": {
+          "description": "The calculated burn rate type.\n\nHas a value of 'FAST', 'SLOW' or 'NONE'.",
+          "type": "string",
+          "enum": [
+            "FAST",
+            "SLOW",
+            "NONE"
+          ]
+        },
+        "SloValue": {
+          "description": "The calculated value of the SLO for the timeframe chosen for the burn rate calculation.",
+          "type": "number"
+        },
+        "EstimatedTimeToConsumeErrorBudget": {
+          "description": "The estimated time left to consume the error budget in hours.",
+          "type": "number"
+        }
+      },
+      "required": [
+        "FastBurnThreshold",
+        "BurnRateVisualizationEnabled"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "typeConfiguration": {
+    "properties": {
+      "DynatraceAccess": {
+        "$ref": "#/definitions/DynatraceAccess"
+      }
     },
+    "additionalProperties": false,
+    "required": [
+      "DynatraceAccess"
+    ]
+  },
+  "properties": {
     "Name": {
       "description": "The name of the SLO.",
       "type": "string",
@@ -71,44 +119,7 @@
       "maximum": 100
     },
     "ErrorBudgetBurnRate": {
-      "description": "Error budget burn rate configuration of a service-level objective (SLO).",
-      "type": "object",
-      "properties": {
-        "FastBurnThreshold": {
-          "description": "The threshold between a slow and a fast burn rate.",
-          "type": "number"
-        },
-        "BurnRateVisualizationEnabled": {
-          "description": "The error budget burn rate visualization is enabled (true) or disabled (false).\n\nIn case of false, no calculated values will be present here.",
-          "type": "boolean"
-        },
-        "BurnRateValue": {
-          "description": "The burn rate of the SLO, calculated for the last hour.",
-          "type": "number"
-        },
-        "BurnRateType": {
-          "description": "The calculated burn rate type.\n\nHas a value of 'FAST', 'SLOW' or 'NONE'.",
-          "type": "string",
-          "enum": [
-            "FAST",
-            "SLOW",
-            "NONE"
-          ]
-        },
-        "SloValue": {
-          "description": "The calculated value of the SLO for the timeframe chosen for the burn rate calculation.",
-          "type": "number"
-        },
-        "EstimatedTimeToConsumeErrorBudget": {
-          "description": "The estimated time left to consume the error budget in hours.",
-          "type": "number"
-        }
-      },
-      "required": [
-        "FastBurnThreshold",
-        "BurnRateVisualizationEnabled"
-      ],
-      "additionalProperties": false
+      "$ref": "#/definitions/ErrorBudgetBurnRate"
     },
     "Timeframe": {
       "description": "The timeframe for the SLO evaluation. Use the syntax of the global timeframe selector.",
@@ -133,6 +144,10 @@
     "Id": {
       "description": "Id of the SLO.",
       "type": "string"
+    },
+    "Enabled": {
+      "description": "The SLO is enabled (true) or disabled (false).",
+      "type": "boolean"
     },
     "BurnRateMetricKey": {
       "description": "The error budget burn rate key for a metric expression.",
@@ -186,158 +201,6 @@
     "Error": {
       "description": "The error of the SLO calculation.\n\nIf the value differs from NONE there's something wrong with the SLO calculation.",
       "type": "string"
-    },
-    "Slo": {
-      "description": "Parameters of a service-level objective (SLO).",
-      "type": "object",
-      "properties": {
-        "Enabled": {
-          "$ref": "#/definitions/Enabled"
-        },
-        "Name": {
-          "$ref": "#/definitions/Name"
-        },
-        "Description": {
-          "$ref": "#/definitions/Description"
-        },
-        "MetricName": {
-          "$ref": "#/definitions/MetricName"
-        },
-        "MetricExpression": {
-          "$ref": "#/definitions/MetricExpression"
-        },
-        "EvaluationType": {
-          "$ref": "#/definitions/EvaluationType"
-        },
-        "Filter": {
-          "$ref": "#/definitions/Filter"
-        },
-        "Target": {
-          "$ref": "#/definitions/Target"
-        },
-        "Warning": {
-          "$ref": "#/definitions/Warning"
-        },
-        "ErrorBudgetBurnRate": {
-          "$ref": "#/definitions/ErrorBudgetBurnRate"
-        },
-        "Timeframe": {
-          "$ref": "#/definitions/Timeframe"
-        },
-        "UserRateMetric": {
-          "$ref": "#/definitions/UserRateMetric"
-        },
-        "MetricRate": {
-          "$ref": "#/definitions/MetricRate"
-        },
-        "MetricNumerator": {
-          "$ref": "#/definitions/MetricNumerator"
-        },
-        "MetricDenominator": {
-          "$ref": "#/definitions/MetricDenominator"
-        },
-        "Id": {
-          "$ref": "#/definitions/Id"
-        },
-        "BurnRateMetricKey": {
-          "$ref": "#/definitions/BurnRateMetricKey"
-        },
-        "NumeratorValue": {
-          "$ref": "#/definitions/NumeratorValue"
-        },
-        "DenominatorValue": {
-          "$ref": "#/definitions/DenominatorValue"
-        },
-        "ProblemFilter": {
-          "$ref": "#/definitions/ProblemFilter"
-        },
-        "RelatedOpenProblems": {
-          "$ref": "#/definitions/RelatedOpenProblems"
-        },
-        "RelatedTotalProblems": {
-          "$ref": "#/definitions/RelatedTotalProblems"
-        },
-        "HasAccess": {
-          "$ref": "#/definitions/HasAccess"
-        },
-        "EvaluatedPercentage": {
-          "$ref": "#/definitions/EvaluatedPercentage"
-        },
-        "ErrorBudget": {
-          "$ref": "#/definitions/ErrorBudget"
-        },
-        "MetricKey": {
-          "$ref": "#/definitions/MetricKey"
-        },
-        "Status": {
-          "$ref": "#/definitions/Status"
-        },
-        "Error": {
-          "$ref": "#/definitions/Error"
-        }
-      },
-      "additionalProperties": false
-    }
-  },
-  "typeConfiguration": {
-    "properties": {
-      "DynatraceAccess": {
-        "$ref": "#/definitions/DynatraceAccess"
-      }
-    },
-    "additionalProperties": false,
-    "required": [
-      "DynatraceAccess"
-    ]
-  },
-  "properties": {
-    "Name": {
-      "$ref": "#/definitions/Name"
-    },
-    "Description": {
-      "$ref": "#/definitions/Description"
-    },
-    "MetricName": {
-      "$ref": "#/definitions/MetricName"
-    },
-    "MetricExpression": {
-      "$ref": "#/definitions/MetricExpression"
-    },
-    "EvaluationType": {
-      "$ref": "#/definitions/EvaluationType"
-    },
-    "Filter": {
-      "$ref": "#/definitions/Filter"
-    },
-    "Target": {
-      "$ref": "#/definitions/Target"
-    },
-    "Warning": {
-      "$ref": "#/definitions/Warning"
-    },
-    "ErrorBudgetBurnRate": {
-      "$ref": "#/definitions/ErrorBudgetBurnRate"
-    },
-    "Timeframe": {
-      "$ref": "#/definitions/Timeframe"
-    },
-    "UserRateMetric": {
-      "$ref": "#/definitions/UserRateMetric"
-    },
-    "MetricRate": {
-      "$ref": "#/definitions/MetricRate"
-    },
-    "MetricNumerator": {
-      "$ref": "#/definitions/MetricNumerator"
-    },
-    "MetricDenominator": {
-      "$ref": "#/definitions/MetricDenominator"
-    },
-    "Id": {
-      "$ref": "#/definitions/Id"
-    },
-    "Slo": {
-      "$ref": "#/definitions/Slo"
     }
   },
   "additionalProperties": false,
@@ -354,7 +217,19 @@
   ],
   "readOnlyProperties": [
     "/properties/Id",
-    "/properties/Slo"
+    "/properties/Enabled",
+    "/properties/BurnRateMetricKey",
+    "/properties/NumeratorValue",
+    "/properties/DenominatorValue",
+    "/properties/ProblemFilter",
+    "/properties/RelatedOpenProblems",
+    "/properties/RelatedTotalProblems",
+    "/properties/HasAccess",
+    "/properties/EvaluatedPercentage",
+    "/properties/ErrorBudget",
+    "/properties/MetricKey",
+    "/properties/Status",
+    "/properties/Error"
   ],
   "primaryIdentifier": [
     "/properties/Id"

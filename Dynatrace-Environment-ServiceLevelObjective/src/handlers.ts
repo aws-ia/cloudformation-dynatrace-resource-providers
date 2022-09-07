@@ -1,36 +1,40 @@
-import {ResourceModel, Slo, TypeConfigurationModel} from './models';
+import {ResourceModel, TypeConfigurationModel} from './models';
 import {DynatraceClient, PaginatedResponseType} from "../../Dynatrace-Common/src/dynatrace-client";
 import {AbstractDynatraceResource} from "../../Dynatrace-Common/src/abstract-dynatrace-resource";
 import {CaseTransformer, Transformer} from '../../Dynatrace-Common/src/util';
 
 import {version} from "../package.json";
 
-type PaginatedSlos = {
-    slo: ResourceModel[]
+type SloPayload = {
+    id: string
+};
+
+type SlosPayload = {
+    slo: SloPayload[]
 } & PaginatedResponseType;
 
-class Resource extends AbstractDynatraceResource<ResourceModel, Slo, Slo, void, TypeConfigurationModel> {
+class Resource extends AbstractDynatraceResource<ResourceModel, SloPayload, SloPayload, void, TypeConfigurationModel> {
 
     private userAgent = `AWS CloudFormation (+https://aws.amazon.com/cloudformation/) CloudFormation resource ${this.typeName}/${version}`;
 
-    async get(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<Slo> {
-        const response = await new DynatraceClient(typeConfiguration?.dynatraceAccess.endpoint, typeConfiguration?.dynatraceAccess.token, this.userAgent).doRequest<Slo>(
+    async get(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<SloPayload> {
+        const response = await new DynatraceClient(typeConfiguration?.dynatraceAccess.endpoint, typeConfiguration?.dynatraceAccess.token, this.userAgent).doRequest<SloPayload>(
             'get',
             `/api/v2/slo/${model.id}`);
-        return new Slo(response.data);
+        return response.data;
     }
 
     async list(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<ResourceModel[]> {
-        return await new DynatraceClient(typeConfiguration?.dynatraceAccess.endpoint, typeConfiguration?.dynatraceAccess.token, this.userAgent).paginate<PaginatedSlos, ResourceModel>(
+        return await new DynatraceClient(typeConfiguration?.dynatraceAccess.endpoint, typeConfiguration?.dynatraceAccess.token, this.userAgent).paginate<SlosPayload, ResourceModel>(
             'get',
             '/api/v2/slo',
             pagedResponse => pagedResponse.data && pagedResponse.data.slo
-                ? pagedResponse.data.slo.map(slo => this.setModelFrom(new ResourceModel(), slo))
+                ? pagedResponse.data.slo.map(sloPayload => this.setModelFrom(model, sloPayload))
                 : [],
             {enabledSlos: 'all'});
     }
 
-    async create(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<Slo> {
+    async create(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<SloPayload> {
         const response = await new DynatraceClient(typeConfiguration?.dynatraceAccess.endpoint, typeConfiguration?.dynatraceAccess.token, this.userAgent).doRequest(
             'post',
             '/api/v2/slo',
@@ -43,9 +47,9 @@ class Resource extends AbstractDynatraceResource<ResourceModel, Slo, Slo, void, 
                 // get us in trouble.
                 enabled: true
             });
-        return new Slo({
+        return {
             id: response.headers.location.substring(response.headers.location.lastIndexOf('/') + 1)
-        });
+        };
     }
 
     async update(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<void> {
@@ -73,7 +77,7 @@ class Resource extends AbstractDynatraceResource<ResourceModel, Slo, Slo, void, 
         return new ResourceModel(partial);
     }
 
-    setModelFrom(model: ResourceModel, from?: ResourceModel): ResourceModel {
+    setModelFrom(model: ResourceModel, from?: SloPayload): ResourceModel {
         if (!from) {
             return model;
         }
