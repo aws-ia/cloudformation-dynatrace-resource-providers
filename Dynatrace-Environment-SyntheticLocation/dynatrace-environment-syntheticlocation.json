@@ -20,7 +20,20 @@
         "Endpoint"
       ],
       "additionalProperties": false
+    }
+  },
+  "typeConfiguration": {
+    "properties": {
+      "DynatraceAccess": {
+        "$ref": "#/definitions/DynatraceAccess"
+      }
     },
+    "additionalProperties": false,
+    "required": [
+      "DynatraceAccess"
+    ]
+  },
+  "properties": {
     "EntityId": {
       "description": "The Dynatrace entity ID of the location.",
       "type": "string"
@@ -95,119 +108,6 @@
     "AutoUpdateChromium": {
       "description": "Auto upgrade of Chromium is enabled (true) or disabled (false).",
       "type": "boolean"
-    },
-    "SyntheticLocation": {
-      "description": "Configuration of a synthetic location.",
-      "type": "object",
-      "properties": {
-        "EntityId": {
-          "$ref": "#/definitions/EntityId"
-        },
-        "Type": {
-          "$ref": "#/definitions/Type"
-        },
-        "Name": {
-          "$ref": "#/definitions/Name"
-        },
-        "CountryCode": {
-          "$ref": "#/definitions/CountryCode"
-        },
-        "RegionCode": {
-          "$ref": "#/definitions/RegionCode"
-        },
-        "City": {
-          "$ref": "#/definitions/City"
-        },
-        "Latitude": {
-          "$ref": "#/definitions/Latitude"
-        },
-        "Longitude": {
-          "$ref": "#/definitions/Longitude"
-        },
-        "Status": {
-          "$ref": "#/definitions/Status"
-        },
-        "Nodes": {
-          "$ref": "#/definitions/Nodes"
-        },
-        "AvailabilityLocationOutage": {
-          "$ref": "#/definitions/AvailabilityLocationOutage"
-        },
-        "AvailabilityNodeOutage": {
-          "$ref": "#/definitions/AvailabilityNodeOutage"
-        },
-        "LocationNodeOutageDelayInMinutes": {
-          "$ref": "#/definitions/LocationNodeOutageDelayInMinutes"
-        },
-        "AvailabilityNotificationsEnabled": {
-          "$ref": "#/definitions/AvailabilityNotificationsEnabled"
-        },
-        "AutoUpdateChromium": {
-          "$ref": "#/definitions/AutoUpdateChromium"
-        }
-      },
-      "additionalProperties": false
-    }
-  },
-  "typeConfiguration": {
-    "properties": {
-      "DynatraceAccess": {
-        "$ref": "#/definitions/DynatraceAccess"
-      }
-    },
-    "additionalProperties": false,
-    "required": [
-      "DynatraceAccess"
-    ]
-  },
-  "properties": {
-    "EntityId": {
-      "$ref": "#/definitions/EntityId"
-    },
-    "Type": {
-      "$ref": "#/definitions/Type"
-    },
-    "Name": {
-      "$ref": "#/definitions/Name"
-    },
-    "CountryCode": {
-      "$ref": "#/definitions/CountryCode"
-    },
-    "RegionCode": {
-      "$ref": "#/definitions/RegionCode"
-    },
-    "City": {
-      "$ref": "#/definitions/City"
-    },
-    "Latitude": {
-      "$ref": "#/definitions/Latitude"
-    },
-    "Longitude": {
-      "$ref": "#/definitions/Longitude"
-    },
-    "Status": {
-      "$ref": "#/definitions/Status"
-    },
-    "Nodes": {
-      "$ref": "#/definitions/Nodes"
-    },
-    "AvailabilityLocationOutage": {
-      "$ref": "#/definitions/AvailabilityLocationOutage"
-    },
-    "AvailabilityNodeOutage": {
-      "$ref": "#/definitions/AvailabilityNodeOutage"
-    },
-    "LocationNodeOutageDelayInMinutes": {
-      "$ref": "#/definitions/LocationNodeOutageDelayInMinutes"
-    },
-    "AvailabilityNotificationsEnabled": {
-      "$ref": "#/definitions/AvailabilityNotificationsEnabled"
-    },
-    "AutoUpdateChromium": {
-      "$ref": "#/definitions/AutoUpdateChromium"
-    },
-    "Location": {
-      "$ref": "#/definitions/SyntheticLocation"
     }
   },
   "additionalProperties": false,
@@ -217,9 +117,11 @@
   "required": [
     "Name"
   ],
+  "writeOnlyProperties": [
+    "/properties/Type"
+  ],
   "readOnlyProperties": [
-    "/properties/EntityId",
-    "/properties/Location"
+    "/properties/EntityId"
   ],
   "primaryIdentifier": [
     "/properties/EntityId"

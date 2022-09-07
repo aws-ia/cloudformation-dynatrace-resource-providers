@@ -25,8 +25,7 @@ To declare this entity in your AWS CloudFormation template, use the following sy
         "<a href="#availabilitynodeoutage" title="AvailabilityNodeOutage">AvailabilityNodeOutage</a>" : <i>Boolean</i>,
         "<a href="#locationnodeoutagedelayinminutes" title="LocationNodeOutageDelayInMinutes">LocationNodeOutageDelayInMinutes</a>" : <i>Integer</i>,
         "<a href="#availabilitynotificationsenabled" title="AvailabilityNotificationsEnabled">AvailabilityNotificationsEnabled</a>" : <i>Boolean</i>,
-        "<a href="#autoupdatechromium" title="AutoUpdateChromium">AutoUpdateChromium</a>" : <i>Boolean</i>,
-        "<a href="#location" title="Location">Location</a>" : <i><a href="syntheticlocation.md">SyntheticLocation</a></i>
+        "<a href="#autoupdatechromium" title="AutoUpdateChromium">AutoUpdateChromium</a>" : <i>Boolean</i>
     }
 }
 </pre>
@@ -51,7 +50,6 @@ Properties:
     <a href="#locationnodeoutagedelayinminutes" title="LocationNodeOutageDelayInMinutes">LocationNodeOutageDelayInMinutes</a>: <i>Integer</i>
     <a href="#availabilitynotificationsenabled" title="AvailabilityNotificationsEnabled">AvailabilityNotificationsEnabled</a>: <i>Boolean</i>
     <a href="#autoupdatechromium" title="AutoUpdateChromium">AutoUpdateChromium</a>: <i>Boolean</i>
-    <a href="#location" title="Location">Location</a>: <i><a href="syntheticlocation.md">SyntheticLocation</a></i>
 </pre>
 
 ## Properties
@@ -218,16 +216,6 @@ _Type_: Boolean
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
-#### Location
-
-Configuration of a synthetic location.
-
-_Required_: No
-
-_Type_: <a href="syntheticlocation.md">SyntheticLocation</a>
-
-_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
-
 ## Return Values
 
 ### Ref
@@ -243,8 +231,4 @@ For more information about using the `Fn::GetAtt` intrinsic function, see [Fn::G
 #### EntityId
 
 The Dynatrace entity ID of the location.
-
-#### Location
-
-Configuration of a synthetic location.
 
