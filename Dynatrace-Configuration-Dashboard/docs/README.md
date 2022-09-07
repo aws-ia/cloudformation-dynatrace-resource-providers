@@ -78,7 +78,3 @@ For more information about using the `Fn::GetAtt` intrinsic function, see [Fn::G
 
 The ID of the dashboard.
 
-#### Dashboard
-
-Dashboard object returned by dynatrace
-

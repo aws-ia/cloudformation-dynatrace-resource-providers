@@ -35,9 +35,6 @@ export class ResourceModel extends BaseModel {
         }
     )
     id?: Optional<string>;
-    @Expose({ name: 'Dashboard' })
-    @Type(() => Dashboard)
-    dashboard?: Optional<Dashboard>;
 
     @Exclude()
     public getPrimaryIdentifier(): Dict {
@@ -237,44 +234,13 @@ export class DynamicFilters extends BaseModel {
 
 }
 
-export class Dashboard extends BaseModel {
-    ['constructor']: typeof Dashboard;
-
-
-    @Expose({ name: 'Metadata' })
-    @Type(() => Metadata)
-    metadata?: Optional<Metadata>;
-    @Expose({ name: 'Id' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'id', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    id?: Optional<string>;
-    @Expose({ name: 'DashboardMetadata' })
-    @Type(() => DashboardMetadata)
-    dashboardMetadata?: Optional<DashboardMetadata>;
-    @Expose({ name: 'Tiles' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Object, 'tiles', value, obj, [Array, Map]),
-        {
-            toClassOnly: true,
-        }
-    )
-    tiles?: Optional<Array<Map<string, object>>>;
-
-}
-
 export class TypeConfigurationModel extends BaseModel {
     ['constructor']: typeof TypeConfigurationModel;
 
 
-    @Expose({ name: 'PagerDutyAccess' })
+    @Expose({ name: 'DynatraceAccess' })
     @Type(() => DynatraceAccess)
-    pagerDutyAccess?: Optional<DynatraceAccess>;
+    dynatraceAccess?: Optional<DynatraceAccess>;
 
 }
 
