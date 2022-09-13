@@ -6,18 +6,17 @@
     "DynatraceAccess": {
       "type": "object",
       "properties": {
-        "AccessToken": {
+        "Token": {
           "description": "Personal Access Token",
-          "type": "string",
-          "pattern": "^[a-zA-Z0-9]+\\.[a-zA-Z0-9]{24}\\.[a-zA-Z0-9]{64}$"
+          "type": "string"
         },
-        "DynatraceEndpoint": {
+        "Endpoint": {
           "description": "Endpoint URL to access Dynatrace API",
           "type": "string"
         }
       },
       "required": [
-        "AccessToken",
+        "Token",
         "Endpoint"
       ],
       "additionalProperties": false
@@ -180,41 +179,20 @@
     "Tile": {
       "description": "Configuration of a tile.\n\nThe actual set of fields depends on the type of the tile. Find the list of actual objects in the description of the tileType field or see Dashboards API - Tile JSON models (https://dt-url.net/2wc3spx).",
       "type": "object"
-    },
-    "Dashboard": {
-      "description": "Dashboard object returned by dynatrace",
-      "type": "object",
-      "properties": {
-        "Metadata": {
-          "$ref": "#/definitions/Metadata"
-        },
-        "Id": {
-          "$ref": "#/definitions/Id"
-        },
-        "DashboardMetadata": {
-          "$ref": "#/definitions/DashboardMetadata"
-        },
-        "Tiles": {
-          "$ref": "#/definitions/Tiles"
-        }
-      },
-      "required": [
-        "DashboardMetadata",
-        "Titles"
-      ],
-      "additionalProperties": false
     }
   },
+  "typeConfiguration": {
+    "properties": {
+      "DynatraceAccess": {
+        "$ref": "#/definitions/DynatraceAccess"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "DynatraceAccess"
+    ]
+  },
   "properties": {
-    "DynatraceAccess": {
-      "description": "Personal Access Token",
-      "type": "string",
-      "pattern": "^[a-zA-Z0-9]+\\.[a-zA-Z0-9]{24}\\.[a-zA-Z0-9]{64}$"
-    },
-    "DynatraceEndpoint": {
-      "description": "Endpoint URL to access Dynatrace API",
-      "type": "string"
-    },
     "Metadata": {
       "$ref": "#/definitions/Metadata"
     },
@@ -226,9 +204,6 @@
     },
     "Id": {
       "$ref": "#/definitions/Id"
-    },
-    "Dashboard": {
-      "$ref": "#/definitions/Dashboard"
     }
   },
   "additionalProperties": false,
@@ -236,18 +211,11 @@
     "taggable": false
   },
   "required": [
-    "DynatraceAccess",
-    "DynatraceEndpoint",
     "DashboardMetadata",
     "Tiles"
   ],
-  "createOnlyProperties": [
-    "/properties/DynatraceAccess",
-    "/properties/DynatraceEndpoint"
-  ],
   "readOnlyProperties": [
-    "/properties/Id",
-    "/properties/Dashboard"
+    "/properties/Id"
   ],
   "primaryIdentifier": [
     "/properties/Id"

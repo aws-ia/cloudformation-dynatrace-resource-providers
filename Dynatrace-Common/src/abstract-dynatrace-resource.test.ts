@@ -10,7 +10,7 @@ import {
     ServiceLimitExceeded
 } from "@amazon-web-services-cloudformation/cloudformation-cli-typescript-lib/dist/exceptions";
 
-class TestAbstractDynatraceResource extends AbstractDynatraceResource<BaseModel, {}, {}, {}> {
+class TestAbstractDynatraceResource extends AbstractDynatraceResource<BaseModel, {}, {}, {}, {}> {
     create(model: BaseModel): Promise<{}> {
         return Promise.resolve({});
     }

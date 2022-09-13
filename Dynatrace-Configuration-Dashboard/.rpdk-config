@@ -2,7 +2,7 @@
     "artifact_type": "RESOURCE",
     "typeName": "Dynatrace::Configuration::Dashboard",
     "language": "typescript",
-    "runtime": "nodejs12.x",
+    "runtime": "nodejs14.x",
     "entrypoint": "dist/Dynatrace-Configuration-Dashboard/src/handlers.entrypoint",
     "testEntrypoint": "dist/Dynatrace-Configuration-Dashboard/src/handlers.testEntrypoint",
     "settings": {
@@ -15,7 +15,7 @@
         "endpoint_url": null,
         "region": null,
         "target_schemas": [],
-        "useDocker": true,
+        "useDocker": false,
         "protocolVersion": "2.0.0"
     }
 }

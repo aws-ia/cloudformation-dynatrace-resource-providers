@@ -31,16 +31,17 @@ export class DynatraceClient {
         this.userAgent = userAgent;
     }
 
-    public async doRequest<ResponseType>(method: 'get' | 'put' | 'post' | 'delete', path: string, params: any = {}, body?: {}): Promise<AxiosResponse<ResponseType>> {
+    public async doRequest<ResponseType>(method: 'get' | 'put' | 'post' | 'delete', path: string, params: any = {}, body?: {}, headers?: {[key: string]: string}): Promise<AxiosResponse<ResponseType>> {
         return await axios.request<ResponseType>({
             url: `${this.baseUrl}${path}`,
             params: params,
             method: method,
-            data: this.sanitizePayload(body),
+            data: body,
             headers: {
                 'User-Agent': this.userAgent || "AWS CloudFormation (+https://aws.amazon.com/cloudformation/) CloudFormation custom resource",
                 Authorization: `Api-Token ${this.apiToken}`,
-                'Content-type': 'application/json; charset=utf-8'
+                'Content-type': 'application/json; charset=utf-8',
+                ...headers
             }
         });
     }
@@ -63,28 +64,5 @@ export class DynatraceClient {
         }
 
         return results;
-    }
-
-    private sanitizePayload(model: { [key: string]: any }) {
-        if (!model) {
-            return model;
-        }
-
-        return Object.keys(model).reduce((map, key) => {
-            let value = model[key];
-            if (value && value instanceof Object && !(value instanceof Array) && !(value instanceof Set)) {
-                value = this.sanitizePayload(value);
-            }
-            if (value && value instanceof Set) {
-                value = Array.of(...value);
-            }
-            if (value && Array.isArray(value)) {
-                value = value.map(item => item && item instanceof Object && !(item instanceof Array) && !(item instanceof Set)
-                    ? this.sanitizePayload(item)
-                    : item);
-            }
-            map[key.substring(0, 1).toLocaleLowerCase() + key.substring(1)] = value;
-            return map;
-        }, {} as { [key: string]: any })
     }
 }

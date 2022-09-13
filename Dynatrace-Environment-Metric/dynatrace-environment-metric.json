@@ -6,18 +6,17 @@
     "DynatraceAccess": {
       "type": "object",
       "properties": {
-        "AccessToken": {
+        "Token": {
           "description": "Personal Access Token",
-          "type": "string",
-          "pattern": "^[a-zA-Z0-9]+\\.[a-zA-Z0-9]{24}\\.[a-zA-Z0-9]{64}$"
+          "type": "string"
         },
-        "DynatraceEndpoint": {
+        "Endpoint": {
           "description": "Endpoint URL to access Dynatrace API",
           "type": "string"
         }
       },
       "required": [
-        "AccessToken",
+        "Token",
         "Endpoint"
       ],
       "additionalProperties": false
@@ -36,61 +35,66 @@
       "description": "The unit of the metric.",
       "type": "string",
       "enum": [
-        "Bit",
-        "BitPerHour",
-        "BitPerMinute",
-        "BitPerSecond",
-        "Byte",
-        "BytePerHour",
-        "BytePerMinute",
-        "BytePerSecond",
+        "Billion (bilcount)",
+        "Bit (bit)",
+        "BitPerHour (bit/h)",
+        "BitPerMinute (bit/min)",
+        "BitPerSecond (bit/s)",
+        "Byte (B)",
+        "BytePerHour (B/h)",
+        "BytePerMinute (B/min)",
+        "BytePerSecond (B/s)",
         "Cores",
-        "Count",
-        "Day",
-        "DecibelMilliWatt",
+        "Count (count)",
+        "Day (ds)",
+        "DecibelMilliWatt (dBm)",
         "G",
-        "GibiByte",
-        "GigaByte",
-        "Hour",
-        "KibiByte",
-        "KibiBytePerHour",
-        "KibiBytePerMinute",
-        "KibiBytePerSecond",
-        "KiloByte",
-        "KiloBytePerHour",
-        "KiloBytePerMinute",
-        "KiloBytePerSecond",
+        "GibiByte (GiB)",
+        "GigaByte (GB)",
+        "Hour (hs)",
+        "KibiByte (KiB)",
+        "KibiBytePerHour (KiB/h)",
+        "KibiBytePerMinute (KiB/min)",
+        "KibiBytePerSecond (KiB/s)",
+        "KiloByte (kB)",
+        "KiloBytePerHour (kB/h)",
+        "KiloBytePerMinute (kB/min)",
+        "KiloBytePerSecond (kB/s)",
         "M",
         "MSU",
-        "MebiByte",
-        "MebiBytePerHour",
-        "MebiBytePerMinute",
-        "MebiBytePerSecond",
-        "MegaByte",
-        "MegaBytePerHour",
-        "MegaBytePerMinute",
-        "MegaBytePerSecond",
-        "MicroSecond",
-        "MilliSecond",
-        "MilliSecondPerMinute",
-        "Minute",
-        "Month",
+        "MebiByte (MiB)",
+        "MebiBytePerHour (MiB/h)",
+        "MebiBytePerMinute (MiB/min)",
+        "MebiBytePerSecond (MiB/s)",
+        "MegaByte (MB)",
+        "MegaBytePerHour (MB/h)",
+        "MegaBytePerMinute (MB/min)",
+        "MegaBytePerSecond (MB/s)",
+        "MicroSecond (µs)",
+        "MilliSecond (ms)",
+        "MilliSecondPerMinute (ms/min)",
+        "Million (milcount)",
+        "Minute (mins)",
+        "Month (mos)",
         "N/A",
-        "NanoSecond",
-        "NanoSecondPerMinute",
-        "PerHour",
-        "PerMinute",
-        "PerSecond",
-        "Percent",
-        "Pixel",
-        "Promille",
+        "NanoSecond (ns)",
+        "NanoSecondPerMinute (ns/min)",
+        "PerHour (count/h)",
+        "PerMinute (count/min)",
+        "PerSecond (count/s)",
+        "Percent (%)",
+        "Pixel (px)",
+        "Promille (‰)",
         "Ratio",
-        "Second",
+        "Second (s)",
         "State",
         "Unspecified",
-        "Week",
-        "Year",
+        "Week (ws)",
+        "Year (ys)",
         "k",
+        "km/h",
+        "m/h",
+        "m/s",
         "mCores"
       ]
     },
@@ -114,56 +118,6 @@
       "items": {
         "type": "string"
       }
-    },
-    "Metric": {
-      "description": "The configuration of a metric with all its parameters.",
-      "type": "object",
-      "properties": {
-        "TimeseriesId": {
-          "$ref": "#/definitions/Id"
-        },
-        "DisplayName": {
-          "$ref": "#/definitions/DisplayName"
-        },
-        "Dimensions": {
-          "$ref": "#/definitions/Dimensions"
-        },
-        "AggregationTypes": {
-          "description": "The list of allowed aggregations for this metric.",
-          "type": "array",
-          "insertionOrder": false,
-          "items": {
-            "type": "string"
-          }
-        },
-        "Unit": {
-          "$ref": "#/definitions/Unit"
-        },
-        "Filter": {
-          "description": "The feature, where the metric originates.",
-          "type": "string"
-        },
-        "DetailedSource": {
-          "description": "The feature, where the metric originates.",
-          "type": "string"
-        },
-        "PluginId": {
-          "description": "The ID of the plugin, where the metric originates.",
-          "type": "string"
-        },
-        "Types": {
-          "$ref": "#/definitions/Types"
-        },
-        "Warnings": {
-          "description": "The warnings that occurred while creating the metric.",
-          "type": "array",
-          "insertionOrder": false,
-          "items": {
-            "type": "string"
-          }
-        }
-      },
-      "additionalProperties": false
     }
   },
   "typeConfiguration": {
@@ -178,15 +132,6 @@
     ]
   },
   "properties": {
-    "DynatraceAccess": {
-      "description": "Personal Access Token",
-      "type": "string",
-      "pattern": "^[a-zA-Z0-9]+\\.[a-zA-Z0-9]{24}\\.[a-zA-Z0-9]{64}$"
-    },
-    "DynatraceEndpoint": {
-      "description": "Endpoint URL to access Dynatrace API",
-      "type": "string"
-    },
     "Id": {
       "$ref": "#/definitions/Id"
     },
@@ -202,24 +147,55 @@
     "Types": {
       "$ref": "#/definitions/Types"
     },
-    "Metric": {
-      "$ref": "#/definitions/Metric"
+    "TimeseriesId": {
+      "$ref": "#/definitions/Id"
+    },
+    "AggregationTypes": {
+      "description": "The list of allowed aggregations for this metric.",
+      "type": "array",
+      "insertionOrder": false,
+      "items": {
+        "type": "string"
+      }
+    },
+    "Filter": {
+      "description": "The feature, where the metric originates.",
+      "type": "string"
+    },
+    "DetailedSource": {
+      "description": "The feature, where the metric originates.",
+      "type": "string"
+    },
+    "PluginId": {
+      "description": "The ID of the plugin, where the metric originates.",
+      "type": "string"
+    },
+    "Warnings": {
+      "description": "The warnings that occurred while creating the metric.",
+      "type": "array",
+      "insertionOrder": false,
+      "items": {
+        "type": "string"
+      }
     }
   },
   "tagging": {
     "taggable": false
   },
   "additionalProperties": false,
-  "required": [
-    "DynatraceAccess",
-    "DynatraceEndpoint"
-  ],
   "createOnlyProperties": [
-    "/properties/Id",
+    "/properties/Id"
+  ],
+  "writeOnlyProperties": [
     "/properties/Dimensions"
   ],
   "readOnlyProperties": [
-    "/properties/Metric"
+    "/properties/TimeseriesId",
+    "/properties/AggregationTypes",
+    "/properties/Filter",
+    "/properties/DetailedSource",
+    "/properties/PluginId",
+    "/properties/Warnings"
   ],
   "primaryIdentifier": [
     "/properties/Id"

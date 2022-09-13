@@ -11,24 +11,6 @@ export class ResourceModel extends BaseModel {
     @Exclude()
     protected readonly IDENTIFIER_KEY_ID: string = '/properties/Id';
 
-    @Expose({ name: 'DynatraceAccess' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'dynatraceAccess', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    dynatraceAccess?: Optional<string>;
-    @Expose({ name: 'DynatraceEndpoint' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'dynatraceEndpoint', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    dynatraceEndpoint?: Optional<string>;
     @Expose({ name: 'Id' })
     @Transform(
         (value: any, obj: any) =>
@@ -74,33 +56,6 @@ export class ResourceModel extends BaseModel {
         }
     )
     types?: Optional<Array<string>>;
-    @Expose({ name: 'Metric' })
-    @Type(() => Metric)
-    metric?: Optional<Metric>;
-
-    @Exclude()
-    public getPrimaryIdentifier(): Dict {
-        const identifier: Dict = {};
-        if (this.id != null) {
-            identifier[this.IDENTIFIER_KEY_ID] = this.id;
-        }
-
-        // only return the identifier if it can be used, i.e. if all components are present
-        return Object.keys(identifier).length === 1 ? identifier : null;
-    }
-
-    @Exclude()
-    public getAdditionalIdentifiers(): Array<Dict> {
-        const identifiers: Array<Dict> = new Array<Dict>();
-        // only return the identifiers if any can be used
-        return identifiers.length === 0 ? null : identifiers;
-    }
-}
-
-export class Metric extends BaseModel {
-    ['constructor']: typeof Metric;
-
-
     @Expose({ name: 'TimeseriesId' })
     @Transform(
         (value: any, obj: any) =>
@@ -110,24 +65,6 @@ export class Metric extends BaseModel {
         }
     )
     timeseriesId?: Optional<string>;
-    @Expose({ name: 'DisplayName' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'displayName', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    displayName?: Optional<string>;
-    @Expose({ name: 'Dimensions' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'dimensions', value, obj, [Array]),
-        {
-            toClassOnly: true,
-        }
-    )
-    dimensions?: Optional<Array<string>>;
     @Expose({ name: 'AggregationTypes' })
     @Transform(
         (value: any, obj: any) =>
@@ -137,15 +74,6 @@ export class Metric extends BaseModel {
         }
     )
     aggregationTypes?: Optional<Array<string>>;
-    @Expose({ name: 'Unit' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'unit', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    unit?: Optional<string>;
     @Expose({ name: 'Filter' })
     @Transform(
         (value: any, obj: any) =>
@@ -173,15 +101,6 @@ export class Metric extends BaseModel {
         }
     )
     pluginId?: Optional<string>;
-    @Expose({ name: 'Types' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'types', value, obj, [Array]),
-        {
-            toClassOnly: true,
-        }
-    )
-    types?: Optional<Array<string>>;
     @Expose({ name: 'Warnings' })
     @Transform(
         (value: any, obj: any) =>
@@ -192,6 +111,23 @@ export class Metric extends BaseModel {
     )
     warnings?: Optional<Array<string>>;
 
+    @Exclude()
+    public getPrimaryIdentifier(): Dict {
+        const identifier: Dict = {};
+        if (this.id != null) {
+            identifier[this.IDENTIFIER_KEY_ID] = this.id;
+        }
+
+        // only return the identifier if it can be used, i.e. if all components are present
+        return Object.keys(identifier).length === 1 ? identifier : null;
+    }
+
+    @Exclude()
+    public getAdditionalIdentifiers(): Array<Dict> {
+        const identifiers: Array<Dict> = new Array<Dict>();
+        // only return the identifiers if any can be used
+        return identifiers.length === 0 ? null : identifiers;
+    }
 }
 
 export class TypeConfigurationModel extends BaseModel {
@@ -208,24 +144,24 @@ export class DynatraceAccess extends BaseModel {
     ['constructor']: typeof DynatraceAccess;
 
 
-    @Expose({ name: 'AccessToken' })
+    @Expose({ name: 'Token' })
     @Transform(
         (value: any, obj: any) =>
-            transformValue(String, 'accessToken', value, obj, []),
+            transformValue(String, 'token', value, obj, []),
         {
             toClassOnly: true,
         }
     )
-    accessToken?: Optional<string>;
-    @Expose({ name: 'DynatraceEndpoint' })
+    token?: Optional<string>;
+    @Expose({ name: 'Endpoint' })
     @Transform(
         (value: any, obj: any) =>
-            transformValue(String, 'dynatraceEndpoint', value, obj, []),
+            transformValue(String, 'endpoint', value, obj, []),
         {
             toClassOnly: true,
         }
     )
-    dynatraceEndpoint?: Optional<string>;
+    endpoint?: Optional<string>;
 
 }
 

@@ -11,24 +11,6 @@ export class ResourceModel extends BaseModel {
     @Exclude()
     protected readonly IDENTIFIER_KEY_ID: string = '/properties/Id';
 
-    @Expose({ name: 'DynatraceAccess' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'dynatraceAccess', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    dynatraceAccess?: Optional<string>;
-    @Expose({ name: 'DynatraceEndpoint' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'dynatraceEndpoint', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    dynatraceEndpoint?: Optional<string>;
     @Expose({ name: 'Metadata' })
     @Type(() => Metadata)
     metadata?: Optional<Metadata>;
@@ -53,9 +35,6 @@ export class ResourceModel extends BaseModel {
         }
     )
     id?: Optional<string>;
-    @Expose({ name: 'Dashboard' })
-    @Type(() => Dashboard)
-    dashboard?: Optional<Dashboard>;
 
     @Exclude()
     public getPrimaryIdentifier(): Dict {
@@ -255,41 +234,38 @@ export class DynamicFilters extends BaseModel {
 
 }
 
-export class Dashboard extends BaseModel {
-    ['constructor']: typeof Dashboard;
-
-
-    @Expose({ name: 'Metadata' })
-    @Type(() => Metadata)
-    metadata?: Optional<Metadata>;
-    @Expose({ name: 'Id' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'id', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    id?: Optional<string>;
-    @Expose({ name: 'DashboardMetadata' })
-    @Type(() => DashboardMetadata)
-    dashboardMetadata?: Optional<DashboardMetadata>;
-    @Expose({ name: 'Tiles' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Object, 'tiles', value, obj, [Array, Map]),
-        {
-            toClassOnly: true,
-        }
-    )
-    tiles?: Optional<Array<Map<string, object>>>;
-
-}
-
 export class TypeConfigurationModel extends BaseModel {
     ['constructor']: typeof TypeConfigurationModel;
 
 
+    @Expose({ name: 'DynatraceAccess' })
+    @Type(() => DynatraceAccess)
+    dynatraceAccess?: Optional<DynatraceAccess>;
+
+}
+
+export class DynatraceAccess extends BaseModel {
+    ['constructor']: typeof DynatraceAccess;
+
+
+    @Expose({ name: 'Token' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'token', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    token?: Optional<string>;
+    @Expose({ name: 'Endpoint' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'endpoint', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    endpoint?: Optional<string>;
 
 }
 

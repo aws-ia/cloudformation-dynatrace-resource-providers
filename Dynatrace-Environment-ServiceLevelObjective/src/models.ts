@@ -11,24 +11,6 @@ export class ResourceModel extends BaseModel {
     @Exclude()
     protected readonly IDENTIFIER_KEY_ID: string = '/properties/Id';
 
-    @Expose({ name: 'DynatraceAccess' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'dynatraceAccess', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    dynatraceAccess?: Optional<string>;
-    @Expose({ name: 'DynatraceEndpoint' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'dynatraceEndpoint', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    dynatraceEndpoint?: Optional<string>;
     @Expose({ name: 'Name' })
     @Transform(
         (value: any, obj: any) =>
@@ -158,94 +140,6 @@ export class ResourceModel extends BaseModel {
         }
     )
     id?: Optional<string>;
-    @Expose({ name: 'Slo' })
-    @Type(() => Slo)
-    slo?: Optional<Slo>;
-
-    @Exclude()
-    public getPrimaryIdentifier(): Dict {
-        const identifier: Dict = {};
-        if (this.id != null) {
-            identifier[this.IDENTIFIER_KEY_ID] = this.id;
-        }
-
-        // only return the identifier if it can be used, i.e. if all components are present
-        return Object.keys(identifier).length === 1 ? identifier : null;
-    }
-
-    @Exclude()
-    public getAdditionalIdentifiers(): Array<Dict> {
-        const identifiers: Array<Dict> = new Array<Dict>();
-        // only return the identifiers if any can be used
-        return identifiers.length === 0 ? null : identifiers;
-    }
-}
-
-export class ErrorBudgetBurnRate extends BaseModel {
-    ['constructor']: typeof ErrorBudgetBurnRate;
-
-
-    @Expose({ name: 'FastBurnThreshold' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Number, 'fastBurnThreshold', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    fastBurnThreshold?: Optional<number>;
-    @Expose({ name: 'BurnRateVisualizationEnabled' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Boolean, 'burnRateVisualizationEnabled', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    burnRateVisualizationEnabled?: Optional<boolean>;
-    @Expose({ name: 'BurnRateValue' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Number, 'burnRateValue', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    burnRateValue?: Optional<number>;
-    @Expose({ name: 'BurnRateType' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'burnRateType', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    burnRateType?: Optional<string>;
-    @Expose({ name: 'SloValue' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Number, 'sloValue', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    sloValue?: Optional<number>;
-    @Expose({ name: 'EstimatedTimeToConsumeErrorBudget' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Number, 'estimatedTimeToConsumeErrorBudget', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    estimatedTimeToConsumeErrorBudget?: Optional<number>;
-
-}
-
-export class Slo extends BaseModel {
-    ['constructor']: typeof Slo;
-
-
     @Expose({ name: 'Enabled' })
     @Transform(
         (value: any, obj: any) =>
@@ -255,135 +149,6 @@ export class Slo extends BaseModel {
         }
     )
     enabled?: Optional<boolean>;
-    @Expose({ name: 'Name' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'name', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    name?: Optional<string>;
-    @Expose({ name: 'Description' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'description', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    description?: Optional<string>;
-    @Expose({ name: 'MetricName' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'metricName', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    metricName?: Optional<string>;
-    @Expose({ name: 'MetricExpression' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'metricExpression', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    metricExpression?: Optional<string>;
-    @Expose({ name: 'EvaluationType' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'evaluationType', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    evaluationType?: Optional<string>;
-    @Expose({ name: 'Filter' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'filter', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    filter?: Optional<string>;
-    @Expose({ name: 'Target' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Number, 'target', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    target?: Optional<number>;
-    @Expose({ name: 'Warning' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Number, 'warning', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    warning?: Optional<number>;
-    @Expose({ name: 'ErrorBudgetBurnRate' })
-    @Type(() => ErrorBudgetBurnRate)
-    errorBudgetBurnRate?: Optional<ErrorBudgetBurnRate>;
-    @Expose({ name: 'Timeframe' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'timeframe', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    timeframe?: Optional<string>;
-    @Expose({ name: 'UserRateMetric' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Boolean, 'userRateMetric', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    userRateMetric?: Optional<boolean>;
-    @Expose({ name: 'MetricRate' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'metricRate', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    metricRate?: Optional<string>;
-    @Expose({ name: 'MetricNumerator' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'metricNumerator', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    metricNumerator?: Optional<string>;
-    @Expose({ name: 'MetricDenominator' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'metricDenominator', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    metricDenominator?: Optional<string>;
-    @Expose({ name: 'Id' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'id', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    id?: Optional<string>;
     @Expose({ name: 'BurnRateMetricKey' })
     @Transform(
         (value: any, obj: any) =>
@@ -493,6 +258,84 @@ export class Slo extends BaseModel {
     )
     error?: Optional<string>;
 
+    @Exclude()
+    public getPrimaryIdentifier(): Dict {
+        const identifier: Dict = {};
+        if (this.id != null) {
+            identifier[this.IDENTIFIER_KEY_ID] = this.id;
+        }
+
+        // only return the identifier if it can be used, i.e. if all components are present
+        return Object.keys(identifier).length === 1 ? identifier : null;
+    }
+
+    @Exclude()
+    public getAdditionalIdentifiers(): Array<Dict> {
+        const identifiers: Array<Dict> = new Array<Dict>();
+        // only return the identifiers if any can be used
+        return identifiers.length === 0 ? null : identifiers;
+    }
+}
+
+export class ErrorBudgetBurnRate extends BaseModel {
+    ['constructor']: typeof ErrorBudgetBurnRate;
+
+
+    @Expose({ name: 'FastBurnThreshold' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(Number, 'fastBurnThreshold', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    fastBurnThreshold?: Optional<number>;
+    @Expose({ name: 'BurnRateVisualizationEnabled' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(Boolean, 'burnRateVisualizationEnabled', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    burnRateVisualizationEnabled?: Optional<boolean>;
+    @Expose({ name: 'BurnRateValue' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(Number, 'burnRateValue', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    burnRateValue?: Optional<number>;
+    @Expose({ name: 'BurnRateType' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'burnRateType', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    burnRateType?: Optional<string>;
+    @Expose({ name: 'SloValue' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(Number, 'sloValue', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    sloValue?: Optional<number>;
+    @Expose({ name: 'EstimatedTimeToConsumeErrorBudget' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(Number, 'estimatedTimeToConsumeErrorBudget', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    estimatedTimeToConsumeErrorBudget?: Optional<number>;
+
 }
 
 export class TypeConfigurationModel extends BaseModel {
@@ -509,24 +352,24 @@ export class DynatraceAccess extends BaseModel {
     ['constructor']: typeof DynatraceAccess;
 
 
-    @Expose({ name: 'AccessToken' })
+    @Expose({ name: 'Token' })
     @Transform(
         (value: any, obj: any) =>
-            transformValue(String, 'accessToken', value, obj, []),
+            transformValue(String, 'token', value, obj, []),
         {
             toClassOnly: true,
         }
     )
-    accessToken?: Optional<string>;
-    @Expose({ name: 'DynatraceEndpoint' })
+    token?: Optional<string>;
+    @Expose({ name: 'Endpoint' })
     @Transform(
         (value: any, obj: any) =>
-            transformValue(String, 'dynatraceEndpoint', value, obj, []),
+            transformValue(String, 'endpoint', value, obj, []),
         {
             toClassOnly: true,
         }
     )
-    dynatraceEndpoint?: Optional<string>;
+    endpoint?: Optional<string>;
 
 }
 

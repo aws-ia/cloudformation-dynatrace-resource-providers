@@ -7,7 +7,7 @@ import {
 import {AxiosError} from "axios";
 import {AbstractBaseResource} from "./abstract-base-resource";
 
-export abstract class AbstractDynatraceResource<ResourceModelType extends BaseModel, GetResponseData, CreateResponseData, UpdateResponseData> extends AbstractBaseResource<ResourceModelType, GetResponseData, CreateResponseData, UpdateResponseData, AxiosError<ApiErrorResponse>> {
+export abstract class AbstractDynatraceResource<ResourceModelType extends BaseModel, GetResponseData, CreateResponseData, UpdateResponseData, TypeConfigurationM> extends AbstractBaseResource<ResourceModelType, GetResponseData, CreateResponseData, UpdateResponseData, AxiosError<ApiErrorResponse>, TypeConfigurationM> {
 
     processRequestException(e: AxiosError<ApiErrorResponse>, request: ResourceHandlerRequest<ResourceModelType>) {
         const apiErrorResponse = e.response?.data;
@@ -31,7 +31,7 @@ export abstract class AbstractDynatraceResource<ResourceModelType extends BaseMo
             case 429:
                 throw new exceptions.ServiceLimitExceeded(errorMessage);
             default:
-                throw new exceptions.InternalFailure(`Unexpected error occurred while talking to the Dynatrace API (HTTP status ${status}) => ${errorMessage}`);
+                throw new exceptions.InternalFailure(`Unexpected error occurred while talking to the Dynatrace API: ${errorMessage}`);
         }
     }
 }

@@ -1,7 +1,5 @@
 {
   "CREATE": {
-    "/DynatraceAccess": "<DYNATRACE_TOKEN>",
-    "/DynatraceEndpoint": "<DYNATRACE_ENDPOINT>",
     "/Metadata": {
       "ConfigurationVersions": [
         4,

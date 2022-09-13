@@ -36,7 +36,8 @@ describe('DynatraceClient', () => {
             expect(mockedAxios.request).toHaveBeenCalledWith(expect.objectContaining({
                 headers: {
                     Authorization: `Api-Token ${token}`,
-                    'Content-type': 'application/json; charset=utf-8'
+                    'Content-type': 'application/json; charset=utf-8',
+                    'User-Agent': 'AWS CloudFormation (+https://aws.amazon.com/cloudformation/) CloudFormation custom resource'
                 }
             }));
         });
@@ -71,62 +72,6 @@ describe('DynatraceClient', () => {
 
             expect(mockedAxios.request).toHaveBeenCalledWith(expect.objectContaining({
                 method: method
-            }));
-        });
-
-
-
-        it.each([
-            [{
-                Foo: 'foo',
-                baR: 123,
-                HelloWorld: 'Hi'
-            }, {
-                foo: 'foo',
-                baR: 123,
-                helloWorld: 'Hi'
-            }],
-            [{
-                HelloWorld: {
-                    Foo: 'foo',
-                    baR: 123,
-                    HelloWorld: 'Hi'
-                }
-            }, {
-                helloWorld: {
-                    foo: 'foo',
-                    baR: 123,
-                    helloWorld: 'Hi'
-                }
-            }],
-            [{
-                HelloWorld: [
-                    'foo',
-                    ['hello', 'world'],
-                    {
-                        foo: 'foo',
-                        baR: 123,
-                        helloWorld: 'Hi'
-                    }
-                ]
-            }, {
-                helloWorld: [
-                    'foo',
-                    ['hello', 'world'],
-                    {
-                        foo: 'foo',
-                        baR: 123,
-                        helloWorld: 'Hi'
-                    }
-                ]
-            }]
-        ])('converts payload keys to camelCase', async (input, output) => {
-            mockedAxios.request.mockResolvedValueOnce({});
-
-            await testInstance.doRequest('get', 'foo/bar', undefined, input);
-
-            expect(mockedAxios.request).toHaveBeenCalledWith(expect.objectContaining({
-                data: output
             }));
         });
     });

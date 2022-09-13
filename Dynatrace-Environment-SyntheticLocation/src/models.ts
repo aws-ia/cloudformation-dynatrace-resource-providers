@@ -11,24 +11,6 @@ export class ResourceModel extends BaseModel {
     @Exclude()
     protected readonly IDENTIFIER_KEY_ENTITYID: string = '/properties/EntityId';
 
-    @Expose({ name: 'DynatraceAccess' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'dynatraceAccess', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    dynatraceAccess?: Optional<string>;
-    @Expose({ name: 'DynatraceEndpoint' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'dynatraceEndpoint', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    dynatraceEndpoint?: Optional<string>;
     @Expose({ name: 'EntityId' })
     @Transform(
         (value: any, obj: any) =>
@@ -164,9 +146,6 @@ export class ResourceModel extends BaseModel {
         }
     )
     autoUpdateChromium?: Optional<boolean>;
-    @Expose({ name: 'Location' })
-    @Type(() => SyntheticLocation)
-    location?: Optional<SyntheticLocation>;
 
     @Exclude()
     public getPrimaryIdentifier(): Dict {
@@ -187,148 +166,6 @@ export class ResourceModel extends BaseModel {
     }
 }
 
-export class SyntheticLocation extends BaseModel {
-    ['constructor']: typeof SyntheticLocation;
-
-
-    @Expose({ name: 'EntityId' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'entityId', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    entityId?: Optional<string>;
-    @Expose({ name: 'Type' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'type_', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    type_?: Optional<string>;
-    @Expose({ name: 'Name' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'name', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    name?: Optional<string>;
-    @Expose({ name: 'CountryCode' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'countryCode', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    countryCode?: Optional<string>;
-    @Expose({ name: 'RegionCode' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'regionCode', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    regionCode?: Optional<string>;
-    @Expose({ name: 'City' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'city', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    city?: Optional<string>;
-    @Expose({ name: 'Latitude' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Number, 'latitude', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    latitude?: Optional<number>;
-    @Expose({ name: 'Longitude' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Number, 'longitude', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    longitude?: Optional<number>;
-    @Expose({ name: 'Status' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'status', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    status?: Optional<string>;
-    @Expose({ name: 'Nodes' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'nodes', value, obj, [Array]),
-        {
-            toClassOnly: true,
-        }
-    )
-    nodes?: Optional<Array<string>>;
-    @Expose({ name: 'AvailabilityLocationOutage' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Boolean, 'availabilityLocationOutage', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    availabilityLocationOutage?: Optional<boolean>;
-    @Expose({ name: 'AvailabilityNodeOutage' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Boolean, 'availabilityNodeOutage', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    availabilityNodeOutage?: Optional<boolean>;
-    @Expose({ name: 'LocationNodeOutageDelayInMinutes' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Integer, 'locationNodeOutageDelayInMinutes', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    locationNodeOutageDelayInMinutes?: Optional<integer>;
-    @Expose({ name: 'AvailabilityNotificationsEnabled' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Boolean, 'availabilityNotificationsEnabled', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    availabilityNotificationsEnabled?: Optional<boolean>;
-    @Expose({ name: 'AutoUpdateChromium' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Boolean, 'autoUpdateChromium', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    autoUpdateChromium?: Optional<boolean>;
-
-}
-
 export class TypeConfigurationModel extends BaseModel {
     ['constructor']: typeof TypeConfigurationModel;
 
@@ -343,24 +180,24 @@ export class DynatraceAccess extends BaseModel {
     ['constructor']: typeof DynatraceAccess;
 
 
-    @Expose({ name: 'AccessToken' })
+    @Expose({ name: 'Token' })
     @Transform(
         (value: any, obj: any) =>
-            transformValue(String, 'accessToken', value, obj, []),
+            transformValue(String, 'token', value, obj, []),
         {
             toClassOnly: true,
         }
     )
-    accessToken?: Optional<string>;
-    @Expose({ name: 'DynatraceEndpoint' })
+    token?: Optional<string>;
+    @Expose({ name: 'Endpoint' })
     @Transform(
         (value: any, obj: any) =>
-            transformValue(String, 'dynatraceEndpoint', value, obj, []),
+            transformValue(String, 'endpoint', value, obj, []),
         {
             toClassOnly: true,
         }
     )
-    dynatraceEndpoint?: Optional<string>;
+    endpoint?: Optional<string>;
 
 }
 
