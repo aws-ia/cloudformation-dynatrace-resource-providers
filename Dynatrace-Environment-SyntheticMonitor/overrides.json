@@ -1,11 +1,12 @@
 {
   "CREATE": {
     "/Type": "HTTP",
+    "/Enabled": true,
     "/AnomalyDetection": {
       "OutageHandling": {
         "GlobalOutage": true,
         "GlobalOutagePolicy": {
-          "ConsecutiveRuns": 3
+          "ConsecutiveRuns": 2
         },
         "LocalOutage": true,
         "LocalOutagePolicy": {
@@ -18,8 +19,7 @@
         "Thresholds": [
           {
             "Type": "TOTAL",
-            "ValueMs": 100,
-            "RequestIndex": 1
+            "ValueMs": 100
           }
         ]
       }
@@ -51,6 +51,63 @@
         "Context": "CONTEXTLESS",
         "Key": "Resource Type",
         "Value": "Dynatrace::Environment::SyntheticMonitor"
+      }
+    ]
+  },
+  "UPDATE": {
+    "/Type": "HTTP",
+    "/Enabled": false,
+    "/AnomalyDetection": {
+      "OutageHandling": {
+        "GlobalOutage": true,
+        "GlobalOutagePolicy": {
+          "ConsecutiveRuns": 5
+        },
+        "LocalOutage": false
+      },
+      "LoadingTimeThresholds": {
+        "Enabled": true,
+        "Thresholds": [
+          {
+            "Type": "TOTAL",
+            "ValueMs": 100
+          }
+        ]
+      }
+    },
+    "/Script": {
+      "version": "1.0",
+      "requests": [
+        {
+          "url": "https://aws.amazon.com",
+          "method": "GET",
+          "description": "HTTP request test",
+          "validation": {
+            "rules": [
+              {
+                "type": "httpStatusesList",
+                "value": "200",
+                "passIfFound": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "/Locations": [],
+    "/ManuallyAssignedApps": [],
+    "/Tags": [
+      {
+        "Source": "AUTO",
+        "Context": "CONTEXTLESS",
+        "Key": "Resource Type",
+        "Value": "Dynatrace::Environment::SyntheticMonitor"
+      },
+      {
+        "Source": "AUTO",
+        "Context": "CONTEXTLESS",
+        "Key": "Operation",
+        "Value": "Update"
       }
     ]
   }

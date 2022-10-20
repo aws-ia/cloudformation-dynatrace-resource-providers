@@ -1,7 +1,7 @@
 {
   "typeName": "Dynatrace::Environment::SyntheticMonitor",
   "description": "Manage a synthetic monitor (V1) in Dynatrace.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "sourceUrl": "https://github.com/aws-ia/cloudformation-dynatrace-resource-providers",
   "definitions": {
     "DynatraceAccess": {
       "type": "object",
@@ -321,9 +321,6 @@
     }
   },
   "additionalProperties": false,
-  "tagging": {
-    "taggable": true
-  },
   "required": [
     "FrequencyMin",
     "Type",
@@ -331,7 +328,9 @@
     "Enabled"
   ],
   "writeOnlyProperties": [
-    "/properties/Type"
+    "/properties/Type",
+    "/properties/Script",
+    "/properties/Tags"
   ],
   "readOnlyProperties": [
     "/properties/EntityId",
