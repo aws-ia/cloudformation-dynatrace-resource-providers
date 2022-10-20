@@ -321,9 +321,6 @@
     }
   },
   "additionalProperties": false,
-  "tagging": {
-    "taggable": true
-  },
   "required": [
     "FrequencyMin",
     "Type",
@@ -331,7 +328,10 @@
     "Enabled"
   ],
   "writeOnlyProperties": [
-    "/properties/Type"
+    "/properties/Type",
+    "/properties/AnomalyDetection",
+    "/properties/Script",
+    "/properties/Tags"
   ],
   "readOnlyProperties": [
     "/properties/EntityId",
