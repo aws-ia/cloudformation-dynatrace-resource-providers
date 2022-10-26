@@ -22,10 +22,6 @@ To declare this entity in your AWS CloudFormation template, use the following sy
         "<a href="#warning" title="Warning">Warning</a>" : <i>Double</i>,
         "<a href="#errorbudgetburnrate" title="ErrorBudgetBurnRate">ErrorBudgetBurnRate</a>" : <i><a href="errorbudgetburnrate.md">ErrorBudgetBurnRate</a></i>,
         "<a href="#timeframe" title="Timeframe">Timeframe</a>" : <i>String</i>,
-        "<a href="#userratemetric" title="UserRateMetric">UserRateMetric</a>" : <i>Boolean</i>,
-        "<a href="#metricrate" title="MetricRate">MetricRate</a>" : <i>String</i>,
-        "<a href="#metricnumerator" title="MetricNumerator">MetricNumerator</a>" : <i>String</i>,
-        "<a href="#metricdenominator" title="MetricDenominator">MetricDenominator</a>" : <i>String</i>,
     }
 }
 </pre>
@@ -45,10 +41,6 @@ Properties:
     <a href="#warning" title="Warning">Warning</a>: <i>Double</i>
     <a href="#errorbudgetburnrate" title="ErrorBudgetBurnRate">ErrorBudgetBurnRate</a>: <i><a href="errorbudgetburnrate.md">ErrorBudgetBurnRate</a></i>
     <a href="#timeframe" title="Timeframe">Timeframe</a>: <i>String</i>
-    <a href="#userratemetric" title="UserRateMetric">UserRateMetric</a>: <i>Boolean</i>
-    <a href="#metricrate" title="MetricRate">MetricRate</a>: <i>String</i>
-    <a href="#metricnumerator" title="MetricNumerator">MetricNumerator</a>: <i>String</i>
-    <a href="#metricdenominator" title="MetricDenominator">MetricDenominator</a>: <i>String</i>
 </pre>
 
 ## Properties
@@ -167,65 +159,6 @@ _Type_: String
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
-#### UserRateMetric
-
-DEPRECATED
-
-The type of the metric to use for SLO calculation:
-
-    true: An existing percentage-based metric.
-    false: A ratio of two metrics.
-
-For a list of available metrics, see Built-in metric page or try the GET metrics API call.
-
-_Required_: No
-
-_Type_: Boolean
-
-_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
-
-#### MetricRate
-
-DEPRECATED
-
-The percentage-based metric for the calculation of the SLO.
-
-Required when the useRateMetric is set to true.
-
-_Required_: No
-
-_Type_: String
-
-_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
-
-#### MetricNumerator
-
-DEPRECATED
-
-The metric for the count of successes (the numerator in rate calculation).
-
-Required when the useRateMetric is set to false.
-
-_Required_: No
-
-_Type_: String
-
-_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
-
-#### MetricDenominator
-
-DEPRECATED
-
-The total count metric (the denominator in rate calculation).
-
-Required when the useRateMetric is set to false.
-
-_Required_: No
-
-_Type_: String
-
-_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
-
 ## Return Values
 
 ### Ref
@@ -252,15 +185,11 @@ The error budget burn rate key for a metric expression.
 
 #### NumeratorValue
 
-DEPRECATED
-
-The numerator value used to evaluate the SLO when useRateMetric is set to false.
+Returns the <code>NumeratorValue</code> value.
 
 #### DenominatorValue
 
-DEPRECATED
-
-The denominator value used to evaluate the SLO when useRateMetric is set to false.
+Returns the <code>DenominatorValue</code> value.
 
 #### ProblemFilter
 

@@ -9,17 +9,8 @@ export class ResourceModel extends BaseModel {
     public static readonly TYPE_NAME: string = 'Dynatrace::Environment::Metric';
 
     @Exclude()
-    protected readonly IDENTIFIER_KEY_ID: string = '/properties/Id';
+    protected readonly IDENTIFIER_KEY_TIMESERIESID: string = '/properties/TimeseriesId';
 
-    @Expose({ name: 'Id' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'id', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    id?: Optional<string>;
     @Expose({ name: 'DisplayName' })
     @Transform(
         (value: any, obj: any) =>
@@ -114,8 +105,8 @@ export class ResourceModel extends BaseModel {
     @Exclude()
     public getPrimaryIdentifier(): Dict {
         const identifier: Dict = {};
-        if (this.id != null) {
-            identifier[this.IDENTIFIER_KEY_ID] = this.id;
+        if (this.timeseriesId != null) {
+            identifier[this.IDENTIFIER_KEY_TIMESERIESID] = this.timeseriesId;
         }
 
         // only return the identifier if it can be used, i.e. if all components are present

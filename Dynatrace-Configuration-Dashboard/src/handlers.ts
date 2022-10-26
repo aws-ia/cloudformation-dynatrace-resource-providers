@@ -69,7 +69,10 @@ class Resource extends AbstractDynatraceResource<ResourceModel, DashboardPayload
 
         return new ResourceModel({
             ...model,
-            ...from
+            ...Transformer.for(from)
+                .transformKeys(CaseTransformer.IDENTITY)
+                .forModelIngestion()
+                .transform()
         });
     }
 

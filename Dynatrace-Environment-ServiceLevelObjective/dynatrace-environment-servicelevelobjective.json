@@ -1,7 +1,7 @@
 {
   "typeName": "Dynatrace::Environment::ServiceLevelObjective",
   "description": "Manage a Service Level Objective in Dynatrace.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "sourceUrl": "https://github.com/aws-ia/cloudformation-dynatrace-resource-providers",
   "definitions": {
     "DynatraceAccess": {
       "type": "object",
@@ -125,22 +125,6 @@
       "description": "The timeframe for the SLO evaluation. Use the syntax of the global timeframe selector.",
       "type": "string"
     },
-    "UserRateMetric": {
-      "description": "DEPRECATED\n\nThe type of the metric to use for SLO calculation:\n\n    true: An existing percentage-based metric.\n    false: A ratio of two metrics.\n\nFor a list of available metrics, see Built-in metric page or try the GET metrics API call.",
-      "type": "boolean"
-    },
-    "MetricRate": {
-      "description": "DEPRECATED\n\nThe percentage-based metric for the calculation of the SLO.\n\nRequired when the useRateMetric is set to true.",
-      "type": "string"
-    },
-    "MetricNumerator": {
-      "description": "DEPRECATED\n\nThe metric for the count of successes (the numerator in rate calculation).\n\nRequired when the useRateMetric is set to false.",
-      "type": "string"
-    },
-    "MetricDenominator": {
-      "description": "DEPRECATED\n\nThe total count metric (the denominator in rate calculation).\n\nRequired when the useRateMetric is set to false.",
-      "type": "string"
-    },
     "Id": {
       "description": "Id of the SLO.",
       "type": "string"
@@ -152,14 +136,6 @@
     "BurnRateMetricKey": {
       "description": "The error budget burn rate key for a metric expression.",
       "type": "string"
-    },
-    "NumeratorValue": {
-      "description": "DEPRECATED\n\nThe numerator value used to evaluate the SLO when useRateMetric is set to false.",
-      "type": "number"
-    },
-    "DenominatorValue": {
-      "description": "DEPRECATED\n\nThe denominator value used to evaluate the SLO when useRateMetric is set to false.",
-      "type": "number"
     },
     "ProblemFilter": {
       "description": "The entity filter for fetching the number of problems related to an SLO. Auto-generated in case no filter has been added to the SLO.",

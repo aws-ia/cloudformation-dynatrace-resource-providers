@@ -7,15 +7,24 @@ import {version} from "../package.json";
 import {AxiosResponse} from "axios";
 import {
     Action,
-    exceptions, handlerEvent,
-    LoggerProxy, OperationStatus,
+    AwsTaskWorkerPool,
+    BaseModel,
+    Constructor,
+    exceptions,
+    handlerEvent,
+    HandlerSignatures,
+    LoggerProxy,
+    OperationStatus,
     Optional,
     ProgressEvent,
     ResourceHandlerRequest,
     SessionProxy
 } from "@amazon-web-services-cloudformation/cloudformation-cli-typescript-lib";
 
-type SyntheticMonitorPayload = {};
+type SyntheticMonitorPayload = {
+    entityId: string
+    script?: { [key: string]: any }
+};
 
 type SyntheticMonitorsPayload = {
     monitors: SyntheticMonitorPayload[]
@@ -29,6 +38,11 @@ class Resource extends AbstractDynatraceResource<ResourceModel, AxiosResponse<Sy
 
     private userAgent = `AWS CloudFormation (+https://aws.amazon.com/cloudformation/) CloudFormation resource ${this.typeName}/${version}`;
     private callbackDelay = 30;
+
+    constructor(typeName: string, modelTypeReference: Constructor<ResourceModel>, workerPool: AwsTaskWorkerPool, handlers: HandlerSignatures<ResourceModel, BaseModel>, typeConfigurationTypeReference: Constructor<BaseModel> & { deserialize: Function }) {
+        super(typeName, modelTypeReference, workerPool, handlers, typeConfigurationTypeReference);
+        this.maxRetries = 10;
+    }
 
     @handlerEvent(Action.Update)
     async updateHandler(
@@ -50,8 +64,9 @@ class Resource extends AbstractDynatraceResource<ResourceModel, AxiosResponse<Sy
 
         if (!callbackContext.serverTiming) {
             try {
-                let updateResponse = await this.update(model, typeConfiguration);
-                let serverTiming = this.getServerTiming(updateResponse);
+                await this.update(model, typeConfiguration);
+                let getResponse = await this.get(model, typeConfiguration);
+                let serverTiming = this.getServerTiming(getResponse);
 
                 let progressEventBuilder = ProgressEvent.builder<ProgressEvent<ResourceModel, EventuallyConsistentCallbackContext>>()
                     .status(OperationStatus.InProgress)
@@ -145,25 +160,16 @@ class Resource extends AbstractDynatraceResource<ResourceModel, AxiosResponse<Sy
 
         const resourceModel = new ResourceModel({
             ...model,
-            ...from.data
+            ...Transformer.for(from.data)
+                .transformKeys(CaseTransformer.IDENTITY)
+                .forModelIngestion()
+                .transform()
         });
         delete resourceModel.type_;
-        delete resourceModel.anomalyDetection;
         delete resourceModel.script;
         delete resourceModel.tags;
 
         return resourceModel;
-    }
-
-    private getServerTiming(response: AxiosResponse<any>) {
-        let serverTiming = undefined;
-        if (response.headers.hasOwnProperty('server-timing')) {
-            const matches = response.headers['server-timing'].match(/dtRpid;desc="([\d\-]+)"/);
-            if (matches !== null) {
-                serverTiming = parseInt(matches[1]);
-            }
-        }
-        return serverTiming;
     }
 
 }

@@ -1,0 +1,10 @@
+{
+  "CREATE": {
+    "/Unit": "GibiByte (GiB)",
+    "/Types": [
+      "A",
+      "B",
+      "C"
+    ]
+  }
+}

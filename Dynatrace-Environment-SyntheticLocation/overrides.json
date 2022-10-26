@@ -1,19 +1,18 @@
 {
   "CREATE": {
     "/Type": "PRIVATE",
-    "/Name": "End-to-end CloudFormation test (Dynatrace::Environment::SyntheticLocation)",
     "/CountryCode": "GB",
-    "/RegionCode": null,
-    "/City": "Edinburgh",
+    "/RegionCode": "E1",
+    "/City": "Bridlington",
     "/Latitude": 55.9533,
     "/Longitude": 3.1883,
-    "/LocationNodeOutageDelayInMinutes": null,
+    "/LocationNodeOutageDelayInMinutes": 3,
     "/Nodes": [
-      "240427549"
-    ]
+      "219952241"
+    ],
+    "/Status": "ENABLED"
   },
   "UPDATE": {
-    "/Name": "End-to-end CloudFormation test (Dynatrace::Environment::SyntheticLocation) - UPDATED",
     "/CountryCode": "GB",
     "/RegionCode": "E1",
     "/City": "Edinburgh",
@@ -21,7 +20,8 @@
     "/Longitude": 3.1883,
     "/LocationNodeOutageDelayInMinutes": 5,
     "/Nodes": [
-      "240427549"
-    ]
+      "219952241"
+    ],
+    "/Status": "ENABLED"
   }
 }

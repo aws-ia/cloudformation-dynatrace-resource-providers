@@ -1,12 +1,5 @@
 {
   "CREATE": {
-    "/Metadata": {
-      "ConfigurationVersions": [
-        4,
-        2
-      ],
-      "ClusterVersion": "Mock version"
-    },
     "/DashboardMetadata": {
       "Name": "End-to-End Dashboard (created by Dynatrace::Configuration::Dashboard)",
       "Owner": "CloudFormation",
@@ -17,9 +10,6 @@
       "DynamicFilters": {
         "Filters": [
           "SERVICE_TYPE"
-        ],
-        "TagSuggestionTypes": [
-          "HOST_LIKE"
         ]
       }
     },
@@ -34,7 +24,10 @@
           "width": 304,
           "height": 38
         },
-        "tileFilter": {}
+        "tileFilter": {
+          "timeframe": null,
+          "managementZone": null
+        }
       },
       {
         "name": "Applications",
@@ -46,7 +39,10 @@
           "width": 304,
           "height": 38
         },
-        "tileFilter": {}
+        "tileFilter": {
+          "timeframe": null,
+          "managementZone": null
+        }
       },
       {
         "name": "Host health",
@@ -59,10 +55,8 @@
           "height": 304
         },
         "tileFilter": {
-          "managementZone": {
-            "id": "3438779970106539862",
-            "name": "Example Management Zone"
-          }
+          "timeframe": null,
+          "managementZone": null
         },
         "chartVisible": true
       },
@@ -77,23 +71,14 @@
           "height": 304
         },
         "tileFilter": {
-          "managementZone": {
-            "id": "3438779970106539862",
-            "name": "Example Management Zone"
-          }
+          "timeframe": null,
+          "managementZone": null
         },
         "chartVisible": true
       }
     ]
   },
   "UPDATE": {
-    "/Metadata": {
-      "ConfigurationVersions": [
-        4,
-        2
-      ],
-      "ClusterVersion": "Mock version"
-    },
     "/DashboardMetadata": {
       "Name": "End-to-End Dashboard (created by Dynatrace::Configuration::Dashboard) – UPDATED",
       "Owner": "Someone",
@@ -103,10 +88,9 @@
       ],
       "DynamicFilters": {
         "Filters": [
-          "SERVICE_TYPE"
-        ],
-        "TagSuggestionTypes": [
-          "HOST_LIKE"
+          "SERVICE_TYPE",
+          "OS_TYPE",
+          "DEPLOYMENT_TYPE"
         ]
       }
     },
@@ -121,7 +105,10 @@
           "width": 304,
           "height": 38
         },
-        "tileFilter": {}
+        "tileFilter": {
+          "timeframe": null,
+          "managementZone": null
+        }
       },
       {
         "name": "Host health",
@@ -134,10 +121,8 @@
           "height": 304
         },
         "tileFilter": {
-          "managementZone": {
-            "id": "3438779970106539862",
-            "name": "Example Management Zone"
-          }
+          "timeframe": null,
+          "managementZone": null
         },
         "chartVisible": true
       }

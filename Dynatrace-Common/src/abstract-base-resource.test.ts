@@ -101,6 +101,7 @@ describe('AbstractBaseResource', () => {
             let firstProgressEvent = await handleFunctionName(session, request, {}, logger,typeConfiguration);
             expect(firstProgressEvent.status).toBe(OperationStatus.InProgress);
             expect(firstProgressEvent.callbackContext).toHaveProperty('retry', 1);
+            expect(firstProgressEvent.callbackDelaySeconds).toBeGreaterThan(0);
 
             let callbackContext = firstProgressEvent.callbackContext;
 
@@ -109,6 +110,7 @@ describe('AbstractBaseResource', () => {
                 let intermediateProgressEvent = await handleFunctionName(session, request, callbackContext, logger,typeConfiguration);
                 expect(intermediateProgressEvent.status).toBe(OperationStatus.InProgress);
                 expect(intermediateProgressEvent.callbackContext).toHaveProperty('retry', i + 2);
+                expect(intermediateProgressEvent.callbackDelaySeconds).toBeGreaterThan(0);
                 callbackContext = intermediateProgressEvent.callbackContext;
             }
 
@@ -116,6 +118,7 @@ describe('AbstractBaseResource', () => {
             let lastProgressEvent = await handleFunctionName(session, request, firstProgressEvent.callbackContext, logger,typeConfiguration);
             expect(lastProgressEvent.status).toBe(OperationStatus.Success);
             expect(lastProgressEvent.callbackContext).toBeUndefined();
+            expect(lastProgressEvent.callbackDelaySeconds).toBe(0);
         }
 
         it.each([
