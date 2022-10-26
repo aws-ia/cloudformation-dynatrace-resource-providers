@@ -95,42 +95,6 @@ export class ResourceModel extends BaseModel {
         }
     )
     timeframe?: Optional<string>;
-    @Expose({ name: 'UserRateMetric' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Boolean, 'userRateMetric', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    userRateMetric?: Optional<boolean>;
-    @Expose({ name: 'MetricRate' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'metricRate', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    metricRate?: Optional<string>;
-    @Expose({ name: 'MetricNumerator' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'metricNumerator', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    metricNumerator?: Optional<string>;
-    @Expose({ name: 'MetricDenominator' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'metricDenominator', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    metricDenominator?: Optional<string>;
     @Expose({ name: 'Id' })
     @Transform(
         (value: any, obj: any) =>
@@ -158,24 +122,6 @@ export class ResourceModel extends BaseModel {
         }
     )
     burnRateMetricKey?: Optional<string>;
-    @Expose({ name: 'NumeratorValue' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Number, 'numeratorValue', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    numeratorValue?: Optional<number>;
-    @Expose({ name: 'DenominatorValue' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Number, 'denominatorValue', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    denominatorValue?: Optional<number>;
     @Expose({ name: 'ProblemFilter' })
     @Transform(
         (value: any, obj: any) =>
