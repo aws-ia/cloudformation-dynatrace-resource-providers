@@ -172,17 +172,6 @@ class Resource extends AbstractDynatraceResource<ResourceModel, AxiosResponse<Sy
         return resourceModel;
     }
 
-    private getServerTiming(response: AxiosResponse<any>) {
-        let serverTiming = undefined;
-        if (response.headers.hasOwnProperty('server-timing')) {
-            const matches = response.headers['server-timing'].match(/dtRpid;desc="([\d\-]+)"/);
-            if (matches !== null) {
-                serverTiming = parseInt(matches[1]);
-            }
-        }
-        return serverTiming;
-    }
-
 }
 
 export const resource = new Resource(ResourceModel.TYPE_NAME, ResourceModel, null, null, TypeConfigurationModel);

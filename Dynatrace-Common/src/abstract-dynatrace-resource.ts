@@ -4,7 +4,7 @@ import {
     exceptions,
     ResourceHandlerRequest
 } from "@amazon-web-services-cloudformation/cloudformation-cli-typescript-lib";
-import {AxiosError} from "axios";
+import {AxiosError, AxiosResponse} from "axios";
 import {AbstractBaseResource} from "./abstract-base-resource";
 
 export abstract class AbstractDynatraceResource<ResourceModelType extends BaseModel, GetResponseData, CreateResponseData, UpdateResponseData, TypeConfigurationM> extends AbstractBaseResource<ResourceModelType, GetResponseData, CreateResponseData, UpdateResponseData, AxiosError<ApiErrorResponse>, TypeConfigurationM> {
@@ -33,5 +33,16 @@ export abstract class AbstractDynatraceResource<ResourceModelType extends BaseMo
             default:
                 throw new exceptions.InternalFailure(`Unexpected error occurred while talking to the Dynatrace API: ${errorMessage}`);
         }
+    }
+
+    getServerTiming(response: AxiosResponse<any>) {
+        let serverTiming = undefined;
+        if (response.headers.hasOwnProperty('server-timing')) {
+            const matches = response.headers['server-timing'].match(/dtRpid;desc="([\d\-]+)"/);
+            if (matches !== null) {
+                serverTiming = parseInt(matches[1]);
+            }
+        }
+        return serverTiming;
     }
 }
