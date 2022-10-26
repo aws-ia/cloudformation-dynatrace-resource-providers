@@ -4,8 +4,10 @@ import {AbstractDynatraceResource} from '../../Dynatrace-Common/src/abstract-dyn
 import {CaseTransformer, Transformer} from '../../Dynatrace-Common/src/util';
 
 import {version} from "../package.json";
+import {exceptions} from "@amazon-web-services-cloudformation/cloudformation-cli-typescript-lib";
 
 type MetricPayload = {
+    timeseriesId: string
     dimensions: any
 };
 
@@ -16,7 +18,7 @@ class Resource extends AbstractDynatraceResource<ResourceModel, MetricPayload, M
     async get(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<MetricPayload> {
         const response = await new DynatraceClient(typeConfiguration?.dynatraceAccess.endpoint, typeConfiguration?.dynatraceAccess.token, this.userAgent).doRequest<MetricPayload>(
             'get',
-            `/api/v1/timeseries/${model.id}`);
+            `/api/v1/timeseries/${model.timeseriesId}`);
         return response.data;
     }
 
@@ -26,13 +28,13 @@ class Resource extends AbstractDynatraceResource<ResourceModel, MetricPayload, M
             `/api/v1/timeseries`,
             {source: 'CUSTOM'});
 
-        return response.data.map(metric => this.setModelFrom(new ResourceModel(model), metric));
+        return response.data.map(metric => this.setModelFrom(this.newModel(), metric));
     }
 
     async create(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<MetricPayload> {
         const response = await new DynatraceClient(typeConfiguration?.dynatraceAccess.endpoint, typeConfiguration?.dynatraceAccess.token, this.userAgent).doRequest<MetricPayload>(
             'put',
-            `/api/v1/timeseries/${model.id}`,
+            `/api/v1/timeseries/${model.timeseriesId}`,
             {},
             Transformer.for(model.toJSON())
                 .transformKeys(CaseTransformer.PASCAL_TO_CAMEL)
@@ -41,13 +43,13 @@ class Resource extends AbstractDynatraceResource<ResourceModel, MetricPayload, M
     }
 
     async update(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<MetricPayload> {
-        return this.create(model);
+        throw new exceptions.NotUpdatable();
     }
 
     async delete(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<void> {
         await new DynatraceClient(typeConfiguration?.dynatraceAccess.endpoint, typeConfiguration?.dynatraceAccess.token, this.userAgent).doRequest(
             'delete',
-            `/api/v1/timeseries/${model.id}`);
+            `/api/v1/timeseries/${model.timeseriesId}`);
     }
 
     newModel(partial?: any): ResourceModel {
@@ -61,8 +63,12 @@ class Resource extends AbstractDynatraceResource<ResourceModel, MetricPayload, M
 
         let resourceModel = new ResourceModel({
             ...model,
-            ...from
+            ...Transformer.for(from)
+                .transformKeys(CaseTransformer.IDENTITY)
+                .forModelIngestion()
+                .transform()
         });
+        delete resourceModel.types;
         delete resourceModel.dimensions;
 
         return resourceModel;

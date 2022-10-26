@@ -2,6 +2,8 @@ export enum CaseTransformer {
     PASCAL_TO_CAMEL,
     PASCAL_TO_SNAKE,
     SNAKE_TO_CAMEL,
+    SNAKE_TO_PASCAL,
+    IDENTITY
 }
 
 export class Transformer {
@@ -134,6 +136,10 @@ export class Transformer {
                 return this.transformObjectKeys(this._object, key => key.substring(0, 1).toLocaleLowerCase() + key.substring(1).replace(/([A-Z])/g, (input) => `_${input.toLocaleLowerCase()}`));
             case CaseTransformer.SNAKE_TO_CAMEL:
                 return this.transformObjectKeys(this._object, key => key.substring(0, 1).toLocaleLowerCase() + key.substring(1).replace(/_([a-z])/g, (input, p1) => `${p1.toLocaleUpperCase()}`));
+            case CaseTransformer.SNAKE_TO_PASCAL:
+                return this.transformObjectKeys(this._object, key => key.substring(0, 1).toLocaleUpperCase() + key.substring(1).replace(/_([a-z])/g, (input, p1) => `${p1.toLocaleUpperCase()}`));
+            case CaseTransformer.IDENTITY:
+                return this.transformObjectKeys(this._object, key => key);
             default:
                 throw new Error(`Case transformer "${this.caseTransformer}" not supported`);
         }

@@ -1,7 +1,7 @@
 {
   "typeName": "Dynatrace::Environment::Metric",
   "description": "Manage a timeseries metric (V1) in Dynatrace.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "sourceUrl": "https://github.com/aws-ia/cloudformation-dynatrace-resource-providers",
   "definitions": {
     "DynatraceAccess": {
       "type": "object",
@@ -24,11 +24,12 @@
     "Id": {
       "description": "The ID of the metric.",
       "type": "string",
-      "pattern": "^custom\\:[A-Za-z\\.\\-\\_]([A-Za-z0-9]|([\\.\\-\\_][A-Za-z\\.\\-\\_])){1,248}$"
+      "pattern": "^custom\\:([a-zA-Z][a-zA-Z0-9]*([\\.\\_\\-][a-zA-Z])?)+$"
     },
     "DisplayName": {
       "description": "The name of the metric in the user interface. It is limited to 256 characters.",
       "type": "string",
+      "minLength": 1,
       "maxLength": 256
     },
     "Unit": {
@@ -132,9 +133,6 @@
     ]
   },
   "properties": {
-    "Id": {
-      "$ref": "#/definitions/Id"
-    },
     "DisplayName": {
       "$ref": "#/definitions/DisplayName"
     },
@@ -184,13 +182,13 @@
   },
   "additionalProperties": false,
   "createOnlyProperties": [
-    "/properties/Id"
+    "/properties/TimeseriesId"
   ],
   "writeOnlyProperties": [
+    "/properties/Types",
     "/properties/Dimensions"
   ],
   "readOnlyProperties": [
-    "/properties/TimeseriesId",
     "/properties/AggregationTypes",
     "/properties/Filter",
     "/properties/DetailedSource",
@@ -198,16 +196,13 @@
     "/properties/Warnings"
   ],
   "primaryIdentifier": [
-    "/properties/Id"
+    "/properties/TimeseriesId"
   ],
   "handlers": {
     "create": {
       "permissions": []
     },
     "read": {
-      "permissions": []
-    },
-    "update": {
       "permissions": []
     },
     "delete": {
