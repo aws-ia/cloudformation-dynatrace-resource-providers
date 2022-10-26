@@ -1,7 +1,7 @@
 {
   "typeName": "Dynatrace::Configuration::Dashboard",
   "description": "Manage a dashboard in Dynatrace.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "sourceUrl": "https://github.com/aws-ia/cloudformation-dynatrace-resource-providers",
   "definitions": {
     "DynatraceAccess": {
       "type": "object",
@@ -56,7 +56,8 @@
       "properties": {
         "Name": {
           "description": "The name of the dashboard.",
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "Shared": {
           "description": "The dashboard is shared (true) or private (false).",
@@ -215,7 +216,8 @@
     "Tiles"
   ],
   "readOnlyProperties": [
-    "/properties/Id"
+    "/properties/Id",
+    "/properties/Metadata"
   ],
   "primaryIdentifier": [
     "/properties/Id"
