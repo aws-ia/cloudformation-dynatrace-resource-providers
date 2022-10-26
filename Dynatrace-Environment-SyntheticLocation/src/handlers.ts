@@ -81,7 +81,6 @@ class Resource extends AbstractDynatraceResource<ResourceModel, LocationPayload,
                 .transform()
         });
         delete resourceModel.type_;
-        // delete resourceModel.locationNodeOutageDelayInMinutes;
 
         return resourceModel;
     }
