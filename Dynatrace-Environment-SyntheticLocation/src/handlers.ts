@@ -75,9 +75,13 @@ class Resource extends AbstractDynatraceResource<ResourceModel, LocationPayload,
 
         const resourceModel = new ResourceModel({
             ...model,
-            ...from
+            ...Transformer.for(from)
+                .transformKeys(CaseTransformer.IDENTITY)
+                .forModelIngestion()
+                .transform()
         });
         delete resourceModel.type_;
+        // delete resourceModel.locationNodeOutageDelayInMinutes;
 
         return resourceModel;
     }

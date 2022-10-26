@@ -1,7 +1,7 @@
 {
   "typeName": "Dynatrace::Environment::SyntheticLocation",
   "description": "Manage a synthetic location (V1) in Dynatrace.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "sourceUrl": "https://github.com/aws-ia/cloudformation-dynatrace-resource-providers",
   "definitions": {
     "DynatraceAccess": {
       "type": "object",
@@ -49,7 +49,8 @@
     },
     "Name": {
       "description": "The name of the location.",
-      "type": "string"
+      "type": "string",
+      "pattern": "[A-Za-z\\u00C0-\\u00D6\\u00D8-\\u00f6\\u00f8-\\u00ff\\s]{1,}"
     },
     "CountryCode": {
       "description": "The country code of the location.\n\nUse the alpha-2 code of the ISO 3166-2 standard (https://dt-url.net/iso3166-2), (for example, AT for Austria or PL for Poland).",
@@ -115,7 +116,12 @@
     "taggable": false
   },
   "required": [
-    "Name"
+    "Name",
+    "CountryCode",
+    "RegionCode",
+    "City",
+    "Latitude",
+    "Longitude"
   ],
   "writeOnlyProperties": [
     "/properties/Type"
