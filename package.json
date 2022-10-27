@@ -6,6 +6,7 @@
     "doc": "docs"
   },
   "scripts": {
+    "prebuild:all": "cd Dynatrace-Common && npm install && npm run build",
     "build:all": "find . -maxdepth 1 -type d -name \"*\" -exec bash -c \"test -e {}/.rpdk-config && cd '{}' && cfn generate && npm install && npm run build\" \\;",
     "build:docs-clean": "rm -rf docs/user/generated/resources/*",
     "build:docs-cp-docs": "find . -maxdepth 1 -type d -name \"*\" -exec bash -c \"! test -e {}/.rpdk-config || mkdir -p docs/user/generated/resources/{} && cp {}/docs/* docs/user/generated/resources/{}/\" \\;",
