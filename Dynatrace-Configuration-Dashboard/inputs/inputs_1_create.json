@@ -1,0 +1,79 @@
+{
+  "DashboardMetadata": {
+    "Name": "End-to-End Dashboard (created by Dynatrace::Configuration::Dashboard)",
+    "Owner": "CloudFormation",
+    "Shared": true,
+    "Tags": [
+      "CloudFormation"
+    ],
+    "DynamicFilters": {
+      "Filters": [
+        "SERVICE_TYPE"
+      ]
+    }
+  },
+  "Tiles": [
+    {
+      "name": "Hosts",
+      "tileType": "HEADER",
+      "configured": true,
+      "bounds": {
+        "top": 0,
+        "left": 0,
+        "width": 304,
+        "height": 38
+      },
+      "tileFilter": {
+        "timeframe": null,
+        "managementZone": null
+      }
+    },
+    {
+      "name": "Applications",
+      "tileType": "HEADER",
+      "configured": true,
+      "bounds": {
+        "top": 0,
+        "left": 304,
+        "width": 304,
+        "height": 38
+      },
+      "tileFilter": {
+        "timeframe": null,
+        "managementZone": null
+      }
+    },
+    {
+      "name": "Host health",
+      "tileType": "HOSTS",
+      "configured": true,
+      "bounds": {
+        "top": 38,
+        "left": 0,
+        "width": 304,
+        "height": 304
+      },
+      "tileFilter": {
+        "timeframe": null,
+        "managementZone": null
+      },
+      "chartVisible": true
+    },
+    {
+      "name": "Application health",
+      "tileType": "APPLICATIONS",
+      "configured": true,
+      "bounds": {
+        "top": 38,
+        "left": 304,
+        "width": 304,
+        "height": 304
+      },
+      "tileFilter": {
+        "timeframe": null,
+        "managementZone": null
+      },
+      "chartVisible": true
+    }
+  ]
+}
