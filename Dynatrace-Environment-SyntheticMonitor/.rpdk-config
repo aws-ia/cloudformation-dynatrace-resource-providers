@@ -17,5 +17,16 @@
         "target_schemas": [],
         "useDocker": false,
         "protocolVersion": "2.0.0"
+    },
+    "contractSettings":{
+        "typeConfiguration": {
+            "configuration": {
+                "DynatraceAccess": {
+                    "Token": "{{resolve:ssm-secure:/cfn/dynatrace/token:7}}",
+                    "Endpoint": "{{resolve:ssm-secure:/cfn/dynatrace/endpoint:3}}"
+                }
+            },
+            "configurationAlias": "default"
+        }
     }
 }

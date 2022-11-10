@@ -1,0 +1,57 @@
+{
+  "Name": "Dynatrace name",
+  "FrequencyMin": 5,
+  "Type": "HTTP",
+  "Enabled": true,
+  "AnomalyDetection": {
+    "OutageHandling": {
+      "GlobalOutage": true,
+      "GlobalOutagePolicy": {
+        "ConsecutiveRuns": 2
+      },
+      "LocalOutage": true,
+      "LocalOutagePolicy": {
+        "AffectedLocations": 1,
+        "ConsecutiveRuns": 3
+      }
+    },
+    "LoadingTimeThresholds": {
+      "Enabled": true,
+      "Thresholds": [
+        {
+          "Type": "TOTAL",
+          "ValueMs": 100
+        }
+      ]
+    }
+  },
+  "Script": {
+    "version": "1.0",
+    "requests": [
+      {
+        "url": "https:aws.amazon.com",
+        "method": "GET",
+        "description": "HTTP request test",
+        "validation": {
+          "rules": [
+            {
+              "type": "httpStatusesList",
+              "value": "200",
+              "passIfFound": true
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "Locations": [],
+  "ManuallyAssignedApps": [],
+  "Tags": [
+    {
+      "Source": "AUTO",
+      "Context": "CONTEXTLESS",
+      "Key": "Resource Type",
+      "Value": "Dynatrace::Environment::SyntheticMonitor"
+    }
+  ]
+}
