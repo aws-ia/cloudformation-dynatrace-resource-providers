@@ -1,0 +1,8 @@
+{
+  "Target": 75,
+  "Warning": 80,
+  "ErrorBudgetBurnRate": {
+    "BurnRateVisualizationEnabled": true
+  },
+  "Timeframe": "-1w"
+}

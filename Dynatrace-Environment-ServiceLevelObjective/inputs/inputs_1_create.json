@@ -1,0 +1,12 @@
+{
+  "Name": "My Name",
+  "MetricExpression": "builtin:apps.custom.reportedErrorCount",
+  "Target": 75,
+  "Warning": 80,
+  "ErrorBudgetBurnRate": {
+    "FastBurnThreshold": 10,
+    "BurnRateVisualizationEnabled": true
+  },
+  "Timeframe": "-1w",
+  "EvaluationType": "AGGREGATE"
+}
