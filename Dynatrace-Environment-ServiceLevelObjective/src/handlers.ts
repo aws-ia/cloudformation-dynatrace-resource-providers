@@ -172,13 +172,23 @@ class Resource extends AbstractDynatraceResource<ResourceModel, AxiosResponse<Sl
             return model;
         }
 
-        return new ResourceModel({
+        let result = new ResourceModel({
             ...model,
             ...Transformer.for(from.data)
                 .transformKeys(CaseTransformer.IDENTITY)
                 .forModelIngestion()
                 .transform()
         });
+        // Delete a couple of unused fields that are returned by the API
+        delete (<any>result)?.errorBudgetMetricKey;
+        delete (<any>result)?.denominatorValue;
+        delete (<any>result)?.metricNumerator;
+        delete (<any>result)?.numeratorValue;
+        delete (<any>result)?.normalizedErrorBudgetMetricKey;
+        delete (<any>result)?.metricDenominator;
+        delete (<any>result)?.useRateMetric;
+        delete (<any>result)?.metricRate;
+        return result
     }
 
 }
