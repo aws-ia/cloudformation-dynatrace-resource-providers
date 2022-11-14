@@ -1,5 +1,5 @@
 {
-  "Name": "Dynatrace name",
+  "Name": "updated Dynatrace name",
   "FrequencyMin": 10,
   "Type": "HTTP",
   "Enabled": false,
@@ -22,18 +22,18 @@
     }
   },
   "Script": {
-    "version": "1.0",
-    "requests": [
+    "Version": "1.0",
+    "Requests": [
       {
-        "url": "https:aws.amazon.com",
-        "method": "GET",
-        "description": "HTTP request test",
-        "validation": {
-          "rules": [
+        "Url": "https//:aws.amazon.com",
+        "Method": "GET",
+        "Description": "HTTP request test",
+        "Validation": {
+          "Rules": [
             {
-              "type": "httpStatusesList",
-              "value": "200",
-              "passIfFound": true
+              "Type": "httpStatusesList",
+              "Value": "200",
+              "PassIfFound": true
             }
           ]
         }

@@ -25,25 +25,7 @@
       ]
     }
   },
-  "Script": {
-    "version": 20, 
-    "requests": [
-      {
-        "url": "https:aws.amazon.com",
-        "method": "GET",
-        "description": "HTTP request test",
-        "validation": {
-          "rules": [
-            {
-              "type": "httpStatusesList",
-              "value": "200",
-              "passIfFound": true
-            }
-          ]
-        }
-      }
-    ]
-  },
+  "Script": {},
   "Locations": [],
   "ManuallyAssignedApps": [],
   "Tags": [
