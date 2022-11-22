@@ -1,7 +1,8 @@
 {
   "typeName": "Dynatrace::Environment::Metric",
   "description": "Manage a timeseries metric (V1) in Dynatrace.",
-  "sourceUrl": "https://github.com/aws-ia/cloudformation-dynatrace-resource-providers",
+  "sourceUrl": "https://github.com/aws-ia/cloudformation-dynatrace-resource-providers.git",
+  "documentationUrl": "https://github.com/aws-ia/cloudformation-dynatrace-resource-providers",
   "definitions": {
     "DynatraceAccess": {
       "type": "object",
