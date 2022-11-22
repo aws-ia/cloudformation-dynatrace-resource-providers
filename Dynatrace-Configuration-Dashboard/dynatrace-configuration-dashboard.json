@@ -1,7 +1,8 @@
 {
   "typeName": "Dynatrace::Configuration::Dashboard",
   "description": "Manage a dashboard in Dynatrace.",
-  "sourceUrl": "https://github.com/aws-ia/cloudformation-dynatrace-resource-providers",
+  "sourceUrl": "https://github.com/aws-ia/cloudformation-dynatrace-resource-providers.git",
+  "documentationUrl": "https://github.com/aws-ia/cloudformation-dynatrace-resource-providers",
   "definitions": {
     "DynatraceAccess": {
       "type": "object",
