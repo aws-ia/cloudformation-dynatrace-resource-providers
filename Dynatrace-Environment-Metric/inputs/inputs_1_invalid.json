@@ -1,0 +1,10 @@
+{
+  "Unit": 1234,
+  "Types": [
+    "A",
+    "B",
+    "C"
+  ],
+  "TimeseriesId": "custom:newTimeseriesId",
+  "DisplayName": "Updated display name"
+}
