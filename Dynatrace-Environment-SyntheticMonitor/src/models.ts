@@ -99,8 +99,14 @@ export class ResourceModel extends BaseModel {
     )
     createdFrom?: Optional<string>;
     @Expose({ name: 'ManagementZones' })
-    @Type(() => ManagementZone)
-    managementZones?: Optional<Array<ManagementZone>>;
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(Object, 'managementZones', value, obj, [Array, Map]),
+        {
+            toClassOnly: true,
+        }
+    )
+    managementZones?: Optional<Array<Map<string, object>>>;
     @Expose({ name: 'AutomaticallyAssignedApps' })
     @Transform(
         (value: any, obj: any) =>
@@ -265,24 +271,6 @@ export class LoadingTimeThreshold extends BaseModel {
         }
     )
     valueMs?: Optional<integer>;
-    @Expose({ name: 'RequestIndex' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Integer, 'requestIndex', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    requestIndex?: Optional<integer>;
-    @Expose({ name: 'EventIndex' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Integer, 'eventIndex', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    eventIndex?: Optional<integer>;
 
 }
 
@@ -326,31 +314,6 @@ export class Tag extends BaseModel {
         }
     )
     value_?: Optional<string>;
-
-}
-
-export class ManagementZone extends BaseModel {
-    ['constructor']: typeof ManagementZone;
-
-
-    @Expose({ name: 'Id' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'id', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    id?: Optional<string>;
-    @Expose({ name: 'Name' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'name', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    name?: Optional<string>;
 
 }
 
