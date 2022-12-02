@@ -3,77 +3,39 @@
     "Name": "End-to-End Dashboard (created by Dynatrace::Configuration::Dashboard)",
     "Owner": "CloudFormation",
     "Shared": true,
-    "Tags": [
-      "CloudFormation"
-    ],
+    "Tags": ["cloudformation"],
     "DynamicFilters": {
       "Filters": [
         "SERVICE_TYPE"
       ]
-    }
+    },
+    "DashboardFilter": {
+      "Timeframe": "l_72_HOURS",
+      "ManagementZone": {
+        "Id": "<MANAGEMENT_ZONE_ID>",
+        "Name": "example"
+      }
+    },
+    "Preset": false
   },
   "Tiles": [
     {
-      "name": "Hosts",
-      "tileType": "HEADER",
-      "configured": true,
-      "bounds": {
-        "top": 0,
-        "left": 0,
-        "width": 304,
-        "height": 38
+      "Name": "Hosts",
+      "TileType": "HEADER",
+      "Configured": true,
+      "Bounds": {
+        "Top": 0,
+        "Left": 0,
+        "Width": 304,
+        "Height": 38
       },
-      "tileFilter": {
-        "timeframe": null,
-        "managementZone": null
+      "TileFilter": {
+        "Timeframe": "l_72_HOURS",
+        "ManagementZone": {
+          "Id": "<MANAGEMENT_ZONE_ID>",
+          "Name": "example"
+        }
       }
-    },
-    {
-      "name": "Applications",
-      "tileType": "HEADER",
-      "configured": true,
-      "bounds": {
-        "top": 0,
-        "left": 304,
-        "width": 304,
-        "height": 38
-      },
-      "tileFilter": {
-        "timeframe": null,
-        "managementZone": null
-      }
-    },
-    {
-      "name": "Host health",
-      "tileType": "HOSTS",
-      "configured": true,
-      "bounds": {
-        "top": 38,
-        "left": 0,
-        "width": 304,
-        "height": 304
-      },
-      "tileFilter": {
-        "timeframe": null,
-        "managementZone": null
-      },
-      "chartVisible": true
-    },
-    {
-      "name": "Application health",
-      "tileType": "APPLICATIONS",
-      "configured": true,
-      "bounds": {
-        "top": 38,
-        "left": 304,
-        "width": 304,
-        "height": 304
-      },
-      "tileFilter": {
-        "timeframe": null,
-        "managementZone": null
-      },
-      "chartVisible": true
     }
   ]
 }

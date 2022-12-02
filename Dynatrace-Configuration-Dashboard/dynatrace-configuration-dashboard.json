@@ -34,15 +34,6 @@
             "type": "integer"
           }
         },
-        "CurrentConfigurationVersions": {
-          "description": "A sorted list of version numbers of the configuration.",
-          "type": "array",
-          "uniqueItems": false,
-          "insertionOrder": false,
-          "items": {
-            "type": "string"
-          }
-        },
         "ClusterVersion": {
           "description": "Dynatrace version.",
           "type": "string"
@@ -128,10 +119,6 @@
         "Name": {
           "description": "The name of the Dynatrace entity.",
           "type": "string"
-        },
-        "Description": {
-          "description": "A short description of the Dynatrace entity.",
-          "type": "string"
         }
       },
       "additionalProperties": false
@@ -142,15 +129,6 @@
       "properties": {
         "Filters": {
           "description": "A set of all possible global dashboard filters that can be applied to a dashboard.",
-          "type": "array",
-          "uniqueItems": true,
-          "insertionOrder": false,
-          "items": {
-            "type": "string"
-          }
-        },
-        "TagSuggestionTypes": {
-          "description": "A set of entities applied for tag filter suggestions. You can fetch the list of possible values with the GET all entity types request.\n\nOnly applicable if the filters set includes TAG_KEY:<tagname>.",
           "type": "array",
           "uniqueItems": true,
           "insertionOrder": false,
@@ -179,7 +157,40 @@
     },
     "Tile": {
       "description": "Configuration of a tile.\n\nThe actual set of fields depends on the type of the tile. Find the list of actual objects in the description of the tileType field or see Dashboards API - Tile JSON models (https://dt-url.net/2wc3spx).",
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "Name": {
+          "type": "string"
+        },
+        "TileType": {
+          "type": "string"
+        },
+        "Bounds": {
+          "type": "object",
+          "properties": {
+            "Width": {
+              "type": "number"
+            },
+            "Top": {
+              "type": "number"
+            },
+            "Left": {
+              "type": "number"
+            },
+            "Height": {
+              "type": "number"
+            }
+          },
+          "additionalProperties": false
+        },
+        "Configured": {
+          "type": "boolean"
+        },
+        "TileFilter": {
+          "$ref": "#/definitions/DashboardFilter"
+        }
+      },
+      "additionalProperties": false
     }
   },
   "typeConfiguration": {
@@ -217,7 +228,10 @@
   ],
   "readOnlyProperties": [
     "/properties/Id",
-    "/properties/Metadata"
+    "/properties/Metadata/ClusterVersion"
+  ],
+  "writeOnlyProperties": [
+    "/properties/DashboardMetadata/Preset"
   ],
   "primaryIdentifier": [
     "/properties/Id"
