@@ -22,6 +22,8 @@ To declare this entity in your AWS CloudFormation template, use the following sy
         "<a href="#warning" title="Warning">Warning</a>" : <i>Double</i>,
         "<a href="#errorbudgetburnrate" title="ErrorBudgetBurnRate">ErrorBudgetBurnRate</a>" : <i><a href="errorbudgetburnrate.md">ErrorBudgetBurnRate</a></i>,
         "<a href="#timeframe" title="Timeframe">Timeframe</a>" : <i>String</i>,
+        "<a href="#problemfilter" title="ProblemFilter">ProblemFilter</a>" : <i>String</i>,
+        "<a href="#hasaccess" title="HasAccess">HasAccess</a>" : <i>Boolean</i>,
     }
 }
 </pre>
@@ -41,6 +43,8 @@ Properties:
     <a href="#warning" title="Warning">Warning</a>: <i>Double</i>
     <a href="#errorbudgetburnrate" title="ErrorBudgetBurnRate">ErrorBudgetBurnRate</a>: <i><a href="errorbudgetburnrate.md">ErrorBudgetBurnRate</a></i>
     <a href="#timeframe" title="Timeframe">Timeframe</a>: <i>String</i>
+    <a href="#problemfilter" title="ProblemFilter">ProblemFilter</a>: <i>String</i>
+    <a href="#hasaccess" title="HasAccess">HasAccess</a>: <i>Boolean</i>
 </pre>
 
 ## Properties
@@ -53,9 +57,9 @@ _Required_: Yes
 
 _Type_: String
 
-_Minimum_: <code>1</code>
+_Minimum Length_: <code>1</code>
 
-_Maximum_: <code>200</code>
+_Maximum Length_: <code>200</code>
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
@@ -67,9 +71,9 @@ _Required_: No
 
 _Type_: String
 
-_Minimum_: <code>1</code>
+_Minimum Length_: <code>1</code>
 
-_Maximum_: <code>250</code>
+_Maximum Length_: <code>250</code>
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
@@ -159,6 +163,26 @@ _Type_: String
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
+#### ProblemFilter
+
+The entity filter for fetching the number of problems related to an SLO. Auto-generated in case no filter has been added to the SLO.
+
+_Required_: No
+
+_Type_: String
+
+_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
+
+#### HasAccess
+
+The SLO is accessible through the settings if hasAccess is true.
+
+_Required_: No
+
+_Type_: Boolean
+
+_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
+
 ## Return Values
 
 ### Ref
@@ -183,18 +207,6 @@ The SLO is enabled (true) or disabled (false).
 
 The error budget burn rate key for a metric expression.
 
-#### NumeratorValue
-
-Returns the <code>NumeratorValue</code> value.
-
-#### DenominatorValue
-
-Returns the <code>DenominatorValue</code> value.
-
-#### ProblemFilter
-
-The entity filter for fetching the number of problems related to an SLO. Auto-generated in case no filter has been added to the SLO.
-
 #### RelatedOpenProblems
 
 Number of OPEN problems related to the SLO.
@@ -206,10 +218,6 @@ Has the value of -1 if there's an error with fetching SLO related problems.
 Total number of problems related to the SLO.
 
 Has the value of -1 if there's an error with fetching SLO related problems.
-
-#### HasAccess
-
-The SLO is accessible through the settings if hasAccess is true.
 
 #### EvaluatedPercentage
 

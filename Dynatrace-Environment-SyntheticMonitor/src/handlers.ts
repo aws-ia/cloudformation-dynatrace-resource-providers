@@ -165,7 +165,6 @@ class Resource extends AbstractDynatraceResource<ResourceModel, AxiosResponse<Sy
                 .forModelIngestion()
                 .transform()
         });
-        delete resourceModel.script;
         delete resourceModel.tags;
         delete (<any>resourceModel)?.requests
 

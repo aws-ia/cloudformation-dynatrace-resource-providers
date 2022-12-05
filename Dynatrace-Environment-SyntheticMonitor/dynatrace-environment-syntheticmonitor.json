@@ -148,6 +148,64 @@
       ],
       "additionalProperties": false
     },
+    "RequestsInput": {
+      "type": "object",
+      "properties": {
+        "Url": {
+          "type": "string"
+        },
+        "Method": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "Configuration": {
+          "type": "object",
+          "properties": {
+            "AcceptAnyCertificate": {
+              "type": "boolean"
+            },
+            "FollowRedirects": {
+              "type": "boolean"
+            },
+            "ShouldNotPersistSensitiveData": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        },
+        "Validation": {
+          "type": "object",
+          "properties": {
+            "Rules": {
+              "type": "array",
+              "insertionOrder": false,
+              "items": {
+                "$ref": "#/definitions/RequestsRules"
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "RequestsRules": {
+      "type": "object",
+      "properties": {
+        "Value": {
+          "type": "string"
+        },
+        "PassIfFound": {
+          "type": "boolean"
+        },
+        "Type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
     "Tag": {
       "description": "Tag with source of a Dynatrace entity.",
       "type": "object",
@@ -250,7 +308,20 @@
     },
     "Script": {
       "description": "The script of a browser (https://dt-url.net/9c103rda) or HTTP monitor.",
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "Version": {
+          "type": "string"
+        },
+        "Requests": {
+          "type": "array",
+          "insertionOrder": false,
+          "items": {
+            "$ref": "#/definitions/RequestsInput"
+          }
+        }
+      },
+      "additionalProperties": false
     },
     "Tags": {
       "description": "A set of tags assigned to the monitor.",
@@ -302,7 +373,6 @@
     "Enabled"
   ],
   "writeOnlyProperties": [
-    "/properties/Script",
     "/properties/Tags",
     "/properties/AnomalyDetection/OutageHandling/RetryOnError"
   ],

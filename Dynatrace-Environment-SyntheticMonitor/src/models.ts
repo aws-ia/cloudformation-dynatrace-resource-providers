@@ -60,14 +60,8 @@ export class ResourceModel extends BaseModel {
     )
     locations?: Optional<Set<string>>;
     @Expose({ name: 'Script' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Object, 'script', value, obj, [Map]),
-        {
-            toClassOnly: true,
-        }
-    )
-    script?: Optional<Map<string, object>>;
+    @Type(() => Script)
+    script?: Optional<Script>;
     @Expose({ name: 'Tags' })
     @Type(() => Tag)
     tags?: Optional<Array<Tag>>;
@@ -271,6 +265,143 @@ export class LoadingTimeThreshold extends BaseModel {
         }
     )
     valueMs?: Optional<integer>;
+
+}
+
+export class Script extends BaseModel {
+    ['constructor']: typeof Script;
+
+
+    @Expose({ name: 'Version' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'version', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    version?: Optional<string>;
+    @Expose({ name: 'Requests' })
+    @Type(() => RequestsInput)
+    requests?: Optional<Array<RequestsInput>>;
+
+}
+
+export class RequestsInput extends BaseModel {
+    ['constructor']: typeof RequestsInput;
+
+
+    @Expose({ name: 'Url' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'url', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    url?: Optional<string>;
+    @Expose({ name: 'Method' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'method', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    method?: Optional<string>;
+    @Expose({ name: 'Description' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'description', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    description?: Optional<string>;
+    @Expose({ name: 'Configuration' })
+    @Type(() => Configuration)
+    configuration?: Optional<Configuration>;
+    @Expose({ name: 'Validation' })
+    @Type(() => Validation)
+    validation?: Optional<Validation>;
+
+}
+
+export class Configuration extends BaseModel {
+    ['constructor']: typeof Configuration;
+
+
+    @Expose({ name: 'AcceptAnyCertificate' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(Boolean, 'acceptAnyCertificate', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    acceptAnyCertificate?: Optional<boolean>;
+    @Expose({ name: 'FollowRedirects' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(Boolean, 'followRedirects', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    followRedirects?: Optional<boolean>;
+    @Expose({ name: 'ShouldNotPersistSensitiveData' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(Boolean, 'shouldNotPersistSensitiveData', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    shouldNotPersistSensitiveData?: Optional<boolean>;
+
+}
+
+export class Validation extends BaseModel {
+    ['constructor']: typeof Validation;
+
+
+    @Expose({ name: 'Rules' })
+    @Type(() => RequestsRules)
+    rules?: Optional<Array<RequestsRules>>;
+
+}
+
+export class RequestsRules extends BaseModel {
+    ['constructor']: typeof RequestsRules;
+
+
+    @Expose({ name: 'Value' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'value_', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    value_?: Optional<string>;
+    @Expose({ name: 'PassIfFound' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(Boolean, 'passIfFound', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    passIfFound?: Optional<boolean>;
+    @Expose({ name: 'Type' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'type_', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    type_?: Optional<string>;
 
 }
 

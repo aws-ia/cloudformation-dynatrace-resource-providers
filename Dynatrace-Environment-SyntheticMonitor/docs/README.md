@@ -18,7 +18,7 @@ To declare this entity in your AWS CloudFormation template, use the following sy
         "<a href="#type" title="Type">Type</a>" : <i>String</i>,
         "<a href="#name" title="Name">Name</a>" : <i>String</i>,
         "<a href="#locations" title="Locations">Locations</a>" : <i>[ String, ... ]</i>,
-        "<a href="#script" title="Script">Script</a>" : <i>Map</i>,
+        "<a href="#script" title="Script">Script</a>" : <i><a href="script.md">Script</a></i>,
         "<a href="#tags" title="Tags">Tags</a>" : <i>[ <a href="tag.md">Tag</a>, ... ]</i>,
         "<a href="#manuallyassignedapps" title="ManuallyAssignedApps">ManuallyAssignedApps</a>" : <i>[ String, ... ]</i>,
         "<a href="#managementzones" title="ManagementZones">ManagementZones</a>" : <i>[ Map, ... ]</i>,
@@ -39,7 +39,7 @@ Properties:
     <a href="#name" title="Name">Name</a>: <i>String</i>
     <a href="#locations" title="Locations">Locations</a>: <i>
       - String</i>
-    <a href="#script" title="Script">Script</a>: <i>Map</i>
+    <a href="#script" title="Script">Script</a>: <i><a href="script.md">Script</a></i>
     <a href="#tags" title="Tags">Tags</a>: <i>
       - <a href="tag.md">Tag</a></i>
     <a href="#manuallyassignedapps" title="ManuallyAssignedApps">ManuallyAssignedApps</a>: <i>
@@ -131,7 +131,7 @@ The script of a browser (https://dt-url.net/9c103rda) or HTTP monitor.
 
 _Required_: No
 
-_Type_: Map
+_Type_: <a href="script.md">Script</a>
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
