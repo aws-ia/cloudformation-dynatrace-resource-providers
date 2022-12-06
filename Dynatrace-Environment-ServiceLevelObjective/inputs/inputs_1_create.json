@@ -6,15 +6,10 @@
   "Warning": 80,
   "ErrorBudgetBurnRate": {
     "FastBurnThreshold": 10,
-    "BurnRateVisualizationEnabled": true,
-    "SloValue": "",
-    "BurnRateValue": "",
-    "EstimatedTimeToConsumeErrorBudget": "",
-    "BurnRateType": "NONE"
+    "BurnRateVisualizationEnabled": true
   },
   "Timeframe": "-1w",
   "EvaluationType": "AGGREGATE",
-  "ProblemFilter": "",
   "HasAccess": true,
   "Description": "Metric description"
 }

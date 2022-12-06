@@ -3,6 +3,7 @@ import {DynatraceClient, PaginatedResponseType} from "../../Dynatrace-Common/src
 import {RetryableCallbackContext} from '../../Dynatrace-Common/src/abstract-base-resource';
 import {AbstractDynatraceResource} from "../../Dynatrace-Common/src/abstract-dynatrace-resource";
 import {CaseTransformer, Transformer} from '../../Dynatrace-Common/src/util';
+import {classToPlain, plainToClass} from 'class-transformer';
 
 import {version} from "../package.json";
 import {
@@ -179,16 +180,10 @@ class Resource extends AbstractDynatraceResource<ResourceModel, AxiosResponse<Sl
                 .forModelIngestion()
                 .transform()
         });
-        // Delete a couple of unused fields that are returned by the API
-        delete (<any>result)?.errorBudgetMetricKey;
-        delete (<any>result)?.denominatorValue;
-        delete (<any>result)?.metricNumerator;
-        delete (<any>result)?.numeratorValue;
-        delete (<any>result)?.normalizedErrorBudgetMetricKey;
-        delete (<any>result)?.metricDenominator;
-        delete (<any>result)?.useRateMetric;
-        delete (<any>result)?.metricRate;
-        return result
+
+        return plainToClass(ResourceModel,
+            classToPlain(result),
+	        { excludeExtraneousValues: true });
     }
 
 }

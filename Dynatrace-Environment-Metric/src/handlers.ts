@@ -72,7 +72,7 @@ class Resource extends AbstractDynatraceResource<ResourceModel, MetricPayload, M
 
         return plainToClass(ResourceModel,
             classToPlain(resourceModel),
-	        { excludeExtraneousValues: true });;
+	        { excludeExtraneousValues: true });
     }
 
 }
