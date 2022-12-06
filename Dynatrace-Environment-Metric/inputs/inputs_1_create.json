@@ -1,0 +1,11 @@
+{
+  "Unit": "GibiByte (GiB)",
+  "Types": [
+    "A",
+    "B",
+    "C"
+  ],
+  "TimeseriesId": "custom:newTimeseriesId1",
+  "DisplayName": "Some display name",
+  "PluginId": "123"
+}

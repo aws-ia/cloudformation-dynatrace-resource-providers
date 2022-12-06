@@ -141,22 +141,70 @@
           "description": "Notify if monitor takes longer than X milliseconds to load.",
           "type": "integer",
           "minimum": 0
-        },
-        "RequestIndex": {
-          "description": "Specify the request to which an ACTION threshold applies.",
-          "type": "integer",
-          "minimum": 0
-        },
-        "EventIndex": {
-          "description": "Specify the event to which an ACTION threshold applies.",
-          "type": "integer",
-          "minimum": 0
         }
       },
       "required": [
         "Type",
         "ValueMs"
       ],
+      "additionalProperties": false
+    },
+    "RequestsInput": {
+      "type": "object",
+      "properties": {
+        "Url": {
+          "type": "string"
+        },
+        "Method": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "Configuration": {
+          "type": "object",
+          "properties": {
+            "AcceptAnyCertificate": {
+              "type": "boolean"
+            },
+            "FollowRedirects": {
+              "type": "boolean"
+            },
+            "ShouldNotPersistSensitiveData": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        },
+        "Validation": {
+          "type": "object",
+          "properties": {
+            "Rules": {
+              "type": "array",
+              "insertionOrder": false,
+              "items": {
+                "$ref": "#/definitions/RequestsRules"
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "RequestsRules": {
+      "type": "object",
+      "properties": {
+        "Value": {
+          "type": "string"
+        },
+        "PassIfFound": {
+          "type": "boolean"
+        },
+        "Type": {
+          "type": "string"
+        }
+      },
       "additionalProperties": false
     },
     "Tag": {
@@ -204,22 +252,7 @@
     },
     "ManagementZone": {
       "description": "Tag with source of a Dynatrace entity.",
-      "type": "object",
-      "properties": {
-        "Id": {
-          "description": "The ID of the management zone.",
-          "type": "string"
-        },
-        "Name": {
-          "description": "The name of the management zone.",
-          "type": "string"
-        }
-      },
-      "required": [
-        "Id",
-        "Name"
-      ],
-      "additionalProperties": false
+      "type": "object"
     }
   },
   "typeConfiguration": {
@@ -276,7 +309,20 @@
     },
     "Script": {
       "description": "The script of a browser (https://dt-url.net/9c103rda) or HTTP monitor.",
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "Version": {
+          "type": "string"
+        },
+        "Requests": {
+          "type": "array",
+          "insertionOrder": false,
+          "items": {
+            "$ref": "#/definitions/RequestsInput"
+          }
+        }
+      },
+      "additionalProperties": false
     },
     "Tags": {
       "description": "A set of tags assigned to the monitor.",
@@ -324,20 +370,16 @@
   "additionalProperties": false,
   "required": [
     "FrequencyMin",
-    "Type",
     "Name",
     "Enabled"
   ],
   "writeOnlyProperties": [
-    "/properties/Type",
-    "/properties/Script",
-    "/properties/Tags"
+    "/properties/Tags",
+    "/properties/AnomalyDetection/OutageHandling/RetryOnError"
   ],
   "readOnlyProperties": [
     "/properties/EntityId",
-    "/properties/CreatedFrom",
-    "/properties/ManagementZones",
-    "/properties/AutomaticallyAssignedApps"
+    "/properties/CreatedFrom"
   ],
   "primaryIdentifier": [
     "/properties/EntityId"

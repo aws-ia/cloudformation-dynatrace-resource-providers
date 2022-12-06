@@ -1,0 +1,15 @@
+{
+  "Name": "My Name Updated",
+  "MetricName": "new_metric",
+  "MetricExpression": "builtin:apps.custom.reportedErrorCount",
+  "Target": 99.98,
+  "Warning": 99.99,
+  "ErrorBudgetBurnRate": {
+    "FastBurnThreshold": 10,
+    "BurnRateVisualizationEnabled": true
+  },
+  "Timeframe": "-1w",
+  "EvaluationType": "AGGREGATE",
+  "HasAccess": true,
+  "Description": "Metric description updated"
+}

@@ -18,14 +18,8 @@ export class ResourceModel extends BaseModel {
     @Type(() => DashboardMetadata)
     dashboardMetadata?: Optional<DashboardMetadata>;
     @Expose({ name: 'Tiles' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Object, 'tiles', value, obj, [Array, Map]),
-        {
-            toClassOnly: true,
-        }
-    )
-    tiles?: Optional<Array<Map<string, object>>>;
+    @Type(() => Tile)
+    tiles?: Optional<Array<Tile>>;
     @Expose({ name: 'Id' })
     @Transform(
         (value: any, obj: any) =>
@@ -68,15 +62,6 @@ export class Metadata extends BaseModel {
         }
     )
     configurationVersions?: Optional<Array<integer>>;
-    @Expose({ name: 'CurrentConfigurationVersions' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'currentConfigurationVersions', value, obj, [Array]),
-        {
-            toClassOnly: true,
-        }
-    )
-    currentConfigurationVersions?: Optional<Array<string>>;
     @Expose({ name: 'ClusterVersion' })
     @Transform(
         (value: any, obj: any) =>
@@ -197,15 +182,6 @@ export class EntityShortRepresentation extends BaseModel {
         }
     )
     name?: Optional<string>;
-    @Expose({ name: 'Description' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'description', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    description?: Optional<string>;
 
 }
 
@@ -222,15 +198,89 @@ export class DynamicFilters extends BaseModel {
         }
     )
     filters?: Optional<Set<string>>;
-    @Expose({ name: 'TagSuggestionTypes' })
+
+}
+
+export class Tile extends BaseModel {
+    ['constructor']: typeof Tile;
+
+
+    @Expose({ name: 'Name' })
     @Transform(
         (value: any, obj: any) =>
-            transformValue(String, 'tagSuggestionTypes', value, obj, [Set]),
+            transformValue(String, 'name', value, obj, []),
         {
             toClassOnly: true,
         }
     )
-    tagSuggestionTypes?: Optional<Set<string>>;
+    name?: Optional<string>;
+    @Expose({ name: 'TileType' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'tileType', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    tileType?: Optional<string>;
+    @Expose({ name: 'Bounds' })
+    @Type(() => Bounds)
+    bounds?: Optional<Bounds>;
+    @Expose({ name: 'Configured' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(Boolean, 'configured', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    configured?: Optional<boolean>;
+    @Expose({ name: 'TileFilter' })
+    @Type(() => DashboardFilter)
+    tileFilter?: Optional<DashboardFilter>;
+
+}
+
+export class Bounds extends BaseModel {
+    ['constructor']: typeof Bounds;
+
+
+    @Expose({ name: 'Width' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(Number, 'width', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    width?: Optional<number>;
+    @Expose({ name: 'Top' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(Number, 'top', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    top?: Optional<number>;
+    @Expose({ name: 'Left' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(Number, 'left', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    left?: Optional<number>;
+    @Expose({ name: 'Height' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(Number, 'height', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    height?: Optional<number>;
 
 }
 

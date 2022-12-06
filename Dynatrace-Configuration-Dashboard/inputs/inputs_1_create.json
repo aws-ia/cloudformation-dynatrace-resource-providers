@@ -1,0 +1,41 @@
+{
+  "DashboardMetadata": {
+    "Name": "End-to-End Dashboard (created by Dynatrace::Configuration::Dashboard)",
+    "Owner": "CloudFormation",
+    "Shared": true,
+    "Tags": ["cloudformation"],
+    "DynamicFilters": {
+      "Filters": [
+        "SERVICE_TYPE"
+      ]
+    },
+    "DashboardFilter": {
+      "Timeframe": "l_72_HOURS",
+      "ManagementZone": {
+        "Id": "<MANAGEMENT_ZONE_ID>",
+        "Name": "example"
+      }
+    },
+    "Preset": false
+  },
+  "Tiles": [
+    {
+      "Name": "Hosts",
+      "TileType": "HEADER",
+      "Configured": true,
+      "Bounds": {
+        "Top": 0,
+        "Left": 0,
+        "Width": 304,
+        "Height": 38
+      },
+      "TileFilter": {
+        "Timeframe": "l_72_HOURS",
+        "ManagementZone": {
+          "Id": "<MANAGEMENT_ZONE_ID>",
+          "Name": "example"
+        }
+      }
+    }
+  ]
+}

@@ -18,9 +18,11 @@ To declare this entity in your AWS CloudFormation template, use the following sy
         "<a href="#type" title="Type">Type</a>" : <i>String</i>,
         "<a href="#name" title="Name">Name</a>" : <i>String</i>,
         "<a href="#locations" title="Locations">Locations</a>" : <i>[ String, ... ]</i>,
-        "<a href="#script" title="Script">Script</a>" : <i>Map</i>,
+        "<a href="#script" title="Script">Script</a>" : <i><a href="script.md">Script</a></i>,
         "<a href="#tags" title="Tags">Tags</a>" : <i>[ <a href="tag.md">Tag</a>, ... ]</i>,
         "<a href="#manuallyassignedapps" title="ManuallyAssignedApps">ManuallyAssignedApps</a>" : <i>[ String, ... ]</i>,
+        "<a href="#managementzones" title="ManagementZones">ManagementZones</a>" : <i>[ Map, ... ]</i>,
+        "<a href="#automaticallyassignedapps" title="AutomaticallyAssignedApps">AutomaticallyAssignedApps</a>" : <i>[ String, ... ]</i>
     }
 }
 </pre>
@@ -37,10 +39,14 @@ Properties:
     <a href="#name" title="Name">Name</a>: <i>String</i>
     <a href="#locations" title="Locations">Locations</a>: <i>
       - String</i>
-    <a href="#script" title="Script">Script</a>: <i>Map</i>
+    <a href="#script" title="Script">Script</a>: <i><a href="script.md">Script</a></i>
     <a href="#tags" title="Tags">Tags</a>: <i>
       - <a href="tag.md">Tag</a></i>
     <a href="#manuallyassignedapps" title="ManuallyAssignedApps">ManuallyAssignedApps</a>: <i>
+      - String</i>
+    <a href="#managementzones" title="ManagementZones">ManagementZones</a>: <i>
+      - Map</i>
+    <a href="#automaticallyassignedapps" title="AutomaticallyAssignedApps">AutomaticallyAssignedApps</a>: <i>
       - String</i>
 </pre>
 
@@ -87,7 +93,7 @@ Defines the actual set of fields depending on the value. See one of the followin
     BROWSER -> BrowserSyntheticMonitor
     HTTP -> HttpSyntheticMonitor
 
-_Required_: Yes
+_Required_: No
 
 _Type_: String
 
@@ -103,7 +109,7 @@ _Required_: Yes
 
 _Type_: String
 
-_Minimum_: <code>1</code>
+_Minimum Length_: <code>1</code>
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
@@ -125,7 +131,7 @@ The script of a browser (https://dt-url.net/9c103rda) or HTTP monitor.
 
 _Required_: No
 
-_Type_: Map
+_Type_: <a href="script.md">Script</a>
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
@@ -142,6 +148,26 @@ _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormati
 #### ManuallyAssignedApps
 
 A set of manually assigned applications.
+
+_Required_: No
+
+_Type_: List of String
+
+_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
+
+#### ManagementZones
+
+A set of management zones to which the monitor belongs to.
+
+_Required_: No
+
+_Type_: List of Map
+
+_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
+
+#### AutomaticallyAssignedApps
+
+A set of automatically assigned applications.
 
 _Required_: No
 
@@ -168,12 +194,4 @@ The entity ID of the monitor.
 #### CreatedFrom
 
 The origin of a monitor
-
-#### ManagementZones
-
-A set of management zones to which the monitor belongs to.
-
-#### AutomaticallyAssignedApps
-
-A set of automatically assigned applications.
 

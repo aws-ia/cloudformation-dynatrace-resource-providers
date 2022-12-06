@@ -60,14 +60,8 @@ export class ResourceModel extends BaseModel {
     )
     locations?: Optional<Set<string>>;
     @Expose({ name: 'Script' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Object, 'script', value, obj, [Map]),
-        {
-            toClassOnly: true,
-        }
-    )
-    script?: Optional<Map<string, object>>;
+    @Type(() => Script)
+    script?: Optional<Script>;
     @Expose({ name: 'Tags' })
     @Type(() => Tag)
     tags?: Optional<Array<Tag>>;
@@ -99,8 +93,14 @@ export class ResourceModel extends BaseModel {
     )
     createdFrom?: Optional<string>;
     @Expose({ name: 'ManagementZones' })
-    @Type(() => ManagementZone)
-    managementZones?: Optional<Array<ManagementZone>>;
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(Object, 'managementZones', value, obj, [Array, Map]),
+        {
+            toClassOnly: true,
+        }
+    )
+    managementZones?: Optional<Array<Map<string, object>>>;
     @Expose({ name: 'AutomaticallyAssignedApps' })
     @Transform(
         (value: any, obj: any) =>
@@ -265,24 +265,143 @@ export class LoadingTimeThreshold extends BaseModel {
         }
     )
     valueMs?: Optional<integer>;
-    @Expose({ name: 'RequestIndex' })
+
+}
+
+export class Script extends BaseModel {
+    ['constructor']: typeof Script;
+
+
+    @Expose({ name: 'Version' })
     @Transform(
         (value: any, obj: any) =>
-            transformValue(Integer, 'requestIndex', value, obj, []),
+            transformValue(String, 'version', value, obj, []),
         {
             toClassOnly: true,
         }
     )
-    requestIndex?: Optional<integer>;
-    @Expose({ name: 'EventIndex' })
+    version?: Optional<string>;
+    @Expose({ name: 'Requests' })
+    @Type(() => RequestsInput)
+    requests?: Optional<Array<RequestsInput>>;
+
+}
+
+export class RequestsInput extends BaseModel {
+    ['constructor']: typeof RequestsInput;
+
+
+    @Expose({ name: 'Url' })
     @Transform(
         (value: any, obj: any) =>
-            transformValue(Integer, 'eventIndex', value, obj, []),
+            transformValue(String, 'url', value, obj, []),
         {
             toClassOnly: true,
         }
     )
-    eventIndex?: Optional<integer>;
+    url?: Optional<string>;
+    @Expose({ name: 'Method' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'method', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    method?: Optional<string>;
+    @Expose({ name: 'Description' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'description', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    description?: Optional<string>;
+    @Expose({ name: 'Configuration' })
+    @Type(() => Configuration)
+    configuration?: Optional<Configuration>;
+    @Expose({ name: 'Validation' })
+    @Type(() => Validation)
+    validation?: Optional<Validation>;
+
+}
+
+export class Configuration extends BaseModel {
+    ['constructor']: typeof Configuration;
+
+
+    @Expose({ name: 'AcceptAnyCertificate' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(Boolean, 'acceptAnyCertificate', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    acceptAnyCertificate?: Optional<boolean>;
+    @Expose({ name: 'FollowRedirects' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(Boolean, 'followRedirects', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    followRedirects?: Optional<boolean>;
+    @Expose({ name: 'ShouldNotPersistSensitiveData' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(Boolean, 'shouldNotPersistSensitiveData', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    shouldNotPersistSensitiveData?: Optional<boolean>;
+
+}
+
+export class Validation extends BaseModel {
+    ['constructor']: typeof Validation;
+
+
+    @Expose({ name: 'Rules' })
+    @Type(() => RequestsRules)
+    rules?: Optional<Array<RequestsRules>>;
+
+}
+
+export class RequestsRules extends BaseModel {
+    ['constructor']: typeof RequestsRules;
+
+
+    @Expose({ name: 'Value' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'value_', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    value_?: Optional<string>;
+    @Expose({ name: 'PassIfFound' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(Boolean, 'passIfFound', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    passIfFound?: Optional<boolean>;
+    @Expose({ name: 'Type' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'type_', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    type_?: Optional<string>;
 
 }
 
@@ -326,31 +445,6 @@ export class Tag extends BaseModel {
         }
     )
     value_?: Optional<string>;
-
-}
-
-export class ManagementZone extends BaseModel {
-    ['constructor']: typeof ManagementZone;
-
-
-    @Expose({ name: 'Id' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'id', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    id?: Optional<string>;
-    @Expose({ name: 'Name' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'name', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    name?: Optional<string>;
 
 }
 

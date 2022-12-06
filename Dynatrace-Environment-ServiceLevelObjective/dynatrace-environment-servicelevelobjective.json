@@ -33,27 +33,6 @@
         "BurnRateVisualizationEnabled": {
           "description": "The error budget burn rate visualization is enabled (true) or disabled (false).\n\nIn case of false, no calculated values will be present here.",
           "type": "boolean"
-        },
-        "BurnRateValue": {
-          "description": "The burn rate of the SLO, calculated for the last hour.",
-          "type": "number"
-        },
-        "BurnRateType": {
-          "description": "The calculated burn rate type.\n\nHas a value of 'FAST', 'SLOW' or 'NONE'.",
-          "type": "string",
-          "enum": [
-            "FAST",
-            "SLOW",
-            "NONE"
-          ]
-        },
-        "SloValue": {
-          "description": "The calculated value of the SLO for the timeframe chosen for the burn rate calculation.",
-          "type": "number"
-        },
-        "EstimatedTimeToConsumeErrorBudget": {
-          "description": "The estimated time left to consume the error budget in hours.",
-          "type": "number"
         }
       },
       "required": [
@@ -138,10 +117,6 @@
       "description": "The error budget burn rate key for a metric expression.",
       "type": "string"
     },
-    "ProblemFilter": {
-      "description": "The entity filter for fetching the number of problems related to an SLO. Auto-generated in case no filter has been added to the SLO.",
-      "type": "string"
-    },
     "RelatedOpenProblems": {
       "description": "Number of OPEN problems related to the SLO.\n\nHas the value of -1 if there's an error with fetching SLO related problems.",
       "type": "integer"
@@ -189,19 +164,16 @@
     "EvaluationType",
     "Timeframe"
   ],
-  "createOnlyProperties": [
-    "/properties/MetricName"
+  "writeOnlyProperties": [
+    "/properties/MetricName",
+    "/properties/HasAccess"
   ],
   "readOnlyProperties": [
     "/properties/Id",
     "/properties/Enabled",
     "/properties/BurnRateMetricKey",
-    "/properties/NumeratorValue",
-    "/properties/DenominatorValue",
-    "/properties/ProblemFilter",
     "/properties/RelatedOpenProblems",
     "/properties/RelatedTotalProblems",
-    "/properties/HasAccess",
     "/properties/EvaluatedPercentage",
     "/properties/ErrorBudget",
     "/properties/MetricKey",

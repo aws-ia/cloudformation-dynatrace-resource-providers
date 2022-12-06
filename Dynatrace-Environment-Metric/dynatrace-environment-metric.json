@@ -183,18 +183,19 @@
   },
   "additionalProperties": false,
   "createOnlyProperties": [
-    "/properties/TimeseriesId"
+    "/properties/TimeseriesId",
+    "/properties/DisplayName",
+    "/properties/Dimensions",
+    "/properties/Types"
   ],
   "writeOnlyProperties": [
-    "/properties/Types",
-    "/properties/Dimensions"
+    "/properties/PluginId"
+    
   ],
   "readOnlyProperties": [
     "/properties/AggregationTypes",
     "/properties/Filter",
-    "/properties/DetailedSource",
-    "/properties/PluginId",
-    "/properties/Warnings"
+    "/properties/DetailedSource"
   ],
   "primaryIdentifier": [
     "/properties/TimeseriesId"

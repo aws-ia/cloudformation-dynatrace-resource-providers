@@ -5,6 +5,7 @@ import {CaseTransformer, Transformer} from '../../Dynatrace-Common/src/util';
 
 import {version} from "../package.json";
 import {exceptions} from "@amazon-web-services-cloudformation/cloudformation-cli-typescript-lib";
+import { classToPlain, plainToClass } from 'class-transformer';
 
 type MetricPayload = {
     timeseriesId: string
@@ -68,10 +69,10 @@ class Resource extends AbstractDynatraceResource<ResourceModel, MetricPayload, M
                 .forModelIngestion()
                 .transform()
         });
-        delete resourceModel.types;
-        delete resourceModel.dimensions;
 
-        return resourceModel;
+        return plainToClass(ResourceModel,
+            classToPlain(resourceModel),
+	        { excludeExtraneousValues: true });
     }
 
 }

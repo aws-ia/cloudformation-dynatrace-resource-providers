@@ -122,15 +122,6 @@ export class ResourceModel extends BaseModel {
         }
     )
     burnRateMetricKey?: Optional<string>;
-    @Expose({ name: 'ProblemFilter' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'problemFilter', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    problemFilter?: Optional<string>;
     @Expose({ name: 'RelatedOpenProblems' })
     @Transform(
         (value: any, obj: any) =>
@@ -245,42 +236,6 @@ export class ErrorBudgetBurnRate extends BaseModel {
         }
     )
     burnRateVisualizationEnabled?: Optional<boolean>;
-    @Expose({ name: 'BurnRateValue' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Number, 'burnRateValue', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    burnRateValue?: Optional<number>;
-    @Expose({ name: 'BurnRateType' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'burnRateType', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    burnRateType?: Optional<string>;
-    @Expose({ name: 'SloValue' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Number, 'sloValue', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    sloValue?: Optional<number>;
-    @Expose({ name: 'EstimatedTimeToConsumeErrorBudget' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Number, 'estimatedTimeToConsumeErrorBudget', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    estimatedTimeToConsumeErrorBudget?: Optional<number>;
 
 }
 

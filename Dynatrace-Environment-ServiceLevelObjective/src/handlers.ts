@@ -3,6 +3,7 @@ import {DynatraceClient, PaginatedResponseType} from "../../Dynatrace-Common/src
 import {RetryableCallbackContext} from '../../Dynatrace-Common/src/abstract-base-resource';
 import {AbstractDynatraceResource} from "../../Dynatrace-Common/src/abstract-dynatrace-resource";
 import {CaseTransformer, Transformer} from '../../Dynatrace-Common/src/util';
+import {classToPlain, plainToClass} from 'class-transformer';
 
 import {version} from "../package.json";
 import {
@@ -172,13 +173,17 @@ class Resource extends AbstractDynatraceResource<ResourceModel, AxiosResponse<Sl
             return model;
         }
 
-        return new ResourceModel({
+        let result = new ResourceModel({
             ...model,
             ...Transformer.for(from.data)
                 .transformKeys(CaseTransformer.IDENTITY)
                 .forModelIngestion()
                 .transform()
         });
+
+        return plainToClass(ResourceModel,
+            classToPlain(result),
+	        { excludeExtraneousValues: true });
     }
 
 }
