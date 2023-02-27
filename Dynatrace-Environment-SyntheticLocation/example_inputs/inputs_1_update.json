@@ -1,8 +1,9 @@
 {
   "Name": "Dynatrace name",
+  "Type": "PRIVATE",
   "CountryCode": "GB",
   "RegionCode": "E1",
-  "City": "Edinburgh",
+  "City": "Bridlington",
   "Latitude": 55.9533,
   "Longitude": 3.1883,
   "LocationNodeOutageDelayInMinutes": 5,

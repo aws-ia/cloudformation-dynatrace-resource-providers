@@ -1,6 +1,6 @@
 {
-  "Name": "My Name",
-  "MetricName": "new_metric",
+  "Name": "CFN TEST",
+  "MetricName": "cfn_new_metric",
   "MetricExpression": "builtin:apps.custom.reportedErrorCount",
   "Target": 75,
   "Warning": 80,
