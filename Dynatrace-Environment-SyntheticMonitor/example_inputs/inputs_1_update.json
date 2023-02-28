@@ -1,6 +1,6 @@
 {
-  "Name": "Dynatrace name",
-  "FrequencyMin": 5,
+  "Name": "Dynatrace name updated",
+  "FrequencyMin": 10,
   "Type": "HTTP",
   "Enabled": true,
   "AnomalyDetection": {
@@ -45,7 +45,7 @@
       }
     ]
   },
-  "Locations": ["<DYNATRACE_LOCATION_ID>"],
+  "Locations": ["DYNATRACE_LOCATION_ID"],
   "ManuallyAssignedApps": [],
   "Tags": [
     {
