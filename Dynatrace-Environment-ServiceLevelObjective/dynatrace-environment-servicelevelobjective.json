@@ -164,10 +164,6 @@
     "EvaluationType",
     "Timeframe"
   ],
-  "writeOnlyProperties": [
-    "/properties/MetricName",
-    "/properties/HasAccess"
-  ],
   "readOnlyProperties": [
     "/properties/Id",
     "/properties/Enabled",

@@ -188,10 +188,6 @@
     "/properties/Dimensions",
     "/properties/Types"
   ],
-  "writeOnlyProperties": [
-    "/properties/PluginId"
-    
-  ],
   "readOnlyProperties": [
     "/properties/AggregationTypes",
     "/properties/Filter",

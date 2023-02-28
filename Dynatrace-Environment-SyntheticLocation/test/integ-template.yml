@@ -1,0 +1,13 @@
+Resources:
+  ActiveGateLocation:
+    Type: Dynatrace::Environment::SyntheticLocation
+    Properties:
+      Name: Dynatrace name
+      Type: PRIVATE
+      CountryCode: GB
+      RegionCode: E1
+      City: Bridlington
+      Latitude: 55.9533
+      Longitude: 3.1883
+      LocationNodeOutageDelayInMinutes: 3
+      Status: ENABLED
