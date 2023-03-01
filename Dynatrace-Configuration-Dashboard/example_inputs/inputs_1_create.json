@@ -12,8 +12,8 @@
     "DashboardFilter": {
       "Timeframe": "l_72_HOURS",
       "ManagementZone": {
-        "Id": "<MANAGEMENT_ZONE_ID>",
-        "Name": "example"
+        "Id": "DYNATRACE_MANAGEMENTZONE_ID",
+        "Name": "Dev"
       }
     },
     "Preset": false
@@ -32,8 +32,8 @@
       "TileFilter": {
         "Timeframe": "l_72_HOURS",
         "ManagementZone": {
-          "Id": "<MANAGEMENT_ZONE_ID>",
-          "Name": "example"
+          "Id": "DYNATRACE_MANAGEMENTZONE_ID",
+          "Name": "Dev"
         }
       }
     }
