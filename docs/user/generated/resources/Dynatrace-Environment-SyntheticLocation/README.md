@@ -78,8 +78,6 @@ _Required_: Yes
 
 _Type_: String
 
-_Pattern_: <code>[A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]{1,}</code>
-
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
 #### CountryCode
@@ -88,7 +86,7 @@ The country code of the location.
 
 Use the alpha-2 code of the ISO 3166-2 standard (https://dt-url.net/iso3166-2), (for example, AT for Austria or PL for Poland).
 
-_Required_: Yes
+_Required_: No
 
 _Type_: String
 
@@ -102,7 +100,7 @@ For the USA or Canada use ISO 3166-2 state codes (without US- or CA- prefix), fo
 
 For the rest of the world use FIPS 10-4 codes (https://dt-url.net/fipscodes).
 
-_Required_: Yes
+_Required_: No
 
 _Type_: String
 
@@ -112,7 +110,7 @@ _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormati
 
 The city of the location.
 
-_Required_: Yes
+_Required_: No
 
 _Type_: String
 
@@ -122,7 +120,7 @@ _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormati
 
 The latitude of the location in DDD.dddd format.
 
-_Required_: Yes
+_Required_: No
 
 _Type_: Double
 
@@ -132,7 +130,7 @@ _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormati
 
 The latitude of the location in DDD.dddd format.
 
-_Required_: Yes
+_Required_: No
 
 _Type_: Double
 
