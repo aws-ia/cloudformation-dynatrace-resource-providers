@@ -14,7 +14,9 @@ import {
 import {NotFound} from "@amazon-web-services-cloudformation/cloudformation-cli-typescript-lib/dist/exceptions";
 
 export interface RetryableCallbackContext {
-    retry?: number
+    retry?: number,
+    operationCompleted?: boolean,
+    successfulCalls?: number
 }
 
 export abstract class AbstractBaseResource<ResourceModelType extends BaseModel, GetResponseData, CreateResponseData, UpdateResponseData, ErrorType, TypeConfigurationType> extends BaseResource<ResourceModelType> {

@@ -253,6 +253,357 @@
     "ManagementZone": {
       "description": "Tag with source of a Dynatrace entity.",
       "type": "object"
+    },
+    "ScriptConfig": {
+      "description": "Contains the setup of a browser monitor.",
+      "type": "object",
+      "properties": {
+        "UserAgent": {
+          "description": "The user agent of the request.",
+          "type": "string"
+        },
+        "Device": {
+          "$ref": "#/definitions/Device"
+        },
+        "Bandwidth": {
+          "$ref": "#/definitions/Bandwidth"
+        },
+        "RequestHeaders": {
+          "description": "The list of HTTP headers to be sent with requests of the monitor.",
+          "type": "array",
+          "uniqueItems": true,
+          "insertionOrder": false,
+          "items": {
+            "$ref": "#/definitions/RequestHeader"
+          }
+        },
+        "Cookies": {
+          "description": "List of cookies to be created for the monitor.",
+          "type": "array",
+          "uniqueItems": true,
+          "insertionOrder": false,
+          "items": {
+            "$ref": "#/definitions/RequestCookie"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "Device": {
+      "description": "The emulated device of the monitor - holds either the parameters of the custom device or the name and orientation of the preconfigured device.",
+      "type": "object",
+      "properties": {
+        "Mobile": {
+          "description": "The flag of the mobile device. Set to true for mobile devices or false for a desktop or laptop.",
+          "type": "boolean"
+        },
+        "TouchEnabled": {
+          "description": "The flag of the touchscreen. Set to true if the device uses touchscreen.",
+          "type": "boolean"
+        },
+        "Width": {
+          "description": "The width of the screen in pixels.",
+          "type": "number"
+        },
+        "Height": {
+          "description": "The height of the screen in pixels.",
+          "type": "number"
+        },
+        "ScaleFactor": {
+          "description": "The pixel ratio of the device.",
+          "type": "number"
+        },
+        "DeviceName": {
+          "description": "The name of the preconfigured device.",
+          "type": "string"
+        },
+        "Orientation": {
+          "description": "The orientation of the device - portrait or landscape",
+          "type": "string",
+          "enum": [
+            "landscape",
+            "portrait"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "Bandwidth": {
+      "description": "The emulated network conditions of the monitor. If not set, then the full available bandwidth is used.",
+      "type": "object",
+      "properties": {
+        "Latency": {
+          "description": "The latency of the network, in milliseconds.",
+          "type": "number"
+        },
+        "Download": {
+          "description":"The download speed of the network, in bytes per second.",
+          "type": "number"
+        },
+        "Upload": {
+          "description":"The upload speed of the network, in bytes per second.",
+          "type": "number"
+        },
+        "NetworkType": {
+          "description": "The type of the preconfigured network.",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "RequestHeader": {
+      "description": "HTTP header to be sent with requests of the monitor.",
+      "type": "object",
+      "properties": {
+        "Name": {
+          "type": "string"
+        },
+        "Value": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "RequestCookie": {
+      "description": "Cookie to be created for the monitor..",
+      "type": "object",
+      "properties": {
+        "Name": {
+          "type": "string"
+        },
+        "Value": {
+          "type": "string"
+        },
+        "Domain": {
+          "type": "string"
+        },
+        "Path": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "EventsInput": {
+      "description": "Steps of the clickpath - the first step must always be of the navigate type.",
+      "type": "object",
+      "properties": {
+        "Type": {
+          "description": "The type of synthetic event. Depending on the value slected here, different parameters will be considered, see reference for more info: https://docs.dynatrace.com/docs/platform-modules/digital-experience/synthetic-monitoring/browser-monitors/script-mode-for-browser-monitor-configuration",
+          "type": "string",
+          "enum": [
+            "navigate",
+            "click",
+            "tap",
+            "javascript",
+            "seclectOption",
+            "cookie",
+            "keystrokes"
+          ]
+        },
+        "Description": {
+          "description": "A short description of the event to appear in the UI",
+          "type": "string"
+        },
+        "Url": {
+          "description": "The URL to navigate to, applicable to 'navigate' events.",
+          "type": "string"
+        },
+        "Wait": {
+          "description": "The wait condition for the event - defines how long Dynatrace should wait before the next action is executed, applicable to 'navigate', 'javaScriptEvent', 'selectOptionEvent', 'keystrokesEvent' and 'interactionEvent' events.",
+          "type": "object",
+          "properties": {
+            "WaitFor": {
+              "description": "The time to wait before the next event is triggered.",
+              "type": "string",
+              "enum": [
+                "page_complete",
+                "network",
+                "next_action",
+                "time",
+                "validation"
+              ]
+            },
+            "Milliseconds": {
+              "description": "The time to wait, in milliseconds.",
+              "type": "number"
+            },
+            "TimeoutInMilliseconds": {
+              "description": "The maximum amount of time to wait for a certain element to appear, in milliseconds - if exceeded, the action is marked as failed.",
+              "type": "number"
+            },
+            "Validation": {
+              "description": "The element to wait for",
+              "items": {
+                "$ref": "#/definitions/ValidationType"
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "Validate": {
+          "description": "The validation rule for the event - helps you verify that your browser monitor loads the expected page content or page element, applicable to 'navigate', 'selectOptionEvent', 'keystrokesEvent' and 'interactionEvent' events.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ValidationType"
+          },
+          "insertionOrder": false
+        },
+        "Target": {
+          "description": "The tab on which the page should open, applicable to 'navigate', 'javaScriptEvent', 'selectOptionEvent', 'keystrokesEvent' and 'interactionEvent' events.",
+          "$ref": "#/definitions/TargetType"
+        },
+        "Authentication": {
+          "description": "The login credentials to bypass the browser login mask, applicable to 'navigate' events.",
+          "type": "object",
+          "properties": {
+            "Type": {
+              "description": "The type of authentication.",
+              "type": "string",
+              "enum": [
+                "basic",
+                "webfrom"
+              ]
+            },
+            "Username": {
+              "description": "The username to log in with.",
+              "type": "string"
+            },
+            "Password": {
+              "description": "The password to log in with.",
+              "type": "string"
+            },
+            "Masked": {
+              "description": "The flag of the masked password: true means that the password is encrypted and stored, false to type in a new password.",
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        },
+        "Button": {
+          "description": "The mouse button to be used for the click, applicable to 'interactionEvent' events.",
+          "type": "number"
+        },
+        "JavaScript": {
+          "description": "The JavaScript code to be executed in this event, applicable to 'javaScriptEvent' events.",
+          "type": "string"
+        },
+        "Selections": {
+          "description": "The options to be selected, applicable to 'selectOptionEvent' events",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ListOptions"
+          },
+          "insertionOrder": false
+        },
+        "Cookies": {
+          "description": "The list of cookies to be created during the event, applicable to 'cookieEvent' events",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RequestCookie"
+          },
+          "insertionOrder": false
+        },
+        "TextValue": {
+          "description": "The text to enter, applicable to 'keystrokesEvent' events.",
+          "type": "string"
+        },
+        "Masked": {
+          "description": "Indicates whether the textValue is encrypted (true) or not (false), applicable to 'keystrokesEvent' events.",
+          "type": "boolean"
+        },
+        "SimulateBlurEvent": {
+          "description": "Defines whether to blur the text field when it loses focus, applicable to 'keystrokesEvent' events.",
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ValidationType": {
+      "description": "Contains the validation rule for an event or waiting rule.",
+      "type": "object",
+      "properties": {
+        "Type": {
+          "description": "The goal of the validation.",
+          "type": "string",
+          "enum": [
+            "content_match",
+            "element_match"
+          ]
+        },
+        "Match": {
+          "description": "The content to look for on the page.",
+          "type": "string"
+        },
+        "IsRegex": {
+          "description": "Defines whether match is a plain text (false) or regular expression (true).",
+          "type": "boolean"
+        },
+        "FailIfFound": {
+          "description": "The condition of the validation: false to succeed if element/content found, true to fail if found.",
+          "type": "boolean"
+        },
+        "Target": {
+          "$ref": "#/definitions/TargetType"
+        }
+      },
+      "additionalProperties": false
+    },
+    "TargetType": {
+      "description": "Contains the target tab or element of the event.",
+      "type": "object",
+      "properties": {
+        "Type": {
+          "description": "Defines where to look for the element.",
+          "type": "string",
+          "enum": [
+            "css",
+            "dom"
+          ]
+        },
+        "Value": {
+          "description": "The name of the element to be found",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ListOptions": {
+      "description": "Contains the options to be selected in the Select option event.",
+      "type": "object",
+      "properties": {
+        "Index": {
+          "description": "The index of the option to be selected.",
+          "type": "number"
+        },
+        "Value": {
+          "description": "The value of the option to be selected.",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "RequestCookie": {
+      "description": "Contains the list of cookies to be created for the monitor.",
+      "type": "object",
+      "properties": {
+        "Name": {
+          "description": "The name of the cookie.",
+          "type": "string"
+        },
+        "Value": {
+          "description": "The value of the cookie.",
+          "type": "string"
+        },
+        "Domain": {
+          "description": "The domain of the cookie.",
+          "type": "string"
+        },
+        "Path": {
+          "description": "The path to the cookie.",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
     }
   },
   "typeConfiguration": {
@@ -315,10 +666,31 @@
           "type": "string"
         },
         "Requests": {
+          "description": "A list of HTTP requests to be performed by the monitor, applicable to 'HTTP' type scripts.",
           "type": "array",
           "insertionOrder": false,
           "items": {
             "$ref": "#/definitions/RequestsInput"
+          }
+        },
+        "Configuration": {
+          "description": "The setup of the monitor, applicable to 'Browser' type scripts.",
+          "$ref": "#/definitions/ScriptConfig"
+        },
+        "Type": {
+          "description": "The type of monitor, applicable to 'Browser' type scripts.",
+          "type": "string",
+          "enum": [
+            "clickpath",
+            "availability"
+          ]
+        },
+        "Events": {
+          "description": "Steps of the clickpath - the first step must always be of the navigate type, applicable to 'Browser' type scripts with 'clickpath' type.",
+          "type": "array",
+          "insertionOrder": false,
+          "items": {
+            "$ref": "#/definitions/EventsInput"
           }
         }
       },
@@ -365,6 +737,25 @@
       "items": {
         "type": "string"
       }
+    },
+    "KeyPerformanceMetrics": {
+      "type": "object",
+      "properties": {
+        "LoadActionKpm": {
+          "type": "string"
+        },
+        "XhrActionKpm": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Events": {
+      "type": "array",
+      "insertionOrder": false,
+      "items": {
+        "type": "string"
+      }
     }
   },
   "additionalProperties": false,
@@ -374,8 +765,7 @@
     "Enabled"
   ],
   "writeOnlyProperties": [
-    "/properties/Tags",
-    "/properties/AnomalyDetection/OutageHandling/RetryOnError"
+    "/properties/Tags"
   ],
   "readOnlyProperties": [
     "/properties/EntityId",
