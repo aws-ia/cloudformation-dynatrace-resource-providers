@@ -1,5 +1,5 @@
 {
-  "Name": "Dynatrace name",
+  "Name": "Dynatrace HTTP Monitor",
   "FrequencyMin": 10,
   "Type": "HTTP",
   "Enabled": 123,
@@ -28,6 +28,7 @@
   "Script": {},
   "Locations": [],
   "ManuallyAssignedApps": [],
+  "ManagementZones": [],
   "Tags": [
     {
       "Source": "AUTO",

@@ -1,5 +1,5 @@
 {
-  "Name": "DynatraceMonitorLALALA123454321",
+  "Name": "Dynatrace Browser Monitor 1 updated",
   "FrequencyMin": 10,
   "Type": "BROWSER",
   "Enabled": true,
@@ -28,7 +28,7 @@
     ]
   },
   "Locations": [
-    "GEOLOCATION-B1B096907F0E9A8C"
+    "DYNATRACE_LOCATION_ID"
   ],
   "ManuallyAssignedApps": [],
   "Tags": [

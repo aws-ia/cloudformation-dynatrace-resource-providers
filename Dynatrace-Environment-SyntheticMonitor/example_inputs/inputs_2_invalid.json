@@ -1,5 +1,5 @@
 {
-  "Name": "Dynatrace name",
+  "Name": "Dynatrace Browser Monitor 1",
   "FrequencyMin": 10,
   "Type": "HTTP",
   "Enabled": 123,

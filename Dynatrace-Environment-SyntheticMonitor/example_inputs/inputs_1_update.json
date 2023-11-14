@@ -1,11 +1,10 @@
 {
-  "Name": "Dynatrace name updated",
+  "Name": "Dynatrace HTTP Monitor updated",
   "FrequencyMin": 10,
   "Type": "HTTP",
   "Enabled": true,
   "AnomalyDetection": {
     "OutageHandling": {
-      "RetryOnError": false,
       "GlobalOutage": true,
       "GlobalOutagePolicy": {
         "ConsecutiveRuns": 2
@@ -47,6 +46,7 @@
   },
   "Locations": ["DYNATRACE_LOCATION_ID"],
   "ManuallyAssignedApps": [],
+  "ManagementZones": [],
   "Tags": [
     {
       "Source": "AUTO",

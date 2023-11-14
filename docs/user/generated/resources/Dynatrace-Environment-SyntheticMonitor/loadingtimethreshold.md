@@ -11,9 +11,7 @@ To declare this entity in your AWS CloudFormation template, use the following sy
 <pre>
 {
     "<a href="#type" title="Type">Type</a>" : <i>String</i>,
-    "<a href="#valuems" title="ValueMs">ValueMs</a>" : <i>Integer</i>,
-    "<a href="#requestindex" title="RequestIndex">RequestIndex</a>" : <i>Integer</i>,
-    "<a href="#eventindex" title="EventIndex">EventIndex</a>" : <i>Integer</i>
+    "<a href="#valuems" title="ValueMs">ValueMs</a>" : <i>Integer</i>
 }
 </pre>
 
@@ -22,8 +20,6 @@ To declare this entity in your AWS CloudFormation template, use the following sy
 <pre>
 <a href="#type" title="Type">Type</a>: <i>String</i>
 <a href="#valuems" title="ValueMs">ValueMs</a>: <i>Integer</i>
-<a href="#requestindex" title="RequestIndex">RequestIndex</a>: <i>Integer</i>
-<a href="#eventindex" title="EventIndex">EventIndex</a>: <i>Integer</i>
 </pre>
 
 ## Properties
@@ -45,26 +41,6 @@ _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormati
 Notify if monitor takes longer than X milliseconds to load.
 
 _Required_: Yes
-
-_Type_: Integer
-
-_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
-
-#### RequestIndex
-
-Specify the request to which an ACTION threshold applies.
-
-_Required_: No
-
-_Type_: Integer
-
-_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
-
-#### EventIndex
-
-Specify the event to which an ACTION threshold applies.
-
-_Required_: No
 
 _Type_: Integer
 
