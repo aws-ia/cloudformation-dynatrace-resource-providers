@@ -364,38 +364,19 @@
       },
       "additionalProperties": false
     },
-    "RequestCookie": {
-      "description": "Cookie to be created for the monitor..",
-      "type": "object",
-      "properties": {
-        "Name": {
-          "type": "string"
-        },
-        "Value": {
-          "type": "string"
-        },
-        "Domain": {
-          "type": "string"
-        },
-        "Path": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": false
-    },
     "EventsInput": {
       "description": "Steps of the clickpath - the first step must always be of the navigate type.",
       "type": "object",
       "properties": {
         "Type": {
-          "description": "The type of synthetic event. Depending on the value slected here, different parameters will be considered, see reference for more info: https://docs.dynatrace.com/docs/platform-modules/digital-experience/synthetic-monitoring/browser-monitors/script-mode-for-browser-monitor-configuration",
+          "description": "The type of synthetic event. Depending on the value selected here, different parameters will be considered, see reference for more info: https://docs.dynatrace.com/docs/platform-modules/digital-experience/synthetic-monitoring/browser-monitors/script-mode-for-browser-monitor-configuration",
           "type": "string",
           "enum": [
             "navigate",
             "click",
             "tap",
             "javascript",
-            "seclectOption",
+            "selectOption",
             "cookie",
             "keystrokes"
           ]
@@ -433,9 +414,11 @@
             },
             "Validation": {
               "description": "The element to wait for",
+              "type": "array",
               "items": {
                 "$ref": "#/definitions/ValidationType"
-              }
+              },
+              "insertionOrder": false
             }
           },
           "additionalProperties": false
