@@ -467,7 +467,8 @@ class Resource extends AbstractDynatraceResource<ResourceModel, AxiosResponse<Sy
                 .transform()
         });
         delete resourceModel.tags;
-        delete (<any>resourceModel)?.requests
+        delete (<any>resourceModel)?.requests;
+        delete (<any>resourceModel)?.script?.configuration?.chromiumStartupFlags;
         return resourceModel;
     }
 
