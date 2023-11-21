@@ -300,12 +300,15 @@ export abstract class AbstractBaseResource<ResourceModelType extends BaseModel, 
         logger: LoggerProxy,
         typeConfiguration: TypeConfigurationType
     ): Promise<ProgressEvent<ResourceModelType, RetryableCallbackContext>> {
+        logger.log('>>>>> readHandler')
         let model = this.newModel(request.desiredResourceState);
 
         try {
             const location = await this.get(model, typeConfiguration);
+            logger.log('>>>>> readHandler - OK')
             model = this.setModelFrom(model, location);
         } catch (e) {
+            logger.log('>>>>> readHandler - ERROR')
             logger.log(`Error ${e}`);
             this.processRequestException(e, request);
         }

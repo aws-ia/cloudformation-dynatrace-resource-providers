@@ -24,7 +24,10 @@ import {NotFound} from "@amazon-web-services-cloudformation/cloudformation-cli-t
 
 type SyntheticMonitorPayload = {
     entityId: string
-    script?: { [key: string]: any }
+    script?: { [key: string]: any },
+    events?: any[],
+    userAgent?: string,
+    bandwidth?: any
 };
 
 type SyntheticMonitorsPayload = {
@@ -63,16 +66,22 @@ class Resource extends AbstractDynatraceResource<ResourceModel, AxiosResponse<Sy
             // if 400, proceed since that's what we get if we initially use undefined as entityId
             // otherwise, process the error and if 503 (ServiceInternalError) retry, else throw
             try {
+                logger.log('>>>>> createHandler - INITIAL GET')
                 const getResult = await this.get(model, typeConfiguration);
                 if (getResult){
+                    logger.log('>>>>> createHandler - INITIAL GET - already exists - BAD')
                     throw new exceptions.AlreadyExists(this.typeName, request.logicalResourceIdentifier);
                 }
             } catch (e1) {
+                logger.log('>>>>> createHandler - INITIAL GET - (error thrown) does not exist - GOOD')
                 const error = JSON.parse(JSON.stringify(e1));
                 if (!(error.status === 404) && !(error.status === 400)) {
+                    logger.log('>>>>> createHandler - INITIAL GET - (error thrown) unexpected error - BAD')
                     try {
+                        logger.log('>>>>> createHandler - INITIAL GET - (error thrown) checking for retry')
                         return this.processRequestExceptionWithRetryableErrors(e1, request, model, callbackContext,['ServiceInternalError']);
                     } catch (e2) {
+                        logger.log('>>>>> createHandler - INITIAL GET - (error thrown) throwing unexpected error - BAD')
                         throw e2;
                     }
                 }
@@ -82,7 +91,9 @@ class Resource extends AbstractDynatraceResource<ResourceModel, AxiosResponse<Sy
             // if successful, retry to ensure if created successfully,
             // otherwise, process the error and if 404 (NotFound) or 503 (ServiceInternalError) retry, else throw
             try {
+                logger.log('>>>>> createHandler - CREATE')
                 let data = await this.create(model, typeConfiguration);
+                logger.log('>>>>> createHandler - CREATE - success - GOOD')
                 model = this.setModelFrom(model, data);
                 const retry = 1;
                 const maxDelay = Math.pow(2, Math.floor(retry/2)) * Math.random();
@@ -95,6 +106,7 @@ class Resource extends AbstractDynatraceResource<ResourceModel, AxiosResponse<Sy
                   .callbackDelaySeconds(maxDelay * Math.random())
                   .build();
             } catch (e) {
+                logger.log('>>>>> createHandler - CREATE - error - BAD')
                 logger.log(`Error ${e}`);
                 try {
                     return this.processRequestExceptionWithRetryableErrors(e, request, model, callbackContext,['NotFound','ServiceInternalError']);
@@ -108,10 +120,15 @@ class Resource extends AbstractDynatraceResource<ResourceModel, AxiosResponse<Sy
         // if retrieved successfully 5 times in a row, return success
         // otherwise, process the error and if 404 (NotFound) or 503 (ServiceInternalError) retry, else throw
         try {
+            // console.log('FINAL CHECK!!!!')
+            logger.log('>>>>> createHandler - FINAL CHECK')
             const data = await this.get(model, typeConfiguration);
+
+            logger.log('>>>>> createHandler - FINAL CHECK - exists - GOOD')
 
             const successfulCalls = callbackContext.successfulCalls || 0;
             if (successfulCalls < this.stabilizationRetries){
+                logger.log('>>>>> createHandler - FINAL CHECK - stabilize try: ' + successfulCalls)
                 if (callbackContext.retry <= this.maxRetries) {
                     const maxDelay = Math.pow(2, Math.floor(callbackContext.retry/2)) * Math.random();
                     return ProgressEvent.builder<ProgressEvent<ResourceModel, RetryableCallbackContext>>()
@@ -129,13 +146,11 @@ class Resource extends AbstractDynatraceResource<ResourceModel, AxiosResponse<Sy
             model = this.setModelFrom(model, data);
             return ProgressEvent.success<ProgressEvent<ResourceModel, RetryableCallbackContext>>(model);
         } catch (e1) {
+            logger.log('>>>>> createHandler - FINAL CHECK - error - check for retry: ' + callbackContext.retry)
             try {
-                const updatedContext: RetryableCallbackContext = {
-                    retry: callbackContext.retry,
-                    successfulCalls: 0
-                }
-                return this.processRequestExceptionWithRetryableErrors(e1, request, model, updatedContext,['NotFound','ServiceInternalError']);
+                return this.processRequestExceptionWithRetryableErrors(e1, request, model, callbackContext,['NotFound','ServiceInternalError']);
             } catch (e2) {
+                logger.log('>>>>> createHandler - FINAL CHECK - error no retry - BAD')
                 throw e2;
             }
         }
@@ -236,6 +251,7 @@ class Resource extends AbstractDynatraceResource<ResourceModel, AxiosResponse<Sy
       logger: LoggerProxy,
       typeConfiguration: TypeConfigurationModel
     ): Promise<ProgressEvent<ResourceModel, RetryableCallbackContext>> {
+        logger.log('>>>>> deleteHandler')
         let model = this.newModel(request.desiredResourceState);
 
 
@@ -243,12 +259,16 @@ class Resource extends AbstractDynatraceResource<ResourceModel, AxiosResponse<Sy
             // GET to ensure the resource exists
             // if retrieved, proceed
             // otherwise, process the error and if 'ServiceInternalError' retry, else throw
+            logger.log('>>>>> deleteHandler - operation not completed')
             try {
                 await this.get(model, typeConfiguration);
+                logger.log('>>>>> deleteHandler - get ok - GOOD')
             } catch (e1) {
+                logger.log('>>>>> deleteHandler - ERROR - check for retries')
                 try {
                     return this.processRequestExceptionWithRetryableErrors(e1, request, model, callbackContext,['ServiceInternalError']);
                 } catch (e2) {
+                    logger.log('>>>>> deleteHandler - ERROR no retry - BAD')
                     throw e2;
                 }
             }
@@ -257,12 +277,16 @@ class Resource extends AbstractDynatraceResource<ResourceModel, AxiosResponse<Sy
             // if successful, retry with the flag operationCompleted so can be verified
             // otherwise, process the error and if 404 (NotFound) or 503 (ServiceInternalError) retry, else throw
             try {
+                logger.log('>>>>> deleteHandler - DELETE')
                 await this.delete(model, typeConfiguration);
+                logger.log('>>>>> deleteHandler - DELETE OK')
             } catch (e1) {
+                logger.log('>>>>> deleteHandler - DELETE ERROR')
                 logger.log(`Error ${e1}`);
                 try {
                     return this.processRequestExceptionWithRetryableErrors(e1, request, model, callbackContext,['NotFound','ServiceInternalError']);
                 } catch (e2) {
+                    logger.log('>>>>> deleteHandler - DELETE ERROR - no retry - BAD')
                     throw e2;
                 }
             }
@@ -272,11 +296,14 @@ class Resource extends AbstractDynatraceResource<ResourceModel, AxiosResponse<Sy
         // if retrieved, retry
         // otherwise, if error 404 (NotFound) mark as success, else if 503 (ServiceInternalError) retry, else throw
         try {
+            logger.log('>>>>> deleteHandler - FINAL CHECK')
             await this.get(model, typeConfiguration);
+            logger.log('>>>>> deleteHandler - FINAL CHECK - still exists')
             const retry = callbackContext.retry || 1;
             if (retry <= this.maxRetries) {
                 const maxDelay = Math.pow(2, Math.floor(callbackContext.retry/2)) * Math.random();
                 const retry = callbackContext.retry || 1;
+                logger.log('>>>>> deleteHandler - FINAL CHECK - retry')
                 return ProgressEvent.builder<ProgressEvent<ResourceModel, RetryableCallbackContext>>()
                   .status(OperationStatus.InProgress)
                   .resourceModel(model)
@@ -287,9 +314,11 @@ class Resource extends AbstractDynatraceResource<ResourceModel, AxiosResponse<Sy
                   .callbackDelaySeconds(maxDelay * Math.random())
                   .build();
             } else {
+                logger.log('>>>>> deleteHandler - FINAL CHECK - not stabuilized - BAD')
                 throw new exceptions.NotStabilized(`Resource failed to stabilized after ${this.maxRetries} retries`);
             }
         } catch (e1) {
+            logger.log('>>>>> deleteHandler - FINAL CHECK - ERROR (expected)')
             try {
                 const updatedCallbackContext : RetryableCallbackContext = {
                     retry: callbackContext.retry,
@@ -299,6 +328,7 @@ class Resource extends AbstractDynatraceResource<ResourceModel, AxiosResponse<Sy
                 return response
             } catch (e2) {
                 if (e2 instanceof NotFound) {
+                    logger.log('>>>>> deleteHandler - FINAL CHECK - does not exist - GOOD!')
                     return ProgressEvent.success<ProgressEvent<ResourceModel, RetryableCallbackContext>>();
                 }
                 throw e2;
@@ -317,14 +347,13 @@ class Resource extends AbstractDynatraceResource<ResourceModel, AxiosResponse<Sy
             this.processRequestException(e, request);
         } catch (e) {
             if (retryableErrorsList.includes(e.errorCode)){
-                const retry = callbackContext.retry || 1;
-                const maxDelay = Math.pow(2, Math.floor(retry/2)) * Math.random();
+                const updatedContext = {...callbackContext};
+                updatedContext.retry = callbackContext.retry || 0 + 1
+                const maxDelay = Math.pow(2, Math.floor(updatedContext.retry/2)) * Math.random();
                 return ProgressEvent.builder<ProgressEvent<ResourceModel, RetryableCallbackContext>>()
                   .status(OperationStatus.InProgress)
                   .resourceModel(model)
-                  .callbackContext({
-                      retry: retry
-                  })
+                  .callbackContext(updatedContext)
                   .callbackDelaySeconds(maxDelay * Math.random())
                   .build();
             }
@@ -334,9 +363,24 @@ class Resource extends AbstractDynatraceResource<ResourceModel, AxiosResponse<Sy
 
 
     async get(model: ResourceModel, typeConfiguration?: TypeConfigurationModel, numberRetries? : number): Promise<AxiosResponse<SyntheticMonitorPayload>> {
-        return await new DynatraceClient(typeConfiguration?.dynatraceAccess.endpoint, typeConfiguration?.dynatraceAccess.token, this.userAgent).doRequest<SyntheticMonitorPayload>(
-          'get',
-          `/api/v1/synthetic/monitors/${model.entityId}`);
+        // console.log('>>>>> GET')
+        try {
+            const a = await new DynatraceClient(typeConfiguration?.dynatraceAccess.endpoint, typeConfiguration?.dynatraceAccess.token, this.userAgent).doRequest<SyntheticMonitorPayload>(
+              'get',
+              `/api/v1/synthetic/monitors/${model.entityId}`);
+            // console.log({
+            //     getResult: a.status,
+            //     getReturnData: a.data
+            // })
+            return a;
+        } catch (e) {
+            // console.log({
+            //     estatus: e.status,
+            //     estatuscode: e.statusCode,
+            //     ecode: e.code
+            // })
+            throw e;
+        }
     }
 
     async list(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<ResourceModel[]> {
@@ -347,14 +391,29 @@ class Resource extends AbstractDynatraceResource<ResourceModel, AxiosResponse<Sy
     }
 
     async create(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<AxiosResponse<SyntheticMonitorPayload>> {
-        return await new DynatraceClient(typeConfiguration?.dynatraceAccess.endpoint, typeConfiguration?.dynatraceAccess.token, this.userAgent).doRequest<SyntheticMonitorPayload>(
-          'post',
-          '/api/v1/synthetic/monitors',
-          {},
-          Transformer.for(model.toJSON())
-            .transformKeys(CaseTransformer.PASCAL_TO_CAMEL)
-            .transform()
-        );
+        // console.log('>>>> CREATE')
+        try {
+            const a = await new DynatraceClient(typeConfiguration?.dynatraceAccess.endpoint, typeConfiguration?.dynatraceAccess.token, this.userAgent).doRequest<SyntheticMonitorPayload>(
+              'post',
+              '/api/v1/synthetic/monitors',
+              {},
+              Transformer.for(model.toJSON())
+                .transformKeys(CaseTransformer.PASCAL_TO_CAMEL)
+                .transform()
+            );
+            // console.log({
+            //     createResult: a.status,
+            //     createReturnData: a.data
+            // })
+            return a;
+        } catch (e) {
+            // console.log({
+            //     estatus: e.status,
+            //     estatuscode: e.statusCode,
+            //     ecode: e.code
+            // })
+            throw e;
+        }
     }
 
     async update(model: ResourceModel, typeConfiguration?: TypeConfigurationModel, numberRetries?: number): Promise<AxiosResponse<SyntheticMonitorPayload>> {
@@ -382,8 +441,26 @@ class Resource extends AbstractDynatraceResource<ResourceModel, AxiosResponse<Sy
             return model;
         }
 
+        // console.log('======================')
+        // console.log({
+        //     model: JSON.stringify(model),
+        //     from: JSON.stringify(from.data)
+        // })
+        // console.log('======================')
+
+        if (!from.data.events){
+            from.data.events = []
+        }
+
+        if (from.data.script && from.data.script.configuration && !from.data.script.configuration.userAgent && model.script?.configuration?.userAgent){
+            from.data.script.configuration.userAgent = model.script.configuration.userAgent
+        }
+
+        if (from.data.script && from.data.script.configuration && !from.data.script.configuration.bandwidth && model.script?.configuration?.bandwidth){
+            from.data.script.configuration.bandwidth = model.script.configuration.bandwidth
+        }
+
         const resourceModel = new ResourceModel({
-            ...model,
             ...Transformer.for(from.data)
                 .transformKeys(CaseTransformer.IDENTITY)
                 .forModelIngestion()

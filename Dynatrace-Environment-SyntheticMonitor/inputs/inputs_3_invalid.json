@@ -35,7 +35,7 @@
       }
     ]
   },
-  "Locations": ["DYNATRACE_LOCATION_ID"],
+  "Locations": ["GEOLOCATION-B1B096907F0E9A8C"],
   "ManuallyAssignedApps": [],
   "Tags": [
     {
@@ -46,7 +46,3 @@
     }
   ]
 }
-
-
-
-

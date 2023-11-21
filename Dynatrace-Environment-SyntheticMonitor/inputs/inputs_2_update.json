@@ -1,6 +1,6 @@
 {
-  "Name": "Dynatrace Browser Monitor 1",
-  "FrequencyMin": 5,
+  "Name": "Dynatrace Browser Monitor 1 updated",
+  "FrequencyMin": 10,
   "Type": "BROWSER",
   "Enabled": true,
   "KeyPerformanceMetrics": {
@@ -11,13 +11,9 @@
     "Version": "1.0",
     "Type": "availability",
     "Configuration": {
-      "UserAgent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0",
       "Device": {
         "DeviceName": "Desktop",
         "Orientation": "landscape"
-      },
-      "Bandwidth": {
-        "NetworkType": "WiFi"
       }
     },
     "Events": [
@@ -31,7 +27,9 @@
       }
     ]
   },
-  "Locations": ["DYNATRACE_LOCATION_ID"],
+  "Locations": [
+    "GEOLOCATION-B1B096907F0E9A8C"
+  ],
   "ManuallyAssignedApps": [],
   "Tags": [
     {
@@ -40,32 +38,5 @@
       "Key": "Resource Type",
       "Value": "Dynatrace::Environment::SyntheticMonitor"
     }
-  ],
-  "AnomalyDetection": {
-    "OutageHandling": {
-      "GlobalOutage": true,
-      "GlobalOutagePolicy": {
-        "ConsecutiveRuns": 2
-      },
-      "LocalOutage": true,
-      "LocalOutagePolicy": {
-        "AffectedLocations": 1,
-        "ConsecutiveRuns": 3
-      },
-      "RetryOnError": false
-    },
-    "LoadingTimeThresholds": {
-      "Enabled": true,
-      "Thresholds": [
-        {
-          "Type": "TOTAL",
-          "ValueMs": 100
-        }
-      ]
-    }
-  }
+  ]
 }
-
-
-
-
