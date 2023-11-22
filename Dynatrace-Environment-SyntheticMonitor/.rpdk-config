@@ -22,8 +22,8 @@
         "typeConfiguration": {
             "configuration": {
                 "DynatraceAccess": {
-                    "Token": "{{resolve:ssm-secure:/cfn/dynatrace/token:1}}",
-                    "Endpoint": "{{resolve:ssm-secure:/cfn/dynatrace/endpoint:1}}"
+                    "Token": "{{resolve:ssm-secure:/cfn/dynatrace/token:10}}",
+                    "Endpoint": "{{resolve:ssm-secure:/cfn/dynatrace/endpoint:6}}"
                 }
             },
             "configurationAlias": "default"

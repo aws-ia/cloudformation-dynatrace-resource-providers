@@ -30,6 +30,8 @@ export abstract class AbstractDynatraceResource<ResourceModelType extends BaseMo
                 throw new exceptions.NotFound(this.typeName, request.logicalResourceIdentifier);
             case 429:
                 throw new exceptions.ServiceLimitExceeded(errorMessage);
+            case 503:
+                throw new exceptions.ServiceInternalError(`Service temporarily unavailable.`);
             default:
                 throw new exceptions.InternalFailure(`Unexpected error occurred while talking to the Dynatrace API: ${errorMessage}`);
         }

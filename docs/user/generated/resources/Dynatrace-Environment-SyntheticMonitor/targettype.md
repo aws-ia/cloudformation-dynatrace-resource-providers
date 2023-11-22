@@ -1,6 +1,6 @@
-# Dynatrace::Environment::SyntheticMonitor LoadingTimeThreshold
+# Dynatrace::Environment::SyntheticMonitor TargetType
 
-The performance threshold rule.
+Contains the target tab or element of the event.
 
 ## Syntax
 
@@ -11,7 +11,7 @@ To declare this entity in your AWS CloudFormation template, use the following sy
 <pre>
 {
     "<a href="#type" title="Type">Type</a>" : <i>String</i>,
-    "<a href="#valuems" title="ValueMs">ValueMs</a>" : <i>Integer</i>
+    "<a href="#value" title="Value">Value</a>" : <i>String</i>
 }
 </pre>
 
@@ -19,30 +19,30 @@ To declare this entity in your AWS CloudFormation template, use the following sy
 
 <pre>
 <a href="#type" title="Type">Type</a>: <i>String</i>
-<a href="#valuems" title="ValueMs">ValueMs</a>: <i>Integer</i>
+<a href="#value" title="Value">Value</a>: <i>String</i>
 </pre>
 
 ## Properties
 
 #### Type
 
-The type of the threshold: total loading time or action loading time.
+Defines where to look for the element.
 
-_Required_: Yes
+_Required_: No
 
 _Type_: String
 
-_Allowed Values_: <code>ACTION</code> | <code>TOTAL</code>
+_Allowed Values_: <code>css</code> | <code>dom</code>
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
-#### ValueMs
+#### Value
 
-Notify if monitor takes longer than X milliseconds to load.
+The name of the element to be found
 
-_Required_: Yes
+_Required_: No
 
-_Type_: Integer
+_Type_: String
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 

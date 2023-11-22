@@ -22,7 +22,9 @@ To declare this entity in your AWS CloudFormation template, use the following sy
         "<a href="#tags" title="Tags">Tags</a>" : <i>[ <a href="tag.md">Tag</a>, ... ]</i>,
         "<a href="#manuallyassignedapps" title="ManuallyAssignedApps">ManuallyAssignedApps</a>" : <i>[ String, ... ]</i>,
         "<a href="#managementzones" title="ManagementZones">ManagementZones</a>" : <i>[ Map, ... ]</i>,
-        "<a href="#automaticallyassignedapps" title="AutomaticallyAssignedApps">AutomaticallyAssignedApps</a>" : <i>[ String, ... ]</i>
+        "<a href="#automaticallyassignedapps" title="AutomaticallyAssignedApps">AutomaticallyAssignedApps</a>" : <i>[ String, ... ]</i>,
+        "<a href="#keyperformancemetrics" title="KeyPerformanceMetrics">KeyPerformanceMetrics</a>" : <i><a href="keyperformancemetrics.md">KeyPerformanceMetrics</a></i>,
+        "<a href="#events" title="Events">Events</a>" : <i>[ <a href="eventsinput.md">EventsInput</a>, ... ]</i>
     }
 }
 </pre>
@@ -48,6 +50,9 @@ Properties:
       - Map</i>
     <a href="#automaticallyassignedapps" title="AutomaticallyAssignedApps">AutomaticallyAssignedApps</a>: <i>
       - String</i>
+    <a href="#keyperformancemetrics" title="KeyPerformanceMetrics">KeyPerformanceMetrics</a>: <i><a href="keyperformancemetrics.md">KeyPerformanceMetrics</a></i>
+    <a href="#events" title="Events">Events</a>: <i>
+      - <a href="eventsinput.md">EventsInput</a></i>
 </pre>
 
 ## Properties
@@ -172,6 +177,22 @@ A set of automatically assigned applications.
 _Required_: No
 
 _Type_: List of String
+
+_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
+
+#### KeyPerformanceMetrics
+
+_Required_: No
+
+_Type_: <a href="keyperformancemetrics.md">KeyPerformanceMetrics</a>
+
+_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
+
+#### Events
+
+_Required_: No
+
+_Type_: List of <a href="eventsinput.md">EventsInput</a>
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
