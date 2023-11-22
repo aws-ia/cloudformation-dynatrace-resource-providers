@@ -782,14 +782,8 @@ export class Wait extends BaseModel {
     )
     timeoutInMilliseconds?: Optional<number>;
     @Expose({ name: 'Validation' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Object, 'validation', value, obj, [Map]),
-        {
-            toClassOnly: true,
-        }
-    )
-    validation?: Optional<Map<string, object>>;
+    @Type(() => ValidationType)
+    validation?: Optional<Array<ValidationType>>;
 
 }
 

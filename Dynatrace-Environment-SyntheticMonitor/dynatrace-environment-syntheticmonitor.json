@@ -75,9 +75,6 @@
           "maximum": 5
         }
       },
-      "required": [
-        "ConsecutiveRuns"
-      ],
       "additionalProperties": false
     },
     "LocalOutagePolicy": {
@@ -96,10 +93,6 @@
           "maximum": 5
         }
       },
-      "required": [
-        "AffectedLocations",
-        "ConsecutiveRuns"
-      ],
       "additionalProperties": false
     },
     "LoadingTimeThresholdsPolicy": {
@@ -748,6 +741,7 @@
     "Enabled"
   ],
   "writeOnlyProperties": [
+    "/properties/AnomalyDetection",
     "/properties/Tags"
   ],
   "readOnlyProperties": [

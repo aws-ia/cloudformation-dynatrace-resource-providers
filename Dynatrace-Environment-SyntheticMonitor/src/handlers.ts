@@ -27,7 +27,8 @@ type SyntheticMonitorPayload = {
     script?: { [key: string]: any },
     events?: any[],
     userAgent?: string,
-    bandwidth?: any
+    bandwidth?: any,
+    anomalyDetection?: any
 };
 
 type SyntheticMonitorsPayload = {
@@ -368,10 +369,6 @@ class Resource extends AbstractDynatraceResource<ResourceModel, AxiosResponse<Sy
             const a = await new DynatraceClient(typeConfiguration?.dynatraceAccess.endpoint, typeConfiguration?.dynatraceAccess.token, this.userAgent).doRequest<SyntheticMonitorPayload>(
               'get',
               `/api/v1/synthetic/monitors/${model.entityId}`);
-            // console.log({
-            //     getResult: a.status,
-            //     getReturnData: a.data
-            // })
             return a;
         } catch (e) {
             // console.log({
@@ -391,7 +388,6 @@ class Resource extends AbstractDynatraceResource<ResourceModel, AxiosResponse<Sy
     }
 
     async create(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<AxiosResponse<SyntheticMonitorPayload>> {
-        // console.log('>>>> CREATE')
         try {
             const a = await new DynatraceClient(typeConfiguration?.dynatraceAccess.endpoint, typeConfiguration?.dynatraceAccess.token, this.userAgent).doRequest<SyntheticMonitorPayload>(
               'post',
@@ -441,13 +437,6 @@ class Resource extends AbstractDynatraceResource<ResourceModel, AxiosResponse<Sy
             return model;
         }
 
-        // console.log('======================')
-        // console.log({
-        //     model: JSON.stringify(model),
-        //     from: JSON.stringify(from.data)
-        // })
-        // console.log('======================')
-
         if (!from.data.events){
             from.data.events = []
         }
@@ -468,6 +457,7 @@ class Resource extends AbstractDynatraceResource<ResourceModel, AxiosResponse<Sy
         });
         delete resourceModel.tags;
         delete (<any>resourceModel)?.requests;
+        delete (<any>resourceModel)?.anomalyDetection;
         delete (<any>resourceModel)?.script?.configuration?.chromiumStartupFlags;
         return resourceModel;
     }
