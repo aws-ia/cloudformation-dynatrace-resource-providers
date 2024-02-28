@@ -1,0 +1,28 @@
+Resources:
+  Actor: "DYNATRACE_USER_ID"
+  Title: "CTv1 Workflow"
+  Description: "Test workflow managed by CTv1"
+  IsPrivate: true
+  Owner: "DYNATRACE_USER_ID"
+  Tasks:
+    - Name: "http_request_1"
+      Description: "Issue an HTTP request to any API"
+      Action: "dynatrace.automations:http-function"
+      Input:
+        url: "https://example.com"
+        payload: "{}",
+        failOnResponseCodes: "400-599"
+      Position:
+        X: 0
+        Y: 1
+  Throttle:
+    IsLimitHit: false
+    LimitEvents: [ ]
+  Trigger:
+    Schedule:
+      Rule: null
+      Trigger:
+        Type: "cron"
+        Cron: "0 0 * * * "
+      Timezone: "Europe/Paris"
+      IsActive: false
