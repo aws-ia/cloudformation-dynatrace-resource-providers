@@ -12,7 +12,7 @@ import {
 } from './models';
 import {AbstractDynatraceResource} from '../../Dynatrace-Common/src/abstract-dynatrace-resource'
 import {CaseTransformer, Transformer} from "../../Dynatrace-Common/src/util";
-import {DynatraceOAuthClient} from './dynatrace-oauth-client';
+import {DynatraceOAuthClient} from '../../Dynatrace-Common/src/dynatrace-oauth-client';
 import {version} from "../package.json";
 import {Task, Workflow} from "@dynatrace-sdk/client-automation";
 import {PaginatedResponseType} from "../../Dynatrace-Common/src/dynatrace-client";

@@ -1,4 +1,4 @@
-import {DynatraceClient} from "../../Dynatrace-Common/src/dynatrace-client";
+import {DynatraceClient} from "./dynatrace-client";
 import axios, {AxiosResponse} from "axios";
 
 export class DynatraceOAuthClient extends DynatraceClient {
