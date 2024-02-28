@@ -7,7 +7,6 @@ import {
     IntervalTrigger,
     ResourceModel,
     ScheduleRequest,
-    Task,
     TimeTrigger,
     TypeConfigurationModel
 } from './models';
@@ -15,7 +14,7 @@ import {AbstractDynatraceResource} from '../../Dynatrace-Common/src/abstract-dyn
 import {CaseTransformer, Transformer} from "../../Dynatrace-Common/src/util";
 import {DynatraceOAuthClient} from './dynatrace-oauth-client';
 import {version} from "../package.json";
-import {Workflow} from "@dynatrace-sdk/client-automation";
+import {Task, Workflow} from "@dynatrace-sdk/client-automation";
 import {PaginatedResponseType} from "../../Dynatrace-Common/src/dynatrace-client";
 import {Expose, plainToClass, Transform, Type} from "class-transformer";
 import {
@@ -87,24 +86,24 @@ class Resource extends AbstractDynatraceResource<ResourceModel, Workflow, Workfl
             return model;
         }
 
-        // Our schema accepts tasks as a list of `Task`, this is to be able to perform schema validation on the input JSON
-        // However, the API returns an object where each key is the task name. So we transform this particular key here.
-        const tasks = Object.values({...from.tasks});
+        const transformedFrom = Transformer.for(from)
+            .transformKeys(CaseTransformer.IDENTITY)
+            .forModelIngestion()
+            .transform();
 
         const result = new ResourceModel({
             ...model,
-            ...Transformer.for(from)
-                .transformKeys(CaseTransformer.IDENTITY)
-                .forModelIngestion()
-                .transform(),
-            // tasks
+            ...transformedFrom,
+            // Our schema accepts tasks as a list of `Task`, this is to be able to perform schema validation on the input JSON
+            // However, the API returns an object where each key is the task name. So we transform this particular key here.
+            tasks: Object.values({...transformedFrom.tasks})
         });
 
         // The command `cfn generate` uses the type `object` if a property is defined with a `oneOf` or `anyOf`.
         // To properly support the parsing and such property, we define our own class below, using the `discriminator`
         // to tell `class-transformer` which type we need to use in which case, then we rewrite the generic `object`-typed
         // property with the rightly typed object.
-
+        //
         // In this case, we need to do this for `Trigger.Schedule` and `Trigger.eventTrigger`
         if (result.trigger?.schedule) {
             result.trigger.schedule = plainToClass(
@@ -114,7 +113,6 @@ class Resource extends AbstractDynatraceResource<ResourceModel, Workflow, Workfl
                     .transform(),
                 {excludeExtraneousValues: true});
         }
-
         if (result.trigger?.eventTrigger) {
             result.trigger.eventTrigger = plainToClass(
                 EventTriggerRequestWithOneOfTrigger,
@@ -128,16 +126,18 @@ class Resource extends AbstractDynatraceResource<ResourceModel, Workflow, Workfl
     }
 
     setPayloadFrom(model: ResourceModel) {
-        // Our schema accepts tasks as a list of `Task`, this is to be able to perform schema validation on the input JSON
-        // However, the API takes an object where each key is the task name. So we transform this particular key here.
+        const payloadFromModel = Transformer.for(model.toJSON())
+            .transformKeys(CaseTransformer.PASCAL_TO_CAMEL)
+            .transform();
+
         return {
-            ...Transformer.for(model.toJSON())
-                .transformKeys(CaseTransformer.PASCAL_TO_CAMEL)
-                .transform(),
-            // tasks: model.tasks?.reduce((map, task) => {
-            //     map[task.name] = task;
-            //     return map
-            // }, {} as Record<string, Task>)
+            ...payloadFromModel,
+            // Our schema accepts tasks as a list of `Task`, this is to be able to perform schema validation on the input JSON
+            // However, the API takes an object where each key is the task name. So we transform this particular key here.
+            tasks: payloadFromModel.tasks?.reduce((map: Record<string, Task>, task: Task) => {
+                map[task.name] = task;
+                return map;
+            }, {})
         };
     }
 
@@ -181,7 +181,7 @@ class EventTriggerRequestWithOneOfTrigger extends EventTriggerRequest {
     @Expose({name: 'TriggerConfiguration'})
     @Transform(
         (value: any, obj: any) =>
-            transformValue(Object, 'triggerConfiguration', value, obj, [Map]),
+            transformValue(Object, 'triggerConfiguration', value, obj, []),
         {
             toClassOnly: true,
         }
