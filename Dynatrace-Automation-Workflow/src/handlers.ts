@@ -92,7 +92,6 @@ class Resource extends AbstractDynatraceResource<ResourceModel, Workflow, Workfl
             .transform();
 
         const result = new ResourceModel({
-            ...model,
             ...transformedFrom,
             // Our schema accepts tasks as a list of `Task`, this is to be able to perform schema validation on the input JSON
             // However, the API returns an object where each key is the task name. So we transform this particular key here.
