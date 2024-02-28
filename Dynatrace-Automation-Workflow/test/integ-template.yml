@@ -1,28 +1,53 @@
 Resources:
-  Actor: "DYNATRACE_USER_ID"
-  Title: "CTv1 Workflow"
-  Description: "Test workflow managed by CTv1"
-  IsPrivate: true
-  Owner: "DYNATRACE_USER_ID"
-  Tasks:
-    - Name: "http_request_1"
-      Description: "Issue an HTTP request to any API"
-      Action: "dynatrace.automations:http-function"
-      Input:
-        url: "https://example.com"
-        payload: "{}",
-        failOnResponseCodes: "400-599"
-      Position:
-        X: 0
-        Y: 1
-  Throttle:
-    IsLimitHit: false
-    LimitEvents: [ ]
-  Trigger:
-    Schedule:
-      Rule: null
+  IntegrationWorkflow:
+    Type: Dynatrace::Automation::Workflow
+    Properties:
+      Actor: "DYNATRACE_USER_ID"
+      Title: "Integration Test Workflow"
+      Description: "Test workflow used for integration test"
+      IsPrivate: true
+      Owner: "DYNATRACE_USER_ID"
+      Tasks:
+        - Name: "http_request_1"
+          Description: "Issue an HTTP request to any API"
+          Action: "dynatrace.automations:http-function"
+          Input:
+            url: "https://example.com"
+            payload: "{}"
+            failOnResponseCodes: "400-599"
+          Position:
+            X: 0
+            Y: 1
+        - Name: "run_javascript_1"
+          Description: "Build a custom task running js Code"
+          Action: "dynatrace.automations:run-javascript"
+          Input:
+            script: |-
+              // optional import of sdk modules
+              import { execution } from '@dynatrace-sdk/automation-utils';
+              
+              export default async function ({ execution_id }) {
+                // your code goes here
+                // e.g. get the current execution
+                const ex = await execution(execution_id);
+                console.log('Automated script execution on behalf of', ex.trigger);
+              
+                return { triggeredBy: ex.trigger };
+              }
+          Position:
+            X: 0
+            Y: 2
+      Throttle:
+        IsLimitHit: false
+        LimitEvents: [ ]
       Trigger:
-        Type: "cron"
-        Cron: "0 0 * * * "
-      Timezone: "Europe/Paris"
-      IsActive: false
+        Schedule:
+          Trigger:
+            Type: "cron"
+            Cron: "0 0 * * * "
+          Timezone: "Europe/Paris"
+          IsActive: true
+
+Outputs:
+  WorkflowId:
+    Value: !GetAtt IntegrationWorkflow.Id
