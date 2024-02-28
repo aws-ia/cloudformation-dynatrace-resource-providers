@@ -7,6 +7,7 @@ export type ApiError = {
     code: number
     message: string
     constraintViolations?: ConstraintViolation[]
+    details?: Record<string, unknown>
 }
 export type ConstraintViolation = {
     path: string
@@ -21,9 +22,9 @@ export type PaginatedResponseType = {
 }
 
 export class DynatraceClient {
-    private readonly baseUrl: string;
+    protected readonly baseUrl: string;
     private readonly apiToken: string;
-    private readonly userAgent: string;
+    protected readonly userAgent: string;
 
     constructor(baseUrl: string, apiToken: string, userAgent?: string) {
         this.baseUrl = baseUrl;

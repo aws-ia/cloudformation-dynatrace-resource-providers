@@ -1,0 +1,16 @@
+{
+    "Actor": null,
+    "Title": "CTv1 Workflow",
+    "Description": "Test workflow managed by CTv1",
+    "IsPrivate": true,
+    "Owner": null,
+    "OwnerType": "USER",
+    "Tasks": [
+        {
+            "Action": "dynatrace.automations:run-javascript",
+            "Name": "Task #1"
+        }
+    ],
+    "Throttle": null,
+    "Trigger": null
+}

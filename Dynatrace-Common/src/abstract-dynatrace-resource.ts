@@ -16,6 +16,10 @@ export abstract class AbstractDynatraceResource<ResourceModelType extends BaseMo
             errorMessage += '\n' + apiErrorResponse.error.constraintViolations.map(cv => `[PATH: ${cv.path}] ${cv.message}`).join('\n');
         }
 
+        if (apiErrorResponse?.error.details) {
+            errorMessage += '\n' + Object.entries(apiErrorResponse.error.details).map(([path, detail]) => `[PATH: ${path}] ${JSON.stringify(detail)}`).join('\n');
+        }
+
         const status = e.status
             ? parseInt(e.status)
             : e.response
