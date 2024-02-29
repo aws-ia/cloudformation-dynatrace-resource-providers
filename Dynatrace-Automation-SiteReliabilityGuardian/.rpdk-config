@@ -1,0 +1,34 @@
+{
+    "artifact_type": "RESOURCE",
+    "typeName": "Dynatrace::Automation::SiteReliabilityGuardian",
+    "language": "typescript",
+    "runtime": "nodejs18.x",
+    "entrypoint": "dist/Dynatrace-Automation-SiteReliabilityGuardian/src/handlers.entrypoint",
+    "testEntrypoint": "dist/Dynatrace-Automation-SiteReliabilityGuardian/src/handlers.testEntrypoint",
+    "settings": {
+        "version": false,
+        "subparser_name": null,
+        "verbose": 0,
+        "force": false,
+        "type_name": null,
+        "artifact_type": null,
+        "endpoint_url": null,
+        "region": null,
+        "target_schemas": [],
+        "useDocker": false,
+        "protocolVersion": "2.0.0"
+
+    },
+    "contractSettings":{
+        "typeConfiguration": {
+            "configuration": {
+                "DynatraceOAuthAccess": {
+                    "ClientId": "{{resolve:ssm-secure:/cfn/dynatrace/client/id:3}}",
+                    "ClientSecret": "{{resolve:ssm-secure:/cfn/dynatrace/client/secret:1}}",
+                    "Endpoint": "{{resolve:ssm-secure:/cfn/dynatrace/endpoint:1}}"
+                }
+            },
+            "configurationAlias": "default"
+        }
+    }
+}
