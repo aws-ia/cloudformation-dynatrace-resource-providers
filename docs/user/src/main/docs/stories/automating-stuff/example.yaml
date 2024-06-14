@@ -1,0 +1,84 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: |
+  The following CloudFormation Dynatrace resource types  # TODO
+
+Parameters:
+  TargetCO2:
+    Type: Number
+    Default: 40
+  WarningCO2:
+    Type: Number
+    Default: 30
+  TargetUtilization:
+    Type: Number
+    Default: 10
+  WarningUtilization:
+    Type: Number
+    Default: 15
+
+Resources:
+
+  Workflow:
+    Type: Dynatrace::Automation::Workflow
+    Properties:
+      Actor: 4d02a174-f96f-4683-8388-53d7aef9d3cf
+      Owner: 4d02a174-f96f-4683-8388-53d7aef9d3cf
+      Title: 'Well-architected Six Pillars Evaluation - Sustainability'
+      Description: 'Well-architected Six Pillars Workflow with Guardians by Cloudformation'
+      IsPrivate: 'false'
+#      TriggerType: Event
+      Trigger:
+        EventTrigger:
+#          FilterQuery: "event.type == \"guardian.validation.triggered\" \n AND tag.service==\"RELEASE_PRODUCT\" AND tag.stage==\"RELEASE_STAGE\""
+          IsActive: true
+          TriggerConfiguration:
+            Type: "event"
+            Value:
+              EventType: bizevents
+              Query: "event.type == \"guardian.validation.triggered\" \n AND tag.service==\"RELEASE_PRODUCT\" AND tag.stage==\"RELEASE_STAGE\""
+      Tasks:
+        - Name: sustainability
+          Description: Sustainability Validation
+          Action: dynatrace.site.reliability.guardian:validate-guardian-action
+          Input:
+            objectId: !GetAtt SustainabilitySRG.ObjectId
+            executionId: '{{ execution().id }}'
+            expressionTo: '{{ event()[''timeframe.to''] }}'
+            expressionFrom: '{{ event()[''timeframe.from''] }}'
+            timeframeSelector:
+              to: now
+              from_: now-40m
+            timeframeInputType: expression
+
+          Position:
+            X: 0
+            Y: 4
+
+
+  SustainabilitySRG:
+    Type: Dynatrace::Automation::SiteReliabilityGuardian
+    Properties:
+      Name: Sustainability
+      Description: Sustainability Guardian
+      Tags:
+        - "usecase:sixpillars"
+      Variables:
+        - Name: version
+          Definition: "1.0.0"
+      Objectives:
+        - Name: Carbon Emission total for the host running the application
+          Description: The host id to be referenced as a parameter from the workflow
+          ObjectiveType: DQL
+          DqlQuery: 'fetch bizevents, from: -2h | filter event.type == "carbon.report" | filter dt.entity.host == "HOST-ID" | summarize toDouble(sum(emissions)), alias:total // total CO2e in grams'
+          ComparisonOperator: LESS_THAN_OR_EQUAL
+          Target: !Ref TargetCO2
+          Warning: !Ref WarningCO2
+        - Name: Under-utilized memory resource validation
+          Description: Identify underutilized memory by querying the memory usage with the memory limit in Kubernetes cluster
+          ObjectiveType: DQL
+          DqlQuery: 'timeseries memory=avg(dt.containers.memory.usage_percent), by:dt.entity.host | filter dt.entity.host == "HOST-ID" | fields avg = arrayAvg(memory) // in percentage '
+          ComparisonOperator: GREATER_THAN_OR_EQUAL
+          Target: !Ref TargetUtilization
+          Warning: !Ref WarningUtilization
