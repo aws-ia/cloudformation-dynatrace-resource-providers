@@ -1,8 +1,5 @@
 import {
     CronTrigger,
-    DavisEventTrigger,
-    DavisProblemTrigger,
-    EventTrigger,
     EventTriggerRequest,
     IntervalTrigger,
     ResourceModel,
@@ -14,7 +11,7 @@ import {AbstractDynatraceResource} from '../../Dynatrace-Common/src/abstract-dyn
 import {CaseTransformer, Transformer} from "../../Dynatrace-Common/src/util";
 import {DynatraceOAuthClient} from '../../Dynatrace-Common/src/dynatrace-oauth-client';
 import {version} from "../package.json";
-import {Task, Workflow} from "@dynatrace-sdk/client-automation";
+import {DavisProblemTriggerConfigType, Task, Workflow} from "@dynatrace-sdk/client-automation";
 import {PaginatedResponseType} from "../../Dynatrace-Common/src/dynatrace-client";
 import {Expose, plainToClass, Transform, Type} from "class-transformer";
 import {
@@ -33,6 +30,9 @@ class Resource extends AbstractDynatraceResource<ResourceModel, Workflow, Workfl
 
     async get(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<Workflow> {
         const scopes = ['automation:workflows:read'];
+        if (!model.id) {
+            throw new Error("No model ID");
+        }
         const response = await new DynatraceOAuthClient(typeConfiguration?.dynatraceOAuthAccess.endpoint, typeConfiguration?.dynatraceOAuthAccess.clientId, typeConfiguration.dynatraceOAuthAccess.clientSecret, scopes, this.userAgent).doRequest<Workflow>(
             'get',
             `/platform/automation/v1/workflows/${model.id}`);
@@ -112,14 +112,6 @@ class Resource extends AbstractDynatraceResource<ResourceModel, Workflow, Workfl
                     .transform(),
                 {excludeExtraneousValues: true});
         }
-        if (result.trigger?.eventTrigger) {
-            result.trigger.eventTrigger = plainToClass(
-                EventTriggerRequestWithOneOfTrigger,
-                Transformer.for(from.trigger?.eventTrigger)
-                    .transformKeys(CaseTransformer.CAMEL_TO_PASCAL)
-                    .transform(),
-                {excludeExtraneousValues: true});
-        }
 
         return result;
     }
@@ -163,29 +155,6 @@ class ScheduleRequestWithOneOfTrigger extends ScheduleRequest {
         }
     )
     trigger?: Optional<CronTrigger | IntervalTrigger | TimeTrigger>;
-}
-
-class EventTriggerRequestWithOneOfTrigger extends EventTriggerRequest {
-    @Type(() => BaseModel, {
-        discriminator: {
-            property: 'Type',
-            subTypes: [
-                {value: DavisEventTrigger, name: 'davis-event'},
-                {value: DavisProblemTrigger, name: 'davis-problem'},
-                {value: EventTrigger, name: 'event'},
-            ],
-        },
-        keepDiscriminatorProperty: true
-    })
-    @Expose({name: 'TriggerConfiguration'})
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Object, 'triggerConfiguration', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    triggerConfiguration?: Optional<DavisEventTrigger | DavisProblemTrigger | EventTrigger>;
 }
 
 // @ts-ignore // if running against v1.0.1 or earlier of plugin the 5th argument is not known but best to ignored (runtime code may warn)

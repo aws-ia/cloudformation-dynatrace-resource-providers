@@ -32,12 +32,12 @@ export class ResourceModel extends BaseModel {
     @Expose({ name: 'Tags' })
     @Transform(
         (value: any, obj: any) =>
-            transformValue(Tag, 'tags', value, obj, [Set]),
+            transformValue(String, 'tags', value, obj, [Set]),
         {
             toClassOnly: true,
         }
     )
-    tags?: Optional<Set<Tag>>;
+    tags?: Optional<Set<string>>;
     @Expose({ name: 'Variables' })
     @Type(() => Variable)
     variables?: Optional<Array<Variable>>;
@@ -71,31 +71,6 @@ export class ResourceModel extends BaseModel {
         // only return the identifiers if any can be used
         return identifiers.length === 0 ? null : identifiers;
     }
-}
-
-export class Tag extends BaseModel {
-    ['constructor']: typeof Tag;
-
-
-    @Expose({ name: 'Key' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'key', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    key?: Optional<string>;
-    @Expose({ name: 'Value' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'value_', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    value_?: Optional<string>;
-
 }
 
 export class Variable extends BaseModel {

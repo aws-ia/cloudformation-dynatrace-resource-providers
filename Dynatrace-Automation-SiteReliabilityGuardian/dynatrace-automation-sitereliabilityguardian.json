@@ -28,16 +28,7 @@
             "additionalProperties": false
         },
         "Tag": {
-            "type": "object",
-            "properties": {
-                "Key": {
-                    "type": "string"
-                },
-                "Value": {
-                    "type": "string"
-                }
-            },
-            "additionalProperties": false
+            "type": "string"
         },
         "Variable": {
             "type": "object",

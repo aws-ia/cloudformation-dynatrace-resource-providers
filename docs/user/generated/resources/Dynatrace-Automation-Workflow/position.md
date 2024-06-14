@@ -1,4 +1,6 @@
-# Dynatrace::Automation::Workflow DavisEventName
+# Dynatrace::Automation::Workflow Position
+
+Layouting information about the task tile when visualized. If not specified Dynatrace will position the task tiles automatically
 
 ## Syntax
 
@@ -8,35 +10,37 @@ To declare this entity in your AWS CloudFormation template, use the following sy
 
 <pre>
 {
-    "<a href="#match" title="Match">Match</a>" : <i>String</i>,
-    "<a href="#name" title="Name">Name</a>" : <i>String</i>
+    "<a href="#x" title="X">X</a>" : <i>Integer</i>,
+    "<a href="#y" title="Y">Y</a>" : <i>Integer</i>
 }
 </pre>
 
 ### YAML
 
 <pre>
-<a href="#match" title="Match">Match</a>: <i>String</i>
-<a href="#name" title="Name">Name</a>: <i>String</i>
+<a href="#x" title="X">X</a>: <i>Integer</i>
+<a href="#y" title="Y">Y</a>: <i>Integer</i>
 </pre>
 
 ## Properties
 
-#### Match
+#### X
+
+x-coordinate for layouting
 
 _Required_: Yes
 
-_Type_: String
-
-_Allowed Values_: <code>Contains</code> | <code>Equals</code>
+_Type_: Integer
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
-#### Name
+#### Y
+
+y-coordinate for layouting
 
 _Required_: Yes
 
-_Type_: String
+_Type_: Integer
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 

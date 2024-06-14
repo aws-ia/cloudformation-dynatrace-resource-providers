@@ -14,7 +14,7 @@ To declare this entity in your AWS CloudFormation template, use the following sy
     "Properties" : {
         "<a href="#name" title="Name">Name</a>" : <i>String</i>,
         "<a href="#description" title="Description">Description</a>" : <i>String</i>,
-        "<a href="#tags" title="Tags">Tags</a>" : <i>[ <a href="tag.md">Tag</a>, ... ]</i>,
+        "<a href="#tags" title="Tags">Tags</a>" : <i>[ String, ... ]</i>,
         "<a href="#variables" title="Variables">Variables</a>" : <i>[ <a href="variable.md">Variable</a>, ... ]</i>,
         "<a href="#objectives" title="Objectives">Objectives</a>" : <i>[ <a href="objective.md">Objective</a>, ... ]</i>,
     }
@@ -29,7 +29,7 @@ Properties:
     <a href="#name" title="Name">Name</a>: <i>String</i>
     <a href="#description" title="Description">Description</a>: <i>String</i>
     <a href="#tags" title="Tags">Tags</a>: <i>
-      - <a href="tag.md">Tag</a></i>
+      - String</i>
     <a href="#variables" title="Variables">Variables</a>: <i>
       - <a href="variable.md">Variable</a></i>
     <a href="#objectives" title="Objectives">Objectives</a>: <i>
@@ -72,7 +72,7 @@ Define key/value pairs that further describe this guardian.
 
 _Required_: Yes
 
-_Type_: List of <a href="tag.md">Tag</a>
+_Type_: List of String
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 

@@ -216,8 +216,8 @@
         "EventType": {
           "type": "string",
           "enum": [
-            "Bizevents",
-            "Events"
+            "bizevents",
+            "events"
           ]
         },
         "Query": {
@@ -251,7 +251,46 @@
     },
     "EventTriggerConfig": {
       "type": "object",
-      "description": "If specified the workflow is getting triggered based on events"
+      "description": "If specified the workflow is getting triggered based on events",
+      "additionalProperties": false,
+      "properties": {
+        "Names": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DavisEventName"
+          },
+          "insertionOrder": true
+        },        "Categories": {
+          "$ref": "#/definitions/DavisProblemCategories"
+        },
+        "CustomFilters": {
+          "type": "string"
+        },
+        "EntityTags": {
+          "type": "object"
+        },
+        "EntityTagsMatch": {
+          "type": "string",
+          "enum": [
+            "All",
+            "Any"
+          ]
+        },
+        "OnProblemClose": {
+          "type": "boolean",
+          "default": false
+        },
+        "EventType": {
+          "type": "string",
+          "enum": [
+            "bizevents",
+            "events"
+          ]
+        },
+        "Query": {
+          "type": "string"
+        }
+      }
     },
     "EventTriggerRequest": {
       "type": "object",
@@ -261,17 +300,21 @@
           "description": "If specified the workflow is getting triggered based on a schedule"
         },
         "TriggerConfiguration": {
-          "oneOf": [
-            {
-              "$ref": "#/definitions/DavisEventTrigger"
+          "type": "object",
+          "properties": {
+            "Type": {
+              "type": "string",
+              "enum": [
+                "davis-event",
+                "davis-problem",
+                "event"
+              ]
             },
-            {
-              "$ref": "#/definitions/DavisProblemTrigger"
-            },
-            {
-              "$ref": "#/definitions/EventTrigger"
+            "Value": {
+              "$ref": "#/definitions/EventTriggerConfig"
             }
-          ]
+          },
+          "additionalProperties": false
         }
       },
       "additionalProperties": false
@@ -436,7 +479,8 @@
           "enum": [
             "dynatrace.automations:http-function",
             "dynatrace.automations:run-javascript",
-            "dynatrace.automations:execute-dql-query"
+            "dynatrace.automations:execute-dql-query",
+            "dynatrace.site.reliability.guardian:validate-guardian-action"
           ]
         },
         "Active": {

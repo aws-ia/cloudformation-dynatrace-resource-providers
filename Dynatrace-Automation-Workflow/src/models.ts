@@ -373,19 +373,13 @@ export class EventTriggerRequest extends BaseModel {
     )
     isActive?: Optional<boolean>;
     @Expose({ name: 'TriggerConfiguration' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Object, 'triggerConfiguration', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    triggerConfiguration?: Optional<object>;
+    @Type(() => TriggerConfiguration)
+    triggerConfiguration?: Optional<TriggerConfiguration>;
 
 }
 
-export class DavisEventTrigger extends BaseModel {
-    ['constructor']: typeof DavisEventTrigger;
+export class TriggerConfiguration extends BaseModel {
+    ['constructor']: typeof TriggerConfiguration;
 
 
     @Expose({ name: 'Type' })
@@ -398,96 +392,18 @@ export class DavisEventTrigger extends BaseModel {
     )
     type_?: Optional<string>;
     @Expose({ name: 'Value' })
-    @Type(() => DavisEventConfig)
-    value_?: Optional<DavisEventConfig>;
+    @Type(() => EventTriggerConfig)
+    value_?: Optional<EventTriggerConfig>;
 
 }
 
-export class DavisEventConfig extends BaseModel {
-    ['constructor']: typeof DavisEventConfig;
+export class EventTriggerConfig extends BaseModel {
+    ['constructor']: typeof EventTriggerConfig;
 
 
-    @Expose({ name: 'CustomFilters' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'customFilters', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    customFilters?: Optional<string>;
-    @Expose({ name: 'EntityTags' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Object, 'entityTags', value, obj, [Map]),
-        {
-            toClassOnly: true,
-        }
-    )
-    entityTags?: Optional<Map<string, object>>;
-    @Expose({ name: 'EntityTagsMatch' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'entityTagsMatch', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    entityTagsMatch?: Optional<string>;
     @Expose({ name: 'Names' })
     @Type(() => DavisEventName)
     names?: Optional<Array<DavisEventName>>;
-
-}
-
-export class DavisEventName extends BaseModel {
-    ['constructor']: typeof DavisEventName;
-
-
-    @Expose({ name: 'Match' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'match', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    match?: Optional<string>;
-    @Expose({ name: 'Name' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'name', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    name?: Optional<string>;
-
-}
-
-export class DavisProblemTrigger extends BaseModel {
-    ['constructor']: typeof DavisProblemTrigger;
-
-
-    @Expose({ name: 'Type' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'type_', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    type_?: Optional<string>;
-    @Expose({ name: 'Value' })
-    @Type(() => DavisProblemConfig)
-    value_?: Optional<DavisProblemConfig>;
-
-}
-
-export class DavisProblemConfig extends BaseModel {
-    ['constructor']: typeof DavisProblemConfig;
-
-
     @Expose({ name: 'Categories' })
     @Type(() => DavisProblemCategories)
     categories?: Optional<DavisProblemCategories>;
@@ -527,6 +443,49 @@ export class DavisProblemConfig extends BaseModel {
         }
     )
     onProblemClose?: Optional<boolean>;
+    @Expose({ name: 'EventType' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'eventType', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    eventType?: Optional<string>;
+    @Expose({ name: 'Query' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'query', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    query?: Optional<string>;
+
+}
+
+export class DavisEventName extends BaseModel {
+    ['constructor']: typeof DavisEventName;
+
+
+    @Expose({ name: 'Match' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'match', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    match?: Optional<string>;
+    @Expose({ name: 'Name' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'name', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    name?: Optional<string>;
 
 }
 
@@ -597,50 +556,6 @@ export class DavisProblemCategories extends BaseModel {
         }
     )
     slowdown?: Optional<boolean>;
-
-}
-
-export class EventTrigger extends BaseModel {
-    ['constructor']: typeof EventTrigger;
-
-
-    @Expose({ name: 'Type' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'type_', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    type_?: Optional<string>;
-    @Expose({ name: 'Value' })
-    @Type(() => EventQuery)
-    value_?: Optional<EventQuery>;
-
-}
-
-export class EventQuery extends BaseModel {
-    ['constructor']: typeof EventQuery;
-
-
-    @Expose({ name: 'EventType' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'eventType', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    eventType?: Optional<string>;
-    @Expose({ name: 'Query' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'query', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    query?: Optional<string>;
 
 }
 

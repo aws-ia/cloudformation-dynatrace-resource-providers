@@ -52,7 +52,7 @@ To get started:
   For example:
 
   ```Bash
-  $ aws cloudformation set-type-configuration \z`
+  $ aws cloudformation set-type-configuration \`
   --region us-west-2 --type RESOURCE \
   --type-name Dynatrace::Configuration::Dashboard \
   --configuration-alias default \

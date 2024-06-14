@@ -9,7 +9,7 @@
     {
       "Name": "System load",
       "Description": "The average number of processes that are being executed by CPU or waiting to be executed by CPU over the last minute. Update",
-      "ObjectiveType": "DQL Invalid",
+      "ObjectiveType": "DQL",
       "DqlQuery": "timeseries val = avg(dt.host.cpu.load), filter: in(dt.entity.host, {\"HOST-EE6367D3BE521767\"})\n| fields avg = arrayAvg(val)",
       "ComparisonOperator": "LESS_THAN_OR_EQUAL",
       "Target": 50.5,
