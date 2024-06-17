@@ -17,6 +17,12 @@ Parameters:
   WarningCPUUsage:
     Type: Number
     Default: 50
+  TargetVulnerability:
+    Type: Number
+    Default: 8.5
+  WarningVulnerability:
+    Type: Number
+    Default: 7.5
   TargetCO2:
     Type: Number
     Default: 40
@@ -66,6 +72,21 @@ Resources:
           Position:
             X: 0
             Y: 1
+        - Name: security
+          Description: Security Validation
+          Action: dynatrace.site.reliability.guardian:validate-guardian-action
+          Input:
+            objectId: !GetAtt SecuritySRG.ObjectId
+            executionId: '{{ execution().id }}'
+            expressionTo: '{{ event()[''timeframe.to''] }}'
+            expressionFrom: '{{ event()[''timeframe.from''] }}'
+            timeframeSelector:
+              to: now
+              from_: now-10m
+            timeframeInputType: expression
+          Position:
+            X: 0
+            Y: 2
         - Name: sustainability
           Description: Sustainability Validation
           Action: dynatrace.site.reliability.guardian:validate-guardian-action
@@ -100,6 +121,7 @@ Resources:
           ComparisonOperator: LESS_THAN_OR_EQUAL
           Target: !Ref TargetResponseTime
           Warning: !Ref WarningResponseTime
+          # TODO: The DQL query fails the validation from Dynatrace. Is it because we are missing from data or something else?
 #        - Name: CPU usage
 #          Description: Check if process CPU usage is in a valid range. The PROCESS_GROUP_INSTANCE-ID id to be referenced as a parameter from the workflow
 #          ObjectiveType: DQL
@@ -107,6 +129,24 @@ Resources:
 #          ComparisonOperator: LESS_THAN_OR_EQUAL
 #          Target: !Ref TargetCPUUsage
 #          Warning: !Ref WarningCPUUsage
+  SecuritySRG:
+    Type: Dynatrace::Automation::SiteReliabilityGuardian
+    Properties:
+      Name: Security
+      Description: Security Efficiency Guardian
+      Tags:
+        - "usecase:sixpillars"
+      Variables:
+        - Name: version
+          Definition: "1.0.0"
+      Objectives:
+        - Name: Vulnerability Analysis
+          Description: Runtime Vulnerability Analysis for a Process Group Instance – Davis Security Assessment Score
+          ObjectiveType: DQL
+          DqlQuery: 'fetch events | filter event.kind == "SECURITY_EVENT" | filter event.type == "VULNERABILITY_STATE_REPORT_EVENT" | filter event.level == "ENTITY" | filter in("PROCESSGROUP_INSTANCE_ID",affected_entity.affected_processes.ids) | sort timestamp, direction:"descending" | summarize { status=takeFirst(vulnerability.resolution.status), score=takeFirst(vulnerability.davis_assessment.score), affected_processes=takeFirst(affected_entity.affected_processes.ids) }, by: {vulnerability.id, affected_entity.id} | filter status == "OPEN" | summarize maxScore=takeMax(score)'
+          ComparisonOperator: LESS_THAN_OR_EQUAL
+          Target: !Ref TargetVulnerability
+          Warning: !Ref WarningVulnerability
   SustainabilitySRG:
     Type: Dynatrace::Automation::SiteReliabilityGuardian
     Properties:
