@@ -41,6 +41,18 @@ Parameters:
   WarningOptimizeDiskSize:
     Type: Number
     Default: 15
+  TargetAvailability:
+    Type: Number
+    Default: 95
+  WarningAvailability:
+    Type: Number
+    Default: 90
+  TargetOutOfMemory:
+    Type: Number
+    Default: 5
+  WarningOutOfMemory:
+    Type: Number
+    Default: 3
   TargetCO2:
     Type: Number
     Default: 40
@@ -120,6 +132,21 @@ Resources:
           Position:
             X: 0
             Y: 3
+        - Name: reliability
+          Description: Reliability Validation
+          Action: dynatrace.site.reliability.guardian:validate-guardian-action
+          Input:
+            objectId: !GetAtt ReliabilitySRG.ObjectId
+            executionId: '{{ execution().id }}'
+            expressionTo: '{{ event()[''timeframe.to''] }}'
+            expressionFrom: '{{ event()[''timeframe.from''] }}'
+            timeframeSelector:
+              to: now
+              from_: now-10m
+            timeframeInputType: expression
+          Position:
+            X: 0
+            Y: 4
         - Name: sustainability
           Description: Sustainability Validation
           Action: dynatrace.site.reliability.guardian:validate-guardian-action
@@ -134,7 +161,7 @@ Resources:
             timeframeInputType: expression
           Position:
             X: 0
-            Y: 4
+            Y: 6
 
   PerformanceSRG:
     Type: Dynatrace::Automation::SiteReliabilityGuardian
@@ -212,6 +239,31 @@ Resources:
           ComparisonOperator: GREATER_THAN_OR_EQUAL
           Target: !Ref TargetOptimizeDiskSize
           Warning: !Ref WarningOptimizeDiskSize
+  ReliabilitySRG:
+    Type: Dynatrace::Automation::SiteReliabilityGuardian
+    Properties:
+      Name: Reliability
+      Description: Reliability Guardian
+      Tags:
+        - "usecase:sixpillars"
+      Variables:
+        - Name: version
+          Definition: "1.0.0"
+      Objectives:
+        - Name: Availability validation
+          Description: Success Rate – Availability Validation with Synthetic Monitoring
+          ObjectiveType: DQL
+          DqlQuery: 'fetch logs | filter log.source == "logs/requests" | parse content,"JSON:request" | fieldsAdd httpRequest = request[httpRequest] | fieldsAdd httpStatus = httpRequest[status] | fieldsAdd success = toLong(httpStatus < 400) | summarize successRate = sum(success)/count() * 100 // in percentage'
+          ComparisonOperator: LESS_THAN_OR_EQUAL
+          Target: !Ref TargetAvailability
+          Warning: !Ref WarningAvailability
+        - Name: Out Of Memory validation
+          Description: Number of Out of memory (OOM) kills of a container in the pod to be less than 5
+          ObjectiveType: DQL
+          DqlQuery: 'timeseries oom_kills = avg(dt.kubernetes.container.oom_kills), filter: in(k8s.cluster.name,"CLUSTER-NAME") and in(k8s.namespace.name,"NAMESPACE-NAME") and in(k8s.workload.kind,"statefulset") and in (k8s.workload.name,"cassandra-workload-1") | fields sum = arraySum(oom_kills) // num of oom_kills'
+          ComparisonOperator: LESS_THAN_OR_EQUAL
+          Target: !Ref TargetAvailability
+          Warning: !Ref WarningAvailability
   SustainabilitySRG:
     Type: Dynatrace::Automation::SiteReliabilityGuardian
     Properties:
