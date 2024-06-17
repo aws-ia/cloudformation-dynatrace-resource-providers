@@ -23,6 +23,24 @@ Parameters:
   WarningVulnerability:
     Type: Number
     Default: 7.5
+  TargetOptimizeCPU:
+    Type: Number
+    Default: 10
+  WarningOptimizeCPU:
+    Type: Number
+    Default: 15
+  TargetOptimizeResponseTime:
+    Type: Number
+    Default: 300
+  WarningOptimizeResponseTime:
+    Type: Number
+    Default: 200
+  TargetOptimizeDiskSize:
+    Type: Number
+    Default: 10
+  WarningOptimizeDiskSize:
+    Type: Number
+    Default: 15
   TargetCO2:
     Type: Number
     Default: 40
@@ -82,11 +100,26 @@ Resources:
             expressionFrom: '{{ event()[''timeframe.from''] }}'
             timeframeSelector:
               to: now
-              from_: now-10m
+              from_: now-60m
             timeframeInputType: expression
           Position:
             X: 0
             Y: 2
+        - Name: cost
+          Description: Cost Optimization Validation
+          Action: dynatrace.site.reliability.guardian:validate-guardian-action
+          Input:
+            objectId: !GetAtt CostOptimizationSRG.ObjectId
+            executionId: '{{ execution().id }}'
+            expressionTo: '{{ event()[''timeframe.to''] }}'
+            expressionFrom: '{{ event()[''timeframe.from''] }}'
+            timeframeSelector:
+              to: now
+              from_: now-10m
+            timeframeInputType: expression
+          Position:
+            X: 0
+            Y: 3
         - Name: sustainability
           Description: Sustainability Validation
           Action: dynatrace.site.reliability.guardian:validate-guardian-action
@@ -147,6 +180,38 @@ Resources:
           ComparisonOperator: LESS_THAN_OR_EQUAL
           Target: !Ref TargetVulnerability
           Warning: !Ref WarningVulnerability
+  CostOptimizationSRG:
+    Type: Dynatrace::Automation::SiteReliabilityGuardian
+    Properties:
+      Name: Cost Optimization
+      Description: Cost Optimization Guardian
+      Tags:
+        - "usecase:sixpillars"
+      Variables:
+        - Name: version
+          Definition: "1.0.0"
+      Objectives:
+        - Name: Optimize container CPU limit
+          Description: Reduce CPU size and cost by checking CPU usage
+          ObjectiveType: DQL
+          DqlQuery: 'timeseries cpu = avg(dt.containers.cpu.usage_percent), filter: in(dt.containers.name, "CONTAINER-NAME") | fields avg = arrayAvg(cpu) // in percentage'
+          ComparisonOperator: GREATER_THAN_OR_EQUAL
+          Target: !Ref TargetOptimizeCPU
+          Warning: !Ref WarningOptimizeCPU
+        - Name: Response Time of the container
+          Description: Response time of the container that is subject to CPU reduction objective due to Cost Optimization
+          ObjectiveType: DQL
+          DqlQuery: "fetch logs | filter k8s.container.name == \"CONTAINER-NAME\" | filter k8s.namespace.name == \"CONTAINER-NAMESPACE\" | filter matchesPhrase(content, \"/api/uri/path\") | parse content, \"DATA '/api/uri/path' DATA 'rt:' SPACE? FLOAT:responsetime \" | filter isNotNull(responsetime) | summarize avg(responsetime) // in milliseconds"
+          ComparisonOperator: LESS_THAN_OR_EQUAL
+          Target: !Ref TargetOptimizeResponseTime
+          Warning: !Ref WarningOptimizeResponseTime
+        - Name: Optimize disk size
+          Description: Reduce disk size and re-validate
+          ObjectiveType: DQL
+          DqlQuery: 'timeseries disk_used = avg(dt.host.disk.used.percent), filter: in(dt.entity.host,"HOST_ID") | fields avg = arrayAvg(disk_used) // in percentage'
+          ComparisonOperator: GREATER_THAN_OR_EQUAL
+          Target: !Ref TargetOptimizeDiskSize
+          Warning: !Ref WarningOptimizeDiskSize
   SustainabilitySRG:
     Type: Dynatrace::Automation::SiteReliabilityGuardian
     Properties:
