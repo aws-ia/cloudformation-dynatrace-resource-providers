@@ -5,6 +5,18 @@ Description: |
   The following CloudFormation Dynatrace resource types  # TODO
 
 Parameters:
+  TargetResponseTime:
+    Type: Number
+    Default: 500
+  WarningResponseTime:
+    Type: Number
+    Default: 400
+  TargetCPUUsage:
+    Type: Number
+    Default: 60
+  WarningCPUUsage:
+    Type: Number
+    Default: 50
   TargetCO2:
     Type: Number
     Default: 40
@@ -39,8 +51,8 @@ Resources:
               EventType: bizevents
               Query: "event.type == \"guardian.validation.triggered\" \n AND tag.service==\"RELEASE_PRODUCT\" AND tag.stage==\"RELEASE_STAGE\""
       Tasks:
-        - Name: sustainability
-          Description: Sustainability Validation
+        - Name: performance
+          Description: Performance Validation
           Action: dynatrace.site.reliability.guardian:validate-guardian-action
           Input:
             objectId: !GetAtt SustainabilitySRG.ObjectId
@@ -49,14 +61,52 @@ Resources:
             expressionFrom: '{{ event()[''timeframe.from''] }}'
             timeframeSelector:
               to: now
+              from_: now-10m
+            timeframeInputType: expression
+          Position:
+            X: 0
+            Y: 1
+        - Name: sustainability
+          Description: Sustainability Validation
+          Action: dynatrace.site.reliability.guardian:validate-guardian-action
+          Input:
+            objectId: !GetAtt PerformanceSRG.ObjectId
+            executionId: '{{ execution().id }}'
+            expressionTo: '{{ event()[''timeframe.to''] }}'
+            expressionFrom: '{{ event()[''timeframe.from''] }}'
+            timeframeSelector:
+              to: now
               from_: now-40m
             timeframeInputType: expression
-
           Position:
             X: 0
             Y: 4
 
-
+  PerformanceSRG:
+    Type: Dynatrace::Automation::SiteReliabilityGuardian
+    Properties:
+      Name: Performance
+      Description: Performance Efficiency Guardian
+      Tags:
+        - "usecase:sixpillars"
+      Variables:
+        - Name: version
+          Definition: "1.0.0"
+      Objectives:
+        - Name: Response time under high
+          Description: Validate if response time is increasing under high load utilizing OpenTelemetry spans
+          ObjectiveType: DQL
+          DqlQuery: 'fetch spans | filter endpoint.name == "/api/getProducts" | filter k8s.namespace.name == "catalog" | filter k8s.container.name == "product-service" | filter http.status_code == 200 | summarize avg(duration) // in milliseconds'
+          ComparisonOperator: LESS_THAN_OR_EQUAL
+          Target: !Ref TargetResponseTime
+          Warning: !Ref WarningResponseTime
+#        - Name: CPU usage
+#          Description: Check if process CPU usage is in a valid range. The PROCESS_GROUP_INSTANCE-ID id to be referenced as a parameter from the workflow
+#          ObjectiveType: DQL
+#          DqlQuery: 'timeseries val=avg(dt.process.cpu.usage), filter:dt.entity.process_group_instance in ["PROCESS_GROUP_INSTANCE-ID"] | fields avg = arrayAvg(val) // in percentage'
+#          ComparisonOperator: LESS_THAN_OR_EQUAL
+#          Target: !Ref TargetCPUUsage
+#          Warning: !Ref WarningCPUUsage
   SustainabilitySRG:
     Type: Dynatrace::Automation::SiteReliabilityGuardian
     Properties:
