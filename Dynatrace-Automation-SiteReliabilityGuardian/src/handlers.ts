@@ -65,7 +65,7 @@ class Resource extends AbstractDynatraceResource<ResourceModel, SRGPayload, SRGP
         delete body.value.ObjectId;
         delete body.value.objectId;
 
-        const response = await this.newOauthClient(typeConfiguration, ["settings:objects:write", "app-engine:apps:run" ]).doRequest<SRGPayload>(
+        const response = await this.newOauthClient(typeConfiguration, ["settings:objects:write", "app-engine:apps:run"]).doRequest<SRGPayload>(
             'put',
             `/api/v2/settings/objects/${model.objectId}`,
             {},
@@ -74,7 +74,7 @@ class Resource extends AbstractDynatraceResource<ResourceModel, SRGPayload, SRGP
     }
 
     async delete(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<void> {
-        await this.newOauthClient(typeConfiguration, ["settings:objects:write", "app-engine:apps:run" ]).doRequest<SRGPayload>(
+        await this.newOauthClient(typeConfiguration, ["settings:objects:write", "app-engine:apps:run"]).doRequest<SRGPayload>(
             'delete',
             `/api/v2/settings/objects/${model.objectId}`);
     }

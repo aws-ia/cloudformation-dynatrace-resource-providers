@@ -16,7 +16,7 @@ To declare this entity in your AWS CloudFormation template, use the following sy
         "<a href="#description" title="Description">Description</a>" : <i>String</i>,
         "<a href="#tags" title="Tags">Tags</a>" : <i>[ String, ... ]</i>,
         "<a href="#variables" title="Variables">Variables</a>" : <i>[ <a href="variable.md">Variable</a>, ... ]</i>,
-        "<a href="#objectives" title="Objectives">Objectives</a>" : <i>[ <a href="objective.md">Objective</a>, ... ]</i>,
+        "<a href="#objectives" title="Objectives">Objectives</a>" : <i>[ <a href="dqlobjective.md">DqlObjective</a>, <a href="sloobjective.md">SloObjective</a>, ... ]</i>,
     }
 }
 </pre>
@@ -33,7 +33,7 @@ Properties:
     <a href="#variables" title="Variables">Variables</a>: <i>
       - <a href="variable.md">Variable</a></i>
     <a href="#objectives" title="Objectives">Objectives</a>: <i>
-      - <a href="objective.md">Objective</a></i>
+      - <a href="dqlobjective.md">DqlObjective</a>, <a href="sloobjective.md">SloObjective</a></i>
 </pre>
 
 ## Properties
@@ -92,7 +92,7 @@ Objectives are means for measuring the performance, availability, capacity, and 
 
 _Required_: Yes
 
-_Type_: List of <a href="objective.md">Objective</a>
+_Type_: List of <a href="dqlobjective.md">DqlObjective</a>, <a href="sloobjective.md">SloObjective</a>
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 

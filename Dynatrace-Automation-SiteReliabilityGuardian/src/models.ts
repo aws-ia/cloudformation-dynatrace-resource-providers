@@ -42,8 +42,14 @@ export class ResourceModel extends BaseModel {
     @Type(() => Variable)
     variables?: Optional<Array<Variable>>;
     @Expose({ name: 'Objectives' })
-    @Type(() => Objective)
-    objectives?: Optional<Array<Objective>>;
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(Object, 'objectives', value, obj, [Array]),
+        {
+            toClassOnly: true,
+        }
+    )
+    objectives?: Optional<Array<object>>;
     @Expose({ name: 'ObjectId' })
     @Transform(
         (value: any, obj: any) =>
@@ -98,8 +104,8 @@ export class Variable extends BaseModel {
 
 }
 
-export class Objective extends BaseModel {
-    ['constructor']: typeof Objective;
+export class DqlObjective extends BaseModel {
+    ['constructor']: typeof DqlObjective;
 
 
     @Expose({ name: 'Name' })
@@ -129,24 +135,6 @@ export class Objective extends BaseModel {
         }
     )
     objectiveType?: Optional<string>;
-    @Expose({ name: 'DqlQuery' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'dqlQuery', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    dqlQuery?: Optional<string>;
-    @Expose({ name: 'ReferenceSlo' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'referenceSlo', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    referenceSlo?: Optional<string>;
     @Expose({ name: 'ComparisonOperator' })
     @Transform(
         (value: any, obj: any) =>
@@ -156,6 +144,15 @@ export class Objective extends BaseModel {
         }
     )
     comparisonOperator?: Optional<string>;
+    @Expose({ name: 'DqlQuery' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'dqlQuery', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    dqlQuery?: Optional<string>;
     @Expose({ name: 'Target' })
     @Transform(
         (value: any, obj: any) =>
@@ -174,6 +171,58 @@ export class Objective extends BaseModel {
         }
     )
     warning?: Optional<number>;
+
+}
+
+export class SloObjective extends BaseModel {
+    ['constructor']: typeof SloObjective;
+
+
+    @Expose({ name: 'Name' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'name', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    name?: Optional<string>;
+    @Expose({ name: 'Description' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'description', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    description?: Optional<string>;
+    @Expose({ name: 'ObjectiveType' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'objectiveType', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    objectiveType?: Optional<string>;
+    @Expose({ name: 'ComparisonOperator' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'comparisonOperator', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    comparisonOperator?: Optional<string>;
+    @Expose({ name: 'ReferenceSlo' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'referenceSlo', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    referenceSlo?: Optional<string>;
 
 }
 

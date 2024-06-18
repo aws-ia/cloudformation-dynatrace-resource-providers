@@ -53,6 +53,12 @@ Parameters:
   WarningOutOfMemory:
     Type: Number
     Default: 3
+  TargetApdexRating:
+    Type: Number
+    Default: 90
+  WarningApdexRating:
+    Type: Number
+    Default: 95
   TargetCO2:
     Type: Number
     Default: 40
@@ -65,6 +71,9 @@ Parameters:
   WarningUtilization:
     Type: Number
     Default: 15
+  ApdexRatingSloMetricName:
+    Type: String
+    Default: my_new_real_user_experience_objective
 
 Resources:
 
@@ -147,6 +156,21 @@ Resources:
           Position:
             X: 0
             Y: 4
+        - Name: operation
+          Description: Operation Excellence
+          Action: dynatrace.site.reliability.guardian:validate-guardian-action
+          Input:
+            objectId: !GetAtt OperationalExcellenceSRG.ObjectId
+            executionId: '{{ execution().id }}'
+            expressionTo: '{{ event()[''timeframe.to''] }}'
+            expressionFrom: '{{ event()[''timeframe.from''] }}'
+            timeframeSelector:
+              to: now
+              from_: now-60m
+            timeframeInputType: expression
+          Position:
+            X: 0
+            Y: 5
         - Name: sustainability
           Description: Sustainability Validation
           Action: dynatrace.site.reliability.guardian:validate-guardian-action
@@ -162,6 +186,20 @@ Resources:
           Position:
             X: 0
             Y: 6
+
+  ApdexRatingSlo:
+    Type: Dynatrace::Environment::ServiceLevelObjective
+    Properties:
+      Name: My new real-user experience objective
+      Description: This is an Apdex rating experience SLO
+      MetricName: !Ref ApdexRatingSloMetricName
+      MetricExpression: '(100)*(builtin:apps.web.actionCount.category:filter(eq("Apdex category",SATISFIED)):splitBy())/(builtin:apps.web.actionCount.category:splitBy())'
+      Timeframe: -1w
+      Filter: 'type("APPLICATION"),entityName.equals("myApplication")'
+      Target: !Ref TargetApdexRating
+      Warning: !Ref WarningApdexRating
+      EvaluationType: AGGREGATE
+      HasAccess: true
 
   PerformanceSRG:
     Type: Dynatrace::Automation::SiteReliabilityGuardian
@@ -264,6 +302,24 @@ Resources:
           ComparisonOperator: LESS_THAN_OR_EQUAL
           Target: !Ref TargetAvailability
           Warning: !Ref WarningAvailability
+  OperationalExcellenceSRG:
+    Type: Dynatrace::Automation::SiteReliabilityGuardian
+    Properties:
+      Name: Operational Excellence
+      Description: Operational Excellence Guardian
+      Tags:
+        - "usecase:sixpillars"
+      Variables:
+        - Name: version
+          Definition: "1.0.0"
+      Objectives:
+        - Name: Apdex rating validation
+          Description: Apdex rating validation of a web application
+          ObjectiveType: REFERENCE_SLO
+          ComparisonOperator: LESS_THAN_OR_EQUAL
+          ReferenceSlo: !Sub
+            - func:slo.${SloName}
+            - SloName: !Ref ApdexRatingSloMetricName
   SustainabilitySRG:
     Type: Dynatrace::Automation::SiteReliabilityGuardian
     Properties:

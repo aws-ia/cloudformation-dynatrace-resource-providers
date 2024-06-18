@@ -51,43 +51,45 @@
             ],
             "additionalProperties": false
         },
-        "Objective": {
+        "ObjectiveName": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1
+        },
+        "ObjectiveDescription": {
+            "type": "string",
+            "maxLength": 250,
+            "minLength": 1
+        },
+        "ObjectiveComparisonOperator": {
+            "type": "string",
+            "enum": [
+                "GREATER_THAN_OR_EQUAL",
+                "LESS_THAN_OR_EQUAL"
+            ]
+        },
+        "DqlObjective": {
             "type": "object",
             "properties": {
                 "Name": {
-                    "type": "string",
-                    "maxLength": 200,
-                    "minLength": 1
+                    "$ref": "#/definitions/ObjectiveName"
                 },
                 "Description": {
-                    "type": "string",
-                    "maxLength": 250,
-                    "minLength": 1
+                    "$ref": "#/definitions/ObjectiveDescription"
                 },
                 "ObjectiveType": {
                     "type": "string",
                     "enum": [
-                        "DQL",
-                        "REFERENCE_SLO"
+                        "DQL"
                     ]
+                },
+                "ComparisonOperator": {
+                    "$ref": "#/definitions/ObjectiveComparisonOperator"
                 },
                 "DqlQuery": {
                     "type": "string",
                     "maxLength": 2000,
                     "minLength": 1
-                },
-                "ReferenceSlo": {
-                    "type": "string",
-                    "description": "Please enter the metric key of your desired SLO. SLO metric keys have to start with 'func:slo.'",
-                    "maxLength": 2000,
-                    "minLength": 1
-                },
-                "ComparisonOperator": {
-                    "type": "string",
-                    "enum": [
-                        "GREATER_THAN_OR_EQUAL",
-                        "LESS_THAN_OR_EQUAL"
-                    ]
                 },
                 "Target": {
                     "type": "number"
@@ -99,10 +101,53 @@
             "required": [
                 "Name",
                 "ObjectiveType",
-                "DqlQuery",
-                "ComparisonOperator"
+                "ComparisonOperator",
+                "DqlQuery"
             ],
             "additionalProperties": false
+        },
+        "SloObjective": {
+            "type": "object",
+            "properties": {
+                "Name": {
+                    "$ref": "#/definitions/ObjectiveName"
+                },
+                "Description": {
+                    "$ref": "#/definitions/ObjectiveDescription"
+                },
+                "ObjectiveType": {
+                    "type": "string",
+                    "enum": [
+                        "REFERENCE_SLO"
+                    ]
+                },
+                "ComparisonOperator": {
+                    "$ref": "#/definitions/ObjectiveComparisonOperator"
+                },
+                "ReferenceSlo": {
+                    "type": "string",
+                    "description": "Please enter the metric key of your desired SLO. SLO metric keys have to start with 'func:slo.'",
+                    "maxLength": 2000,
+                    "minLength": 1
+                }
+            },
+            "required": [
+                "Name",
+                "ObjectiveType",
+                "ComparisonOperator",
+                "ReferenceSlo"
+            ],
+            "additionalProperties": false
+        },
+        "Objective": {
+            "anyOf": [
+                {
+                    "$ref": "#/definitions/DqlObjective"
+                },
+                {
+                    "$ref": "#/definitions/SloObjective"
+                }
+            ]
         }
     },
     "typeConfiguration": {
