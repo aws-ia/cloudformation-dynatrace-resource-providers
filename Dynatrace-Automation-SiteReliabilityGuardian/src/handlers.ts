@@ -4,7 +4,6 @@ import {PaginatedResponseType} from "../../Dynatrace-Common/src/dynatrace-client
 import {CaseTransformer, Transformer} from "../../Dynatrace-Common/src/util";
 import {DynatraceOAuthClient} from '../../Dynatrace-Common/src/dynatrace-oauth-client';
 
-
 import {version} from "../package.json";
 
 type SRGPayload = {
@@ -55,7 +54,6 @@ class Resource extends AbstractDynatraceResource<ResourceModel, SRGPayload, SRGP
     }
 
     async update(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<SRGPayload> {
-
         let body = {
             value: Transformer.for(model.toJSON())
                 .transformKeys(CaseTransformer.PASCAL_TO_CAMEL)

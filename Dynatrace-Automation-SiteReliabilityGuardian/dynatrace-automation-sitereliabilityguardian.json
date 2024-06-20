@@ -51,40 +51,32 @@
             ],
             "additionalProperties": false
         },
-        "ObjectiveName": {
-            "type": "string",
-            "maxLength": 200,
-            "minLength": 1
-        },
-        "ObjectiveDescription": {
-            "type": "string",
-            "maxLength": 250,
-            "minLength": 1
-        },
-        "ObjectiveComparisonOperator": {
-            "type": "string",
-            "enum": [
-                "GREATER_THAN_OR_EQUAL",
-                "LESS_THAN_OR_EQUAL"
-            ]
-        },
-        "DqlObjective": {
+        "Objective": {
             "type": "object",
             "properties": {
                 "Name": {
-                    "$ref": "#/definitions/ObjectiveName"
+                    "type": "string",
+                    "maxLength": 200,
+                    "minLength": 1
                 },
                 "Description": {
-                    "$ref": "#/definitions/ObjectiveDescription"
+                    "type": "string",
+                    "maxLength": 250,
+                    "minLength": 1
                 },
                 "ObjectiveType": {
                     "type": "string",
                     "enum": [
-                        "DQL"
+                        "DQL",
+                        "REFERENCE_SLO"
                     ]
                 },
                 "ComparisonOperator": {
-                    "$ref": "#/definitions/ObjectiveComparisonOperator"
+                    "type": "string",
+                    "enum": [
+                        "GREATER_THAN_OR_EQUAL",
+                        "LESS_THAN_OR_EQUAL"
+                    ]
                 },
                 "DqlQuery": {
                     "type": "string",
@@ -96,33 +88,6 @@
                 },
                 "Warning": {
                     "type": "number"
-                }
-            },
-            "required": [
-                "Name",
-                "ObjectiveType",
-                "ComparisonOperator",
-                "DqlQuery"
-            ],
-            "additionalProperties": false
-        },
-        "SloObjective": {
-            "type": "object",
-            "properties": {
-                "Name": {
-                    "$ref": "#/definitions/ObjectiveName"
-                },
-                "Description": {
-                    "$ref": "#/definitions/ObjectiveDescription"
-                },
-                "ObjectiveType": {
-                    "type": "string",
-                    "enum": [
-                        "REFERENCE_SLO"
-                    ]
-                },
-                "ComparisonOperator": {
-                    "$ref": "#/definitions/ObjectiveComparisonOperator"
                 },
                 "ReferenceSlo": {
                     "type": "string",
@@ -134,20 +99,9 @@
             "required": [
                 "Name",
                 "ObjectiveType",
-                "ComparisonOperator",
-                "ReferenceSlo"
+                "ComparisonOperator"
             ],
             "additionalProperties": false
-        },
-        "Objective": {
-            "anyOf": [
-                {
-                    "$ref": "#/definitions/DqlObjective"
-                },
-                {
-                    "$ref": "#/definitions/SloObjective"
-                }
-            ]
         }
     },
     "typeConfiguration": {

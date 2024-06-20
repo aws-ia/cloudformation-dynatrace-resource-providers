@@ -42,14 +42,8 @@ export class ResourceModel extends BaseModel {
     @Type(() => Variable)
     variables?: Optional<Array<Variable>>;
     @Expose({ name: 'Objectives' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Object, 'objectives', value, obj, [Array]),
-        {
-            toClassOnly: true,
-        }
-    )
-    objectives?: Optional<Array<object>>;
+    @Type(() => Objective)
+    objectives?: Optional<Array<Objective>>;
     @Expose({ name: 'ObjectId' })
     @Transform(
         (value: any, obj: any) =>
@@ -104,8 +98,8 @@ export class Variable extends BaseModel {
 
 }
 
-export class DqlObjective extends BaseModel {
-    ['constructor']: typeof DqlObjective;
+export class Objective extends BaseModel {
+    ['constructor']: typeof Objective;
 
 
     @Expose({ name: 'Name' })
@@ -171,49 +165,6 @@ export class DqlObjective extends BaseModel {
         }
     )
     warning?: Optional<number>;
-
-}
-
-export class SloObjective extends BaseModel {
-    ['constructor']: typeof SloObjective;
-
-
-    @Expose({ name: 'Name' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'name', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    name?: Optional<string>;
-    @Expose({ name: 'Description' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'description', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    description?: Optional<string>;
-    @Expose({ name: 'ObjectiveType' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'objectiveType', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    objectiveType?: Optional<string>;
-    @Expose({ name: 'ComparisonOperator' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'comparisonOperator', value, obj, []),
-        {
-            toClassOnly: true,
-        }
-    )
-    comparisonOperator?: Optional<string>;
     @Expose({ name: 'ReferenceSlo' })
     @Transform(
         (value: any, obj: any) =>
