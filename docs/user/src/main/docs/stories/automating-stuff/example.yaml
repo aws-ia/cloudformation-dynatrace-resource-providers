@@ -2,7 +2,12 @@
 AWSTemplateFormatVersion: '2010-09-09'
 
 Description: |
-  The following CloudFormation Dynatrace resource types  # TODO
+  The CloudFormation template creates all resources necessary to implement AWS well-architected pillars with an automated
+  workflow in Dynatrace. This showcases the use of the 2 news CloudFormation resources types:
+  - `Dynatrace::Automation::Workflow`
+  - `Dynatrace::Automation::SiteReliabilityGuardian`
+  as well as the integration with the existing resource type `Dynatrace::Environment::ServiceLevelObjective`. The template
+  does not implement all the alerting defined in https://www.dynatrace.com/news/blog/implementing-aws-well-architected-pillars/
 
 Parameters:
   TargetResponseTime:
