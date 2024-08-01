@@ -289,21 +289,23 @@ Resources:
                 AND tag.service == "RELEASE_PRODUCT"
                 AND tag.stage   == "RELEASE_STAGE"
       Tasks:
-        - Name:        performanceEfficiency
-          Description: Validate WAF pillar 4 - Performance Efficiency
+
+        - Name:        operationalExcellence
+          Description: Validate WAF pillar 1 - Operational Excellence
           Action:      dynatrace.site.reliability.guardian:validate-guardian-action
           Input:
-            objectId:       !GetAtt PerformanceEfficiencySrg.ObjectId
+            objectId:       !GetAtt OperationalExcellenceSrg.ObjectId
             executionId:    '{{ execution().id }}'
             expressionTo:   '{{ event()[''timeframe.to''] }}'
             expressionFrom: '{{ event()[''timeframe.from''] }}'
             timeframeSelector:
               to: now
-              from_: now-10m
+              from_: now-60m
             timeframeInputType: expression
           Position:
             X: 0
             Y: 1
+
         - Name:        security
           Description: Validate WAF pillar 2 - Security
           Action:      dynatrace.site.reliability.guardian:validate-guardian-action
@@ -319,21 +321,7 @@ Resources:
           Position:
             X: 0
             Y: 2
-        - Name:        costOptimization
-          Description: Validate WAF pillar 5 - Cost Optimization
-          Action:      dynatrace.site.reliability.guardian:validate-guardian-action
-          Input:
-            objectId:       !GetAtt CostOptimizationSrg.ObjectId
-            executionId:    '{{ execution().id }}'
-            expressionTo:   '{{ event()[''timeframe.to''] }}'
-            expressionFrom: '{{ event()[''timeframe.from''] }}'
-            timeframeSelector:
-              to: now
-              from_: now-10m
-            timeframeInputType: expression
-          Position:
-            X: 0
-            Y: 3
+
         - Name:        reliability
           Description: Validate WAF pillar 3 - Reliability
           Action:      dynatrace.site.reliability.guardian:validate-guardian-action
@@ -348,22 +336,40 @@ Resources:
             timeframeInputType: expression
           Position:
             X: 0
-            Y: 4
-        - Name:        operationalExcellence
-          Description: Validate WAF pillar 1 - Operational Excellence
+            Y: 3
+
+        - Name:        performanceEfficiency
+          Description: Validate WAF pillar 4 - Performance Efficiency
           Action:      dynatrace.site.reliability.guardian:validate-guardian-action
           Input:
-            objectId:       !GetAtt OperationalExcellenceSrg.ObjectId
+            objectId:       !GetAtt PerformanceEfficiencySrg.ObjectId
             executionId:    '{{ execution().id }}'
             expressionTo:   '{{ event()[''timeframe.to''] }}'
             expressionFrom: '{{ event()[''timeframe.from''] }}'
             timeframeSelector:
               to: now
-              from_: now-60m
+              from_: now-10m
+            timeframeInputType: expression
+          Position:
+            X: 0
+            Y: 4
+
+        - Name:        costOptimization
+          Description: Validate WAF pillar 5 - Cost Optimization
+          Action:      dynatrace.site.reliability.guardian:validate-guardian-action
+          Input:
+            objectId:       !GetAtt CostOptimizationSrg.ObjectId
+            executionId:    '{{ execution().id }}'
+            expressionTo:   '{{ event()[''timeframe.to''] }}'
+            expressionFrom: '{{ event()[''timeframe.from''] }}'
+            timeframeSelector:
+              to: now
+              from_: now-10m
             timeframeInputType: expression
           Position:
             X: 0
             Y: 5
+
         - Name:        sustainability
           Description: Validate WAF pillar 6 - Sustainability
           Action:      dynatrace.site.reliability.guardian:validate-guardian-action
