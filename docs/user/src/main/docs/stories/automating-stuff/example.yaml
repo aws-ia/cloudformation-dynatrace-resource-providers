@@ -290,7 +290,7 @@ Resources:
                 AND tag.stage   == "RELEASE_STAGE"
       Tasks:
         - Name:        performanceEfficiency
-          Description: Performance Efficiency Validation
+          Description: Validate WAF pillar 4 - Performance Efficiency
           Action:      dynatrace.site.reliability.guardian:validate-guardian-action
           Input:
             objectId:       !GetAtt PerformanceEfficiencySrg.ObjectId
@@ -305,7 +305,7 @@ Resources:
             X: 0
             Y: 1
         - Name:        security
-          Description: Security Validation
+          Description: Validate WAF pillar 2 - Security
           Action:      dynatrace.site.reliability.guardian:validate-guardian-action
           Input:
             objectId:       !GetAtt SecuritySrg.ObjectId
@@ -320,7 +320,7 @@ Resources:
             X: 0
             Y: 2
         - Name:        costOptimization
-          Description: Cost Optimization Validation
+          Description: Validate WAF pillar 5 - Cost Optimization
           Action:      dynatrace.site.reliability.guardian:validate-guardian-action
           Input:
             objectId:       !GetAtt CostOptimizationSrg.ObjectId
@@ -335,7 +335,7 @@ Resources:
             X: 0
             Y: 3
         - Name:        reliability
-          Description: Reliability Validation
+          Description: Validate WAF pillar 3 - Reliability
           Action:      dynatrace.site.reliability.guardian:validate-guardian-action
           Input:
             objectId:       !GetAtt ReliabilitySrg.ObjectId
@@ -350,7 +350,7 @@ Resources:
             X: 0
             Y: 4
         - Name:        operationalExcellence
-          Description: Operation Excellence Validation
+          Description: Validate WAF pillar 1 - Operational Excellence
           Action:      dynatrace.site.reliability.guardian:validate-guardian-action
           Input:
             objectId:       !GetAtt OperationalExcellenceSrg.ObjectId
@@ -365,7 +365,7 @@ Resources:
             X: 0
             Y: 5
         - Name:        sustainability
-          Description: Sustainability Validation
+          Description: Validate WAF pillar 6 - Sustainability
           Action:      dynatrace.site.reliability.guardian:validate-guardian-action
           Input:
             objectId:       !GetAtt SustainabilitySrg.ObjectId
