@@ -293,95 +293,83 @@ Resources:
         - Name:        operationalExcellence
           Description: Validate WAF pillar 1 - Operational Excellence
           Action:      dynatrace.site.reliability.guardian:validate-guardian-action
+          Position:    { X: 0, Y: 1 }
           Input:
             objectId:       !GetAtt OperationalExcellenceSrg.ObjectId
             executionId:    '{{ execution().id }}'
             expressionTo:   '{{ event()[''timeframe.to''] }}'
             expressionFrom: '{{ event()[''timeframe.from''] }}'
-            timeframeSelector:
-              to: now
-              from_: now-60m
             timeframeInputType: expression
-          Position:
-            X: 0
-            Y: 1
+            timeframeSelector:
+              from_: now-60m
+              to:    now
 
         - Name:        security
           Description: Validate WAF pillar 2 - Security
           Action:      dynatrace.site.reliability.guardian:validate-guardian-action
+          Position:    { X: 0, Y: 2 }
           Input:
             objectId:       !GetAtt SecuritySrg.ObjectId
             executionId:    '{{ execution().id }}'
             expressionTo:   '{{ event()[''timeframe.to''] }}'
             expressionFrom: '{{ event()[''timeframe.from''] }}'
-            timeframeSelector:
-              to: now
-              from_: now-60m
             timeframeInputType: expression
-          Position:
-            X: 0
-            Y: 2
+            timeframeSelector:
+              from_: now-60m
+              to:    now
 
         - Name:        reliability
           Description: Validate WAF pillar 3 - Reliability
           Action:      dynatrace.site.reliability.guardian:validate-guardian-action
+          Position:    { X: 0, Y: 3 }
           Input:
             objectId:       !GetAtt ReliabilitySrg.ObjectId
             executionId:    '{{ execution().id }}'
             expressionTo:   '{{ event()[''timeframe.to''] }}'
             expressionFrom: '{{ event()[''timeframe.from''] }}'
-            timeframeSelector:
-              to: now
-              from_: now-10m
             timeframeInputType: expression
-          Position:
-            X: 0
-            Y: 3
+            timeframeSelector:
+              from_: now-10m
+              to:    now
 
         - Name:        performanceEfficiency
           Description: Validate WAF pillar 4 - Performance Efficiency
           Action:      dynatrace.site.reliability.guardian:validate-guardian-action
+          Position:    { X: 0, Y: 4 }
           Input:
             objectId:       !GetAtt PerformanceEfficiencySrg.ObjectId
             executionId:    '{{ execution().id }}'
             expressionTo:   '{{ event()[''timeframe.to''] }}'
             expressionFrom: '{{ event()[''timeframe.from''] }}'
-            timeframeSelector:
-              to: now
-              from_: now-10m
             timeframeInputType: expression
-          Position:
-            X: 0
-            Y: 4
+            timeframeSelector:
+              from_: now-10m
+              to:    now
 
         - Name:        costOptimization
           Description: Validate WAF pillar 5 - Cost Optimization
           Action:      dynatrace.site.reliability.guardian:validate-guardian-action
+          Position:    { X: 0, Y: 5 }
           Input:
             objectId:       !GetAtt CostOptimizationSrg.ObjectId
             executionId:    '{{ execution().id }}'
             expressionTo:   '{{ event()[''timeframe.to''] }}'
             expressionFrom: '{{ event()[''timeframe.from''] }}'
-            timeframeSelector:
-              to: now
-              from_: now-10m
             timeframeInputType: expression
-          Position:
-            X: 0
-            Y: 5
+            timeframeSelector:
+              from_: now-10m
+              to:    now
 
         - Name:        sustainability
           Description: Validate WAF pillar 6 - Sustainability
           Action:      dynatrace.site.reliability.guardian:validate-guardian-action
+          Position:    { X: 0, Y: 6 }
           Input:
             objectId:       !GetAtt SustainabilitySrg.ObjectId
             executionId:    '{{ execution().id }}'
             expressionTo:   '{{ event()[''timeframe.to''] }}'
             expressionFrom: '{{ event()[''timeframe.from''] }}'
-            timeframeSelector:
-              to: now
-              from_: now-40m
             timeframeInputType: expression
-          Position:
-            X: 0
-            Y: 6
+            timeframeSelector:
+              from_: now-40m
+              to:    now
