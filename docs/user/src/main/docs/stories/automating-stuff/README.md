@@ -11,7 +11,7 @@ This exmple uses the following types:
 * `Dynatrace::Automation::Workflow` - triggered against a new release candidate 
 * `Dynatrace::Automation::SiteReliability::Guardian` - checks CO2 output and resource utilisation against metric ranges
 
-The [example cloudformation template](./example.yaml) accepts the following paramaters: TargetCo2, WarningCo2, TargetUtilization, WarningUtilization.
+The [example cloudformation template](./dynatrace-six-pillars.yaml) accepts the following paramaters: TargetCo2, WarningCo2, TargetUtilization, WarningUtilization.
 
 You can create a new stack with the following command:
 
@@ -19,6 +19,5 @@ You can create a new stack with the following command:
 aws cloudformation deploy \
   --region eu-west-1 \
   --stack-name Dynatrace-Six-Pillars \
-  --template-file example.yaml
+  --template-file dynatrace-six-pillars.yaml
 ```
-
