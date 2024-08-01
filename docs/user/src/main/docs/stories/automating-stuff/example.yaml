@@ -14,8 +14,8 @@ Parameters:
   WarningResponseTime:         { Type: Number, Default: 400 }
   TargetCpuUsage:              { Type: Number, Default: 60  }
   WarningCpuUsage:             { Type: Number, Default: 50  }
-  TargetVulnerability:         { Type: Number, Default: 8.5 }
-  WarningVulnerability:        { Type: Number, Default: 7.5 }
+  TargetVulnerabilityScore:    { Type: Number, Default: 8.5 }
+  WarningVulnerabilityScore:   { Type: Number, Default: 7.5 }
   TargetOptimizeCpu:           { Type: Number, Default: 10  }
   WarningOptimizeCpu:          { Type: Number, Default: 15  }
   TargetOptimizeResponseTime:  { Type: Number, Default: 300 }
@@ -94,18 +94,22 @@ Resources:
           Description:   Runtime Vulnerability Analysis for a Process Group Instance – Davis Security Assessment Score
           ObjectiveType: DQL
           ComparisonOperator: LESS_THAN_OR_EQUAL
-          Target:        !Ref TargetVulnerability
-          Warning:       !Ref WarningVulnerability
+          Target:        !Ref TargetVulnerabilityScore
+          Warning:       !Ref WarningVulnerabilityScore
           DqlQuery: |
             fetch events
-            | filter event.kind == "SECURITY_EVENT"
-            | filter event.type == "VULNERABILITY_STATE_REPORT_EVENT"
+            | filter event.kind  == "SECURITY_EVENT"
+            | filter event.type  == "VULNERABILITY_STATE_REPORT_EVENT"
             | filter event.level == "ENTITY"
-            | filter in("PROCESSGROUP_INSTANCE_ID",affected_entity.affected_processes.ids)
+            | filter in("PROCESSGROUP_INSTANCE_ID", affected_entity.affected_processes.ids)
             | sort timestamp, direction:"descending"
-            | summarize { status=takeFirst(vulnerability.resolution.status), score=takeFirst(vulnerability.davis_assessment.score), affected_processes=takeFirst(affected_entity.affected_processes.ids) }, by: {vulnerability.id, affected_entity.id}
+            | summarize { 
+                affected_processes = takeFirst(affected_entity.affected_processes.ids),
+                status             = takeFirst(vulnerability.resolution.status),
+                score              = takeFirst(vulnerability.davis_assessment.score)
+              }, by: { vulnerability.id, affected_entity.id }
             | filter status == "OPEN"
-            | summarize maxScore=takeMax(score)
+            | summarize maxScore = takeMax(score)
 
 
   # Pillar 3: Reliability
