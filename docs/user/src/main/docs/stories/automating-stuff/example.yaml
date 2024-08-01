@@ -37,114 +37,6 @@ Parameters:
 
 Resources:
 
-  Workflow:
-    Type: Dynatrace::Automation::Workflow
-    Properties:
-      Actor: 4d02a174-f96f-4683-8388-53d7aef9d3cf
-      Owner: 4d02a174-f96f-4683-8388-53d7aef9d3cf
-      Title: 'Well-architected Six Pillars Evaluation - Sustainability'
-      Description: 'Well-architected Six Pillars Workflow with Guardians by Cloudformation'
-      IsPrivate: 'false'
-      Trigger:
-        EventTrigger:
-          IsActive: true
-          TriggerConfiguration:
-            Type: "event"
-            Value:
-              EventType: bizevents
-              Query: "event.type == \"guardian.validation.triggered\" \n AND tag.service==\"RELEASE_PRODUCT\" AND tag.stage==\"RELEASE_STAGE\""
-      Tasks:
-        - Name: performanceEfficiency
-          Description: Performance Efficiency Validation
-          Action: dynatrace.site.reliability.guardian:validate-guardian-action
-          Input:
-            objectId: !GetAtt PerformanceEfficiencySrg.ObjectId
-            executionId: '{{ execution().id }}'
-            expressionTo: '{{ event()[''timeframe.to''] }}'
-            expressionFrom: '{{ event()[''timeframe.from''] }}'
-            timeframeSelector:
-              to: now
-              from_: now-10m
-            timeframeInputType: expression
-          Position:
-            X: 0
-            Y: 1
-        - Name: security
-          Description: Security Validation
-          Action: dynatrace.site.reliability.guardian:validate-guardian-action
-          Input:
-            objectId: !GetAtt SecuritySrg.ObjectId
-            executionId: '{{ execution().id }}'
-            expressionTo: '{{ event()[''timeframe.to''] }}'
-            expressionFrom: '{{ event()[''timeframe.from''] }}'
-            timeframeSelector:
-              to: now
-              from_: now-60m
-            timeframeInputType: expression
-          Position:
-            X: 0
-            Y: 2
-        - Name: costOptimization
-          Description: Cost Optimization Validation
-          Action: dynatrace.site.reliability.guardian:validate-guardian-action
-          Input:
-            objectId: !GetAtt CostOptimizationSrg.ObjectId
-            executionId: '{{ execution().id }}'
-            expressionTo: '{{ event()[''timeframe.to''] }}'
-            expressionFrom: '{{ event()[''timeframe.from''] }}'
-            timeframeSelector:
-              to: now
-              from_: now-10m
-            timeframeInputType: expression
-          Position:
-            X: 0
-            Y: 3
-        - Name: reliability
-          Description: Reliability Validation
-          Action: dynatrace.site.reliability.guardian:validate-guardian-action
-          Input:
-            objectId: !GetAtt ReliabilitySrg.ObjectId
-            executionId: '{{ execution().id }}'
-            expressionTo: '{{ event()[''timeframe.to''] }}'
-            expressionFrom: '{{ event()[''timeframe.from''] }}'
-            timeframeSelector:
-              to: now
-              from_: now-10m
-            timeframeInputType: expression
-          Position:
-            X: 0
-            Y: 4
-        - Name: operationalExcellence
-          Description: Operation Excellence Validation
-          Action: dynatrace.site.reliability.guardian:validate-guardian-action
-          Input:
-            objectId: !GetAtt OperationalExcellenceSrg.ObjectId
-            executionId: '{{ execution().id }}'
-            expressionTo: '{{ event()[''timeframe.to''] }}'
-            expressionFrom: '{{ event()[''timeframe.from''] }}'
-            timeframeSelector:
-              to: now
-              from_: now-60m
-            timeframeInputType: expression
-          Position:
-            X: 0
-            Y: 5
-        - Name: sustainability
-          Description: Sustainability Validation
-          Action: dynatrace.site.reliability.guardian:validate-guardian-action
-          Input:
-            objectId: !GetAtt SustainabilitySrg.ObjectId
-            executionId: '{{ execution().id }}'
-            expressionTo: '{{ event()[''timeframe.to''] }}'
-            expressionFrom: '{{ event()[''timeframe.from''] }}'
-            timeframeSelector:
-              to: now
-              from_: now-40m
-            timeframeInputType: expression
-          Position:
-            X: 0
-            Y: 6
-
   ApdexRatingSlo:
     Type: Dynatrace::Environment::ServiceLevelObjective
     Properties:
@@ -320,3 +212,113 @@ Resources:
           ComparisonOperator: GREATER_THAN_OR_EQUAL
           Target: !Ref TargetUtilization
           Warning: !Ref WarningUtilization
+
+
+  # Combine the above guardians into a single automation workflow
+  Workflow:
+    Type: Dynatrace::Automation::Workflow
+    Properties:
+      Actor: 4d02a174-f96f-4683-8388-53d7aef9d3cf
+      Owner: 4d02a174-f96f-4683-8388-53d7aef9d3cf
+      Title: 'Well-architected Six Pillars Evaluation - Sustainability'
+      Description: 'Well-architected Six Pillars Workflow with Guardians by Cloudformation'
+      IsPrivate: 'false'
+      Trigger:
+        EventTrigger:
+          IsActive: true
+          TriggerConfiguration:
+            Type: "event"
+            Value:
+              EventType: bizevents
+              Query: "event.type == \"guardian.validation.triggered\" \n AND tag.service==\"RELEASE_PRODUCT\" AND tag.stage==\"RELEASE_STAGE\""
+      Tasks:
+        - Name: performanceEfficiency
+          Description: Performance Efficiency Validation
+          Action: dynatrace.site.reliability.guardian:validate-guardian-action
+          Input:
+            objectId: !GetAtt PerformanceEfficiencySrg.ObjectId
+            executionId: '{{ execution().id }}'
+            expressionTo: '{{ event()[''timeframe.to''] }}'
+            expressionFrom: '{{ event()[''timeframe.from''] }}'
+            timeframeSelector:
+              to: now
+              from_: now-10m
+            timeframeInputType: expression
+          Position:
+            X: 0
+            Y: 1
+        - Name: security
+          Description: Security Validation
+          Action: dynatrace.site.reliability.guardian:validate-guardian-action
+          Input:
+            objectId: !GetAtt SecuritySrg.ObjectId
+            executionId: '{{ execution().id }}'
+            expressionTo: '{{ event()[''timeframe.to''] }}'
+            expressionFrom: '{{ event()[''timeframe.from''] }}'
+            timeframeSelector:
+              to: now
+              from_: now-60m
+            timeframeInputType: expression
+          Position:
+            X: 0
+            Y: 2
+        - Name: costOptimization
+          Description: Cost Optimization Validation
+          Action: dynatrace.site.reliability.guardian:validate-guardian-action
+          Input:
+            objectId: !GetAtt CostOptimizationSrg.ObjectId
+            executionId: '{{ execution().id }}'
+            expressionTo: '{{ event()[''timeframe.to''] }}'
+            expressionFrom: '{{ event()[''timeframe.from''] }}'
+            timeframeSelector:
+              to: now
+              from_: now-10m
+            timeframeInputType: expression
+          Position:
+            X: 0
+            Y: 3
+        - Name: reliability
+          Description: Reliability Validation
+          Action: dynatrace.site.reliability.guardian:validate-guardian-action
+          Input:
+            objectId: !GetAtt ReliabilitySrg.ObjectId
+            executionId: '{{ execution().id }}'
+            expressionTo: '{{ event()[''timeframe.to''] }}'
+            expressionFrom: '{{ event()[''timeframe.from''] }}'
+            timeframeSelector:
+              to: now
+              from_: now-10m
+            timeframeInputType: expression
+          Position:
+            X: 0
+            Y: 4
+        - Name: operationalExcellence
+          Description: Operation Excellence Validation
+          Action: dynatrace.site.reliability.guardian:validate-guardian-action
+          Input:
+            objectId: !GetAtt OperationalExcellenceSrg.ObjectId
+            executionId: '{{ execution().id }}'
+            expressionTo: '{{ event()[''timeframe.to''] }}'
+            expressionFrom: '{{ event()[''timeframe.from''] }}'
+            timeframeSelector:
+              to: now
+              from_: now-60m
+            timeframeInputType: expression
+          Position:
+            X: 0
+            Y: 5
+        - Name: sustainability
+          Description: Sustainability Validation
+          Action: dynatrace.site.reliability.guardian:validate-guardian-action
+          Input:
+            objectId: !GetAtt SustainabilitySrg.ObjectId
+            executionId: '{{ execution().id }}'
+            expressionTo: '{{ event()[''timeframe.to''] }}'
+            expressionFrom: '{{ event()[''timeframe.from''] }}'
+            timeframeSelector:
+              to: now
+              from_: now-40m
+            timeframeInputType: expression
+          Position:
+            X: 0
+            Y: 6
