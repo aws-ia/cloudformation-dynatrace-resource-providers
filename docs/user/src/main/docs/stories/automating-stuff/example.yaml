@@ -16,10 +16,10 @@ Parameters:
   WarningResponseTime:
     Type: Number
     Default: 400
-  TargetCPUUsage:
+  TargetCpuUsage:
     Type: Number
     Default: 60
-  WarningCPUUsage:
+  WarningCpuUsage:
     Type: Number
     Default: 50
   TargetVulnerability:
@@ -28,10 +28,10 @@ Parameters:
   WarningVulnerability:
     Type: Number
     Default: 7.5
-  TargetOptimizeCPU:
+  TargetOptimizeCpu:
     Type: Number
     Default: 10
-  WarningOptimizeCPU:
+  WarningOptimizeCpu:
     Type: Number
     Default: 15
   TargetOptimizeResponseTime:
@@ -64,10 +64,10 @@ Parameters:
   WarningApdexRating:
     Type: Number
     Default: 95
-  TargetCO2:
+  TargetCo2:
     Type: Number
     Default: 40
-  WarningCO2:
+  WarningCo2:
     Type: Number
     Default: 30
   TargetUtilization:
@@ -103,7 +103,7 @@ Resources:
           Description: Performance Validation
           Action: dynatrace.site.reliability.guardian:validate-guardian-action
           Input:
-            objectId: !GetAtt SustainabilitySRG.ObjectId
+            objectId: !GetAtt SustainabilitySrg.ObjectId
             executionId: '{{ execution().id }}'
             expressionTo: '{{ event()[''timeframe.to''] }}'
             expressionFrom: '{{ event()[''timeframe.from''] }}'
@@ -118,7 +118,7 @@ Resources:
           Description: Security Validation
           Action: dynatrace.site.reliability.guardian:validate-guardian-action
           Input:
-            objectId: !GetAtt SecuritySRG.ObjectId
+            objectId: !GetAtt SecuritySrg.ObjectId
             executionId: '{{ execution().id }}'
             expressionTo: '{{ event()[''timeframe.to''] }}'
             expressionFrom: '{{ event()[''timeframe.from''] }}'
@@ -133,7 +133,7 @@ Resources:
           Description: Cost Optimization Validation
           Action: dynatrace.site.reliability.guardian:validate-guardian-action
           Input:
-            objectId: !GetAtt CostOptimizationSRG.ObjectId
+            objectId: !GetAtt CostOptimizationSrg.ObjectId
             executionId: '{{ execution().id }}'
             expressionTo: '{{ event()[''timeframe.to''] }}'
             expressionFrom: '{{ event()[''timeframe.from''] }}'
@@ -148,7 +148,7 @@ Resources:
           Description: Reliability Validation
           Action: dynatrace.site.reliability.guardian:validate-guardian-action
           Input:
-            objectId: !GetAtt ReliabilitySRG.ObjectId
+            objectId: !GetAtt ReliabilitySrg.ObjectId
             executionId: '{{ execution().id }}'
             expressionTo: '{{ event()[''timeframe.to''] }}'
             expressionFrom: '{{ event()[''timeframe.from''] }}'
@@ -163,7 +163,7 @@ Resources:
           Description: Operation Excellence
           Action: dynatrace.site.reliability.guardian:validate-guardian-action
           Input:
-            objectId: !GetAtt OperationalExcellenceSRG.ObjectId
+            objectId: !GetAtt OperationalExcellenceSrg.ObjectId
             executionId: '{{ execution().id }}'
             expressionTo: '{{ event()[''timeframe.to''] }}'
             expressionFrom: '{{ event()[''timeframe.from''] }}'
@@ -178,7 +178,7 @@ Resources:
           Description: Sustainability Validation
           Action: dynatrace.site.reliability.guardian:validate-guardian-action
           Input:
-            objectId: !GetAtt PerformanceSRG.ObjectId
+            objectId: !GetAtt PerformanceSrg.ObjectId
             executionId: '{{ execution().id }}'
             expressionTo: '{{ event()[''timeframe.to''] }}'
             expressionFrom: '{{ event()[''timeframe.from''] }}'
@@ -204,7 +204,7 @@ Resources:
       EvaluationType: AGGREGATE
       HasAccess: true
 
-  PerformanceSRG:
+  PerformanceSrg:
     Type: Dynatrace::Automation::SiteReliabilityGuardian
     Properties:
       Name: Performance
@@ -228,9 +228,9 @@ Resources:
 #          ObjectiveType: DQL
 #          DqlQuery: 'timeseries val=avg(dt.process.cpu.usage), filter:dt.entity.process_group_instance in ["PROCESS_GROUP_INSTANCE-ID"] | fields avg = arrayAvg(val) // in percentage'
 #          ComparisonOperator: LESS_THAN_OR_EQUAL
-#          Target: !Ref TargetCPUUsage
-#          Warning: !Ref WarningCPUUsage
-  SecuritySRG:
+#          Target: !Ref TargetCpuUsage
+#          Warning: !Ref WarningCpuUsage
+  SecuritySrg:
     Type: Dynatrace::Automation::SiteReliabilityGuardian
     Properties:
       Name: Security
@@ -248,7 +248,7 @@ Resources:
           ComparisonOperator: LESS_THAN_OR_EQUAL
           Target: !Ref TargetVulnerability
           Warning: !Ref WarningVulnerability
-  CostOptimizationSRG:
+  CostOptimizationSrg:
     Type: Dynatrace::Automation::SiteReliabilityGuardian
     Properties:
       Name: Cost Optimization
@@ -264,8 +264,8 @@ Resources:
           ObjectiveType: DQL
           DqlQuery: 'timeseries cpu = avg(dt.containers.cpu.usage_percent), filter: in(dt.containers.name, "CONTAINER-NAME") | fields avg = arrayAvg(cpu) // in percentage'
           ComparisonOperator: GREATER_THAN_OR_EQUAL
-          Target: !Ref TargetOptimizeCPU
-          Warning: !Ref WarningOptimizeCPU
+          Target: !Ref TargetOptimizeCpu
+          Warning: !Ref WarningOptimizeCpu
         - Name: Response Time of the container
           Description: Response time of the container that is subject to CPU reduction objective due to Cost Optimization
           ObjectiveType: DQL
@@ -280,7 +280,7 @@ Resources:
           ComparisonOperator: GREATER_THAN_OR_EQUAL
           Target: !Ref TargetOptimizeDiskSize
           Warning: !Ref WarningOptimizeDiskSize
-  ReliabilitySRG:
+  ReliabilitySrg:
     Type: Dynatrace::Automation::SiteReliabilityGuardian
     Properties:
       Name: Reliability
@@ -305,7 +305,7 @@ Resources:
           ComparisonOperator: LESS_THAN_OR_EQUAL
           Target: !Ref TargetAvailability
           Warning: !Ref WarningAvailability
-  OperationalExcellenceSRG:
+  OperationalExcellenceSrg:
     Type: Dynatrace::Automation::SiteReliabilityGuardian
     Properties:
       Name: Operational Excellence
@@ -323,7 +323,7 @@ Resources:
           ReferenceSlo: !Sub
             - func:slo.${SloName}
             - SloName: !Ref ApdexRatingSloMetricName
-  SustainabilitySRG:
+  SustainabilitySrg:
     Type: Dynatrace::Automation::SiteReliabilityGuardian
     Properties:
       Name: Sustainability
@@ -339,8 +339,8 @@ Resources:
           ObjectiveType: DQL
           DqlQuery: 'fetch bizevents, from: -2h | filter event.type == "carbon.report" | filter dt.entity.host == "HOST-ID" | summarize toDouble(sum(emissions)), alias:total // total CO2e in grams'
           ComparisonOperator: LESS_THAN_OR_EQUAL
-          Target: !Ref TargetCO2
-          Warning: !Ref WarningCO2
+          Target: !Ref TargetCo2
+          Warning: !Ref WarningCo2
         - Name: Under-utilized memory resource validation
           Description: Identify underutilized memory by querying the memory usage with the memory limit in Kubernetes cluster
           ObjectiveType: DQL
