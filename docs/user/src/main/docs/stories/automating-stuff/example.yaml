@@ -37,6 +37,8 @@ Parameters:
 
 Resources:
 
+  # Guardians can optionally reference a separate SLO; here we define one
+  # that will be used by our "operational excellence" guardian (below).
   ApdexRatingSlo:
     Type: Dynatrace::Environment::ServiceLevelObjective
     Properties:
