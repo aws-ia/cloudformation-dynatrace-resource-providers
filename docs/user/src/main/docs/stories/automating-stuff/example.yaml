@@ -10,75 +10,30 @@ Description: |
   does not implement all the alerting defined in https://www.dynatrace.com/news/blog/implementing-aws-well-architected-pillars/
 
 Parameters:
-  TargetResponseTime:
-    Type: Number
-    Default: 500
-  WarningResponseTime:
-    Type: Number
-    Default: 400
-  TargetCpuUsage:
-    Type: Number
-    Default: 60
-  WarningCpuUsage:
-    Type: Number
-    Default: 50
-  TargetVulnerability:
-    Type: Number
-    Default: 8.5
-  WarningVulnerability:
-    Type: Number
-    Default: 7.5
-  TargetOptimizeCpu:
-    Type: Number
-    Default: 10
-  WarningOptimizeCpu:
-    Type: Number
-    Default: 15
-  TargetOptimizeResponseTime:
-    Type: Number
-    Default: 300
-  WarningOptimizeResponseTime:
-    Type: Number
-    Default: 200
-  TargetOptimizeDiskSize:
-    Type: Number
-    Default: 10
-  WarningOptimizeDiskSize:
-    Type: Number
-    Default: 15
-  TargetAvailability:
-    Type: Number
-    Default: 95
-  WarningAvailability:
-    Type: Number
-    Default: 90
-  TargetOutOfMemory:
-    Type: Number
-    Default: 5
-  WarningOutOfMemory:
-    Type: Number
-    Default: 3
-  TargetApdexRating:
-    Type: Number
-    Default: 90
-  WarningApdexRating:
-    Type: Number
-    Default: 95
-  TargetCo2:
-    Type: Number
-    Default: 40
-  WarningCo2:
-    Type: Number
-    Default: 30
-  TargetUtilization:
-    Type: Number
-    Default: 10
-  WarningUtilization:
-    Type: Number
-    Default: 15
-  ApdexRatingSloMetricName:
-    Type: String
-    Default: my_new_real_user_experience_objective
+  TargetResponseTime:          { Type: Number, Default: 500 }
+  WarningResponseTime:         { Type: Number, Default: 400 }
+  TargetCpuUsage:              { Type: Number, Default: 60  }
+  WarningCpuUsage:             { Type: Number, Default: 50  }
+  TargetVulnerability:         { Type: Number, Default: 8.5 }
+  WarningVulnerability:        { Type: Number, Default: 7.5 }
+  TargetOptimizeCpu:           { Type: Number, Default: 10  }
+  WarningOptimizeCpu:          { Type: Number, Default: 15  }
+  TargetOptimizeResponseTime:  { Type: Number, Default: 300 }
+  WarningOptimizeResponseTime: { Type: Number, Default: 200 }
+  TargetOptimizeDiskSize:      { Type: Number, Default: 10  }
+  WarningOptimizeDiskSize:     { Type: Number, Default: 15  }
+  TargetAvailability:          { Type: Number, Default: 95  }
+  WarningAvailability:         { Type: Number, Default: 90  }
+  TargetOutOfMemory:           { Type: Number, Default: 5   }
+  WarningOutOfMemory:          { Type: Number, Default: 3   }
+  TargetApdexRating:           { Type: Number, Default: 90  }
+  WarningApdexRating:          { Type: Number, Default: 95  }
+  TargetCo2:                   { Type: Number, Default: 40  }
+  WarningCo2:                  { Type: Number, Default: 30  }
+  TargetUtilization:           { Type: Number, Default: 10  }
+  WarningUtilization:          { Type: Number, Default: 15  }
+  ApdexRatingSloMetricName:    { Type: String, Default: my_new_real_user_experience_objective }
+
 
 Resources:
 
