@@ -54,11 +54,11 @@ Resources:
               EventType: bizevents
               Query: "event.type == \"guardian.validation.triggered\" \n AND tag.service==\"RELEASE_PRODUCT\" AND tag.stage==\"RELEASE_STAGE\""
       Tasks:
-        - Name: performance
-          Description: Performance Validation
+        - Name: performanceEfficiency
+          Description: Performance Efficiency Validation
           Action: dynatrace.site.reliability.guardian:validate-guardian-action
           Input:
-            objectId: !GetAtt SustainabilitySrg.ObjectId
+            objectId: !GetAtt PerformanceEfficiencySrg.ObjectId
             executionId: '{{ execution().id }}'
             expressionTo: '{{ event()[''timeframe.to''] }}'
             expressionFrom: '{{ event()[''timeframe.from''] }}'
@@ -84,7 +84,7 @@ Resources:
           Position:
             X: 0
             Y: 2
-        - Name: cost
+        - Name: costOptimization
           Description: Cost Optimization Validation
           Action: dynatrace.site.reliability.guardian:validate-guardian-action
           Input:
@@ -114,8 +114,8 @@ Resources:
           Position:
             X: 0
             Y: 4
-        - Name: operation
-          Description: Operation Excellence
+        - Name: operationalExcellence
+          Description: Operation Excellence Validation
           Action: dynatrace.site.reliability.guardian:validate-guardian-action
           Input:
             objectId: !GetAtt OperationalExcellenceSrg.ObjectId
@@ -133,7 +133,7 @@ Resources:
           Description: Sustainability Validation
           Action: dynatrace.site.reliability.guardian:validate-guardian-action
           Input:
-            objectId: !GetAtt PerformanceSrg.ObjectId
+            objectId: !GetAtt SustainabilitySrg.ObjectId
             executionId: '{{ execution().id }}'
             expressionTo: '{{ event()[''timeframe.to''] }}'
             expressionFrom: '{{ event()[''timeframe.from''] }}'
@@ -159,10 +159,10 @@ Resources:
       EvaluationType: AGGREGATE
       HasAccess: true
 
-  PerformanceSrg:
+  PerformanceEfficiencySrg:
     Type: Dynatrace::Automation::SiteReliabilityGuardian
     Properties:
-      Name: Performance
+      Name: Performance Efficiency
       Description: Performance Efficiency Guardian
       Tags:
         - "usecase:sixpillars"
@@ -185,11 +185,12 @@ Resources:
 #          ComparisonOperator: LESS_THAN_OR_EQUAL
 #          Target: !Ref TargetCpuUsage
 #          Warning: !Ref WarningCpuUsage
+
   SecuritySrg:
     Type: Dynatrace::Automation::SiteReliabilityGuardian
     Properties:
       Name: Security
-      Description: Security Efficiency Guardian
+      Description: Security Guardian
       Tags:
         - "usecase:sixpillars"
       Variables:
@@ -203,6 +204,7 @@ Resources:
           ComparisonOperator: LESS_THAN_OR_EQUAL
           Target: !Ref TargetVulnerability
           Warning: !Ref WarningVulnerability
+
   CostOptimizationSrg:
     Type: Dynatrace::Automation::SiteReliabilityGuardian
     Properties:
@@ -235,6 +237,7 @@ Resources:
           ComparisonOperator: GREATER_THAN_OR_EQUAL
           Target: !Ref TargetOptimizeDiskSize
           Warning: !Ref WarningOptimizeDiskSize
+
   ReliabilitySrg:
     Type: Dynatrace::Automation::SiteReliabilityGuardian
     Properties:
@@ -260,6 +263,7 @@ Resources:
           ComparisonOperator: LESS_THAN_OR_EQUAL
           Target: !Ref TargetAvailability
           Warning: !Ref WarningAvailability
+
   OperationalExcellenceSrg:
     Type: Dynatrace::Automation::SiteReliabilityGuardian
     Properties:
@@ -278,6 +282,7 @@ Resources:
           ReferenceSlo: !Sub
             - func:slo.${SloName}
             - SloName: !Ref ApdexRatingSloMetricName
+
   SustainabilitySrg:
     Type: Dynatrace::Automation::SiteReliabilityGuardian
     Properties:
