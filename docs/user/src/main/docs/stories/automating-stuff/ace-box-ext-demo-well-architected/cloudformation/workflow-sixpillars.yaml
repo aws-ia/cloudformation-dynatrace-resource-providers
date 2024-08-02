@@ -1,0 +1,145 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: |
+  AWS Well-Architected Framework: Six Pillars Validation
+
+  This CloudFormation template was manually derived from the Monaco source files in the
+  `ace-box-ext-demo-well-architected` repository 
+  (https://github.com/dynatrace-ace/ace-box-ext-demo-well-architected/tree/main/roles/my-use-case/files/monaco/well_architected_framework_validation)
+  specifically:
+  
+  * workflow/_config_wf_template.yamlx
+  * workflow/wf-sixpillars.json
+
+
+  Note: it is necessary to have deployed the individual guardians for
+        each of the six pillars prior to deploying this template. See
+        how those templates export the necessary IDs with unique names
+        that are references by this template using `!ImportValue`
+
+  Note: this workflow does not include any of the "remediation" tasks
+        described in the Dynatrace example
+
+
+  TODO: reconstruct this template from the Monaco sources
+
+
+Parameters:
+
+  # Application metadata
+  ReleaseProduct:              { Type: String, Default: "simplenode" }
+  ReleaseStage:                { Type: String, Default: "test" }
+  Actor:                       { Type: String }
+  Owner:                       { Type: String }
+
+
+Resources:
+
+  Workflow:
+    Type:          Dynatrace::Automation::Workflow
+    Properties:
+      Actor:       !Ref Actor
+      Owner:       !Ref Owner
+      Title:       ??
+      Description: 
+      IsPrivate:   false
+
+      Trigger:
+        EventTrigger:
+          IsActive: true
+          TriggerConfiguration:
+            Type: "event"
+            Value:
+              EventType: bizevents
+              Query: !Sub
+                - |
+                  event.type == "guardian.validation.triggered"
+                  AND tag.service == "${ReleaseProduct}"
+                  AND tag.stage   == "${ReleaseStage}"
+
+      Tasks:
+
+        - Name:        operationalExcellence
+          Description: Validate WAF pillar 1 - Operational Excellence
+          Action:      dynatrace.site.reliability.guardian:validate-guardian-action
+          Position:    { X: 0, Y: 1 }
+          Input:
+            objectId:       !ImportValue: !Sub ${ReleaseProduct}-${ReleaseStage}-OperationalExcellenceGuardianId
+            executionId:    '{{ execution().id }}'
+            expressionTo:   '{{ event()[''timeframe.to''] }}'
+            expressionFrom: '{{ event()[''timeframe.from''] }}'
+            timeframeInputType: expression
+            timeframeSelector:
+              from_: now-60m
+              to:    now
+
+        - Name:        security
+          Description: Validate WAF pillar 2 - Security
+          Action:      dynatrace.site.reliability.guardian:validate-guardian-action
+          Position:    { X: 0, Y: 2 }
+          Input:
+            objectId:       !ImportValue: !Sub ${ReleaseProduct}-${ReleaseStage}-SecurityGuardianId
+            executionId:    '{{ execution().id }}'
+            expressionTo:   '{{ event()[''timeframe.to''] }}'
+            expressionFrom: '{{ event()[''timeframe.from''] }}'
+            timeframeInputType: expression
+            timeframeSelector:
+              from_: now-60m
+              to:    now
+
+        - Name:        reliability
+          Description: Validate WAF pillar 3 - Reliability
+          Action:      dynatrace.site.reliability.guardian:validate-guardian-action
+          Position:    { X: 0, Y: 3 }
+          Input:
+            objectId:       !ImportValue: !Sub ${ReleaseProduct}-${ReleaseStage}-ReliabilityGuardianId
+            executionId:    '{{ execution().id }}'
+            expressionTo:   '{{ event()[''timeframe.to''] }}'
+            expressionFrom: '{{ event()[''timeframe.from''] }}'
+            timeframeInputType: expression
+            timeframeSelector:
+              from_: now-10m
+              to:    now
+
+        - Name:        performanceEfficiency
+          Description: Validate WAF pillar 4 - Performance Efficiency
+          Action:      dynatrace.site.reliability.guardian:validate-guardian-action
+          Position:    { X: 0, Y: 4 }
+          Input:
+            objectId:       !ImportValue: !Sub ${ReleaseProduct}-${ReleaseStage}-PerformanceEfficiencyGuardianId
+            executionId:    '{{ execution().id }}'
+            expressionTo:   '{{ event()[''timeframe.to''] }}'
+            expressionFrom: '{{ event()[''timeframe.from''] }}'
+            timeframeInputType: expression
+            timeframeSelector:
+              from_: now-10m
+              to:    now
+
+        - Name:        costOptimization
+          Description: Validate WAF pillar 5 - Cost Optimization
+          Action:      dynatrace.site.reliability.guardian:validate-guardian-action
+          Position:    { X: 0, Y: 5 }
+          Input:
+            objectId:       !ImportValue: !Sub ${ReleaseProduct}-${ReleaseStage}-CostOptimizationGuardianId
+            executionId:    '{{ execution().id }}'
+            expressionTo:   '{{ event()[''timeframe.to''] }}'
+            expressionFrom: '{{ event()[''timeframe.from''] }}'
+            timeframeInputType: expression
+            timeframeSelector:
+              from_: now-10m
+              to:    now
+
+        - Name:        sustainability
+          Description: Validate WAF pillar 6 - Sustainability
+          Action:      dynatrace.site.reliability.guardian:validate-guardian-action
+          Position:    { X: 0, Y: 6 }
+          Input:
+            objectId:       !ImportValue: !Sub ${ReleaseProduct}-${ReleaseStage}-SustainabilityGuardianId
+            executionId:    '{{ execution().id }}'
+            expressionTo:   '{{ event()[''timeframe.to''] }}'
+            expressionFrom: '{{ event()[''timeframe.from''] }}'
+            timeframeInputType: expression
+            timeframeSelector:
+              from_: now-40m
+              to:    now

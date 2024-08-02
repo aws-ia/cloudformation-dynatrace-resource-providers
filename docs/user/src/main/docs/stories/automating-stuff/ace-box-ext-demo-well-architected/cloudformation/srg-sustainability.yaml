@@ -1,0 +1,101 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: |
+  AWS Well-Architeced Framework Pillar 6: Sustainability
+
+  This CloudFormation template was manually derived from the Monaco source files in the
+  `ace-box-ext-demo-well-architected` repository 
+  (https://github.com/dynatrace-ace/ace-box-ext-demo-well-architected/tree/main/roles/my-use-case/files/monaco/well_architected_framework_validation)
+  specifically:
+  
+  * srg/sustainability/_config_template.yamlx
+  * srg/sustainability/srg-sustainability.json
+
+
+Parameters:
+
+  # Application metadata
+  ReleaseProduct:              { Type: String,       Default: "simplenode" }
+  ReleaseStage:                { Type: String,       Default: "test" }
+  UseCase:                     { Type: String,       Default: "sixpillars" }
+  Tags:                        { Type: List<String>, Default: [ "usecase:sixpillars" ] }
+
+  # Objective thresholds
+  TargetCarbonIndex:           { Type: Number, Default: 40 }
+  WarningCarbonIndex:          { Type: Number, Default: 30 }
+
+  TargetMemUsage:              { Type: Number, Default:  2 }
+  WarningMemUsage:             { Type: Number, Default: 10 }
+
+
+Resources:
+
+  SustainabilityGuardian:
+    Type:          Dynatrace::Automation::SiteReliabilityGuardian
+    Properties:
+      Name:        !Sub Six Pillars - Sustainability - ${ReleaseProduct}
+      Description: Sustainability Guardian
+      Tags:        !Ref Tags
+      Variables:   [ { Name: "version", Definition: "1.0.0" } ]
+      Objectives:
+
+        # objective - dql - carbon index
+        # TODO: check provision of host id (see description)
+        - Name:               Carbon Emission total for the host running the application
+          Description:        The host id to be referenced as a parameter from the workflow
+          ObjectiveType:      DQL
+          ComparisonOperator: LESS_THAN_OR_EQUAL
+          Target:             !Ref TargetCarbonIndex
+          Warning:            !Ref WarningCarbonIndex
+          DqlQuery: !Sub
+            - |
+              fetch bizevents 
+              | filter event.type == "carbon.report" 
+              | summarize count(), by: { dt.entity.host, emissions }
+              | lookup [ 
+                fetch dt.entity.process_group
+                | fieldsAdd tags
+                | filter(matchesPhrase(tags,"DT_RELEASE_STAGE:${ReleaseStage}"))
+                | filter(matchesPhrase(tags,"DT_RELEASE_PRODUCT:${ReleaseProduct}"))
+                | filter(matchesPhrase(tags,"DT_RELEASE_VERSION:$version"))
+                | sort lifetime  desc
+                | fieldsAdd runs_on[dt.entity.host], alias: hosts
+                | summarize hosts_id = takeFirst(hosts)
+                | expand  hosts_id
+              ], sourceField:dt.entity.host, lookupField:hosts_id
+              | filter isNotNull(lookup.hosts_id)
+              | summarize toDouble(sum(emissions)), alias:total
+
+
+        # objective - timeseries - mem usage
+        - Name:               Under-utilized memory resource validation
+          Description:        Identify underutilized memory by querying the memory usage with the memory limit in Kubernetes cluster
+          ObjectiveType:      DQL
+          ComparisonOperator: GREATER_THAN_OR_EQUAL
+          Target:             !Ref TargetMemUsage
+          Warning:            !Ref WarningMemUsage
+          DqlQuery: !Sub
+            - |
+              timeseries mem=avg(dt.containers.memory.usage_percent), by:dt.entity.host 
+              | lookup [ 
+                fetch dt.entity.process_group
+                | fieldsAdd tags
+                | filter(matchesPhrase(tags,"DT_RELEASE_STAGE:${ReleaseStage}"))
+                | filter(matchesPhrase(tags,"DT_RELEASE_PRODUCT:${ReleaseProduct}"))
+                | filter(matchesPhrase(tags,"DT_RELEASE_VERSION:$version"))
+                | sort lifetime  desc
+                | fieldsAdd runs_on[dt.entity.host], alias: hosts
+                | summarize hosts_id = takeFirst(hosts)
+                | expand  hosts_id
+              ], sourceField:dt.entity.host, lookupField:hosts_id
+              | filter isNotNull(lookup.hosts_id)
+              | fields avg = arrayAvg(mem)
+
+
+Outputs:
+  GuardianId:
+    Description: Object ID of the Sustainability Guardian
+    Value:       !GetAtt SustainabilityGuardian.ObjectId
+    Export:
+      Name:      !Sub ${ReleaseProduct}-${ReleaseStage}-SustainabilityGuardianId

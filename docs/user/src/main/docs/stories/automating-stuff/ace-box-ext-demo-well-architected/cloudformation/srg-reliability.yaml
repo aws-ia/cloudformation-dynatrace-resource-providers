@@ -1,0 +1,118 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: |
+  AWS Well-Architeced Framework Pillar 3: Reliability
+
+  This CloudFormation template was manually derived from the Monaco source files in the
+  `ace-box-ext-demo-well-architected` repository 
+  (https://github.com/dynatrace-ace/ace-box-ext-demo-well-architected/tree/main/roles/my-use-case/files/monaco/well_architected_framework_validation)
+  specifically:
+  
+  * srg/reliability/_config_template.yamlx
+  * srg/reliability/srg-reliability.json
+
+
+Parameters:
+
+  # Application metadata
+  ReleaseProduct:              { Type: String,       Default: "simplenode" }
+  ReleaseStage:                { Type: String,       Default: "test" }
+  UseCase:                     { Type: String,       Default: "sixpillars" }
+  Tags:                        { Type: List<String>, Default: [ "usecase:sixpillars" ] }
+
+  # Objective thresholds
+  TargetSuccessRate:           { Type: Number, Default: 95 }
+  WarningSuccessRate:          { Type: Number, Default: 98 }
+
+  TargetOomKills:              { Type: Number, Default:  5 }
+  WarningOomKills:             { Type: Number, Default:  3 }
+
+
+Resources:
+
+  ReliabilityGuardian:
+    Type:          Dynatrace::Automation::SiteReliabilityGuardian
+    Properties:
+      Name:        !Sub Six Pillars - Reliability - ${ReleaseProduct}
+      Description: Reliability Guardian - Reliability of an application
+      Tags:        !Ref Tags
+      Variables:   [ { Name: "version", Definition: "1.0.0" } ]
+      Objectives:
+
+        # objective - dql - successs rate
+        - Name:               Success Rate - Availability Validation
+          Description:        Success Rate - Availability Validation
+          ObjectiveType:      DQL
+          ComparisonOperator: GREATER_THAN_OR_EQUAL
+          Target:             !Ref TargetSuccessRate
+          Warning:            !Ref WarningSuccessRate
+          DqlQuery: !Sub
+            - |
+              fetch logs
+              | fields pgis = dt.entity.process_group_instance,content
+              | expand pgis
+              | lookup 
+                [ fetch dt.entity.process_group_instance
+                | fieldsAdd tags
+                | filter(matchesPhrase(tags,"DT_RELEASE_STAGE:${ReleaseStage}"))
+                | filter(matchesPhrase(tags,"DT_RELEASE_PRODUCT:${ReleaseProduct}"))
+                | filter(matchesPhrase(tags,"DT_RELEASE_VERSION:$version"))
+                | sort lifetime  desc
+                | summarize pgi_id = takeFirst(id)
+                ], sourceField:pgis, lookupField:pgi_id, prefix:"pg_"
+              | filter isNotNull(pg_pgi_id)
+              | filter pgis == pg_pgi_id
+              | filter matchesPhrase(content, "GET / ")
+              | parse content, "DATA 'status:' SPACE? INT:http_status " 
+              | filter isNotNull(http_status)
+              | fieldsAdd success =  toLong(http_status < 400)
+              | summarize successRate = sum(success)/count() * 100
+
+
+        # objective - timeseries - oom kills
+        - Name:               Out of memory (OOM) kills of a container in the pod
+          Description:        Number of Out of memory (OOM) kills of a container in the pod to be less than 5
+          ObjectiveType:      DQL
+          ComparisonOperator: LESS_THAN_OR_EQUAL
+          Target:             !Ref TargetOomKills
+          Warning:            !Ref WarningOomKills
+          # ContainerName?
+          DqlQuery: !Sub
+            - |
+              data record(default=0,id=1)
+              | lookup [timeseries val=avg(dt.kubernetes.container.oom_kills), 
+              by:{dt.source_entity}
+              | lookup 
+                [ fetch dt.entity.container_group_instance
+                | fields id, pgis=contains[dt.entity.process_group_instance],lifetime
+                | expand pgis
+                | lookup  
+                  [ fetch dt.entity.process_group_instance
+                    | fields id, metadata, tags, lifetime
+                    | filter(matchesPhrase(tags,"DT_RELEASE_STAGE:${ReleaseStage}"))
+                    | filter(matchesPhrase(tags,"DT_RELEASE_PRODUCT:${ReleaseProduct}"))
+                    | filter(matchesPhrase(tags,"DT_RELEASE_VERSION:$version"))
+                    | sort lifetime  desc
+                    | summarize count(), by: {id}
+                  ] , sourceField: pgis , lookupField: id
+                | filter pgis == lookup.id
+                | sort lifetime  desc
+                | summarize latest_container_group_instance_id = takeFirst(id)
+                ], sourceField:dt.source_entity , lookupField:latest_container_group_instance_id
+              | filter dt.source_entity == lookup.latest_container_group_instance_id
+              | fields avg = arrayAvg(val), id=1 ], lookupfield:id, fields:{avg}
+              | fields avg=default+if(isnull(avg),0,else:avg)
+
+
+  # TODO: _config_template.yamlx also contains clauses for:
+  # log ingestion rules
+  # K8s anomaly detection rules
+
+
+Outputs:
+  GuardianId:
+    Description: Object ID of the Reliability Guardian
+    Value:       !GetAtt ReliabilityGuardian.ObjectId
+    Export:
+      Name:      !Sub ${ReleaseProduct}-${ReleaseStage}-ReliabilityGuardianId

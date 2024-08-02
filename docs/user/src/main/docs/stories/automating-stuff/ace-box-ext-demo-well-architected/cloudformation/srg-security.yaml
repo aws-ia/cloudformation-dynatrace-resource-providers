@@ -1,0 +1,74 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: |
+  AWS Well-Architeced Framework Pillar 2: Security
+
+  This CloudFormation template was manually derived from the Monaco source files in the
+  `ace-box-ext-demo-well-architected` repository 
+  (https://github.com/dynatrace-ace/ace-box-ext-demo-well-architected/tree/main/roles/my-use-case/files/monaco/well_architected_framework_validation)
+  specifically:
+  
+  * srg/security/_config_template.yamlx
+  * srg/security/srg-security.json
+
+
+Parameters:
+
+  # Application metadata
+  ReleaseProduct:              { Type: String,       Default: "simplenode" }
+  ReleaseStage:                { Type: String,       Default: "test" }
+  UseCase:                     { Type: String,       Default: "sixpillars" }
+  Tags:                        { Type: List<String>, Default: [ "usecase:sixpillars" ] }
+
+  # Objective thresholds
+  TargetSecurityScore:         { Type: Number, Default: 8.5 }
+  WarningSecurityScore:        { Type: Number, Default: 7.5 }
+
+
+Resources:
+
+  SecurityGuardian:
+    Type:          Dynatrace::Automation::SiteReliabilityGuardian
+    Properties:
+      Name:        !Sub Six Pillars - Security - ${ReleaseProduct}
+      Description: Security Guardian - Perform Security Checks of an application
+      Tags:        !Ref Tags
+      Variables:   [ { Name: "version", Definition: "1.0.0" } ]
+      Objectives:
+
+        # objective - dql - security score
+        - Name:               Runtime Vulnerability Analysis - Davis Security Score
+          Description:        Runtime Vulnerability Analysis for a Process Group Instance - Davis Security Score
+          ObjectiveType:      DQL
+          ComparisonOperator: LESS_THAN_OR_EQUAL
+          Target:             !Ref TargetSecurityScore
+          Warning:            !Ref WarningSecurityScore
+          DqlQuery: !Sub
+            - |
+              fetch events
+              | filter event.kind == "SECURITY_EVENT" 
+              | filter event.type == "VULNERABILITY_STATE_REPORT_EVENT" 
+              | filter event.level == "ENTITY" 
+              | filter vulnerability.resolution.status == "OPEN" 
+              | summarize{
+              sc=takeFirst(vulnerability.davis_assessment.score), 
+              procs=takeFirst(affected_entity.affected_processes.ids)}, by: {vulnerability.id, affected_entity.id} 
+              | lookup
+                [ fetch dt.entity.process_group 
+                | fieldsAdd tags 
+                | filter(matchesPhrase(tags,"DT_RELEASE_STAGE:${ReleaseStage}"))
+                | filter(matchesPhrase(tags,"DT_RELEASE_PRODUCT:${ReleaseProduct}"))
+                | filter(matchesPhrase(tags,"DT_RELEASE_VERSION:$version"))
+                | summarize pg_id = takeFirst(id)
+                ], sourceField:affected_entity.id , lookupField:pg_id 
+              | filter affected_entity.id == toString(lookup.pg_id) 
+              | summarize maxScore=takeMax(sc)
+
+
+Outputs:
+  GuardianId:
+    Description: Object ID of the Security Guardian
+    Value:       !GetAtt SecurityGuardian.ObjectId
+    Export:
+      Name:      !Sub ${ReleaseProduct}-${ReleaseStage}-SecurityGuardianId
