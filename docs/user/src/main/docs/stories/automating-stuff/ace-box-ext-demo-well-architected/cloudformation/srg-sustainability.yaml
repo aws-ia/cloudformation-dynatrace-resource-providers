@@ -5,10 +5,10 @@ Description: |
   AWS Well-Architeced Framework Pillar 6: Sustainability
 
   This CloudFormation template was manually derived from the Monaco source files in the
-  `ace-box-ext-demo-well-architected` repository 
+  `ace-box-ext-demo-well-architected` repository
   (https://github.com/dynatrace-ace/ace-box-ext-demo-well-architected/tree/main/roles/my-use-case/files/monaco/well_architected_framework_validation)
   specifically:
-  
+
   * srg/sustainability/_config_template.yamlx
   * srg/sustainability/srg-sustainability.json
 
@@ -50,10 +50,10 @@ Resources:
           Warning:            !Ref WarningCarbonIndex
           DqlQuery: !Sub
             - |
-              fetch bizevents 
-              | filter event.type == "carbon.report" 
+              fetch bizevents
+              | filter event.type == "carbon.report"
               | summarize count(), by: { dt.entity.host, emissions }
-              | lookup [ 
+              | lookup [
                 fetch dt.entity.process_group
                 | fieldsAdd tags
                 | filter(matchesPhrase(tags,"DT_RELEASE_STAGE:${ReleaseStage}"))
@@ -77,8 +77,8 @@ Resources:
           Warning:            !Ref WarningMemUsage
           DqlQuery: !Sub
             - |
-              timeseries mem=avg(dt.containers.memory.usage_percent), by:dt.entity.host 
-              | lookup [ 
+              timeseries mem=avg(dt.containers.memory.usage_percent), by:dt.entity.host
+              | lookup [
                 fetch dt.entity.process_group
                 | fieldsAdd tags
                 | filter(matchesPhrase(tags,"DT_RELEASE_STAGE:${ReleaseStage}"))

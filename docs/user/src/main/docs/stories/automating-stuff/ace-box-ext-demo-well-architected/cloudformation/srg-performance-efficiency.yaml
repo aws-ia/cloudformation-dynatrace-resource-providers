@@ -5,10 +5,10 @@ Description: |
   AWS Well-Architeced Framework Pillar 4: Performance Efficiency
 
   This CloudFormation template was manually derived from the Monaco source files in the
-  `ace-box-ext-demo-well-architected` repository 
+  `ace-box-ext-demo-well-architected` repository
   (https://github.com/dynatrace-ace/ace-box-ext-demo-well-architected/tree/main/roles/my-use-case/files/monaco/well_architected_framework_validation)
   specifically:
-  
+
   * srg/perf/_config_template.yamlx
   * srg/perf/srg-perf.json
 
@@ -52,17 +52,17 @@ Resources:
           Warning:            !Ref WarningMemUsage
           DqlQuery: !Sub
             - |
-              timeseries val = avg(dt.process.memory.usage), by:{dt.entity.process_group_instance} 
-              | lookup 
-                [ fetch dt.entity.process_group_instance 
+              timeseries val = avg(dt.process.memory.usage), by:{dt.entity.process_group_instance}
+              | lookup
+                [ fetch dt.entity.process_group_instance
                 | filter(matchesPhrase(tags,"DT_RELEASE_STAGE:${ReleaseStage}"))
                 | filter(matchesPhrase(tags,"DT_RELEASE_PRODUCT:${ReleaseProduct}"))
                 | filter(matchesPhrase(tags,"DT_RELEASE_VERSION:$version"))
-                ], sourceField:dt.entity.process_group_instance, lookupField:id 
-              | filterOut isNull(lookup.tags) 
-              | filterOut arrayAvg(val) == 0 
+                ], sourceField:dt.entity.process_group_instance, lookupField:id
+              | filterOut isNull(lookup.tags)
+              | filterOut arrayAvg(val) == 0
               | fields avg = arrayAvg(val)
-              | summarize latest_avg =takeFirst(avg) 
+              | summarize latest_avg =takeFirst(avg)
 
 
         # objective - dql - cpu usage
@@ -74,17 +74,17 @@ Resources:
           Warning:            !Ref WarningCpuUsage
           DqlQuery: !Sub
             - |
-              timeseries val = avg(dt.process.cpu.usage), by:{dt.entity.process_group_instance} 
-              | lookup 
-                [ fetch dt.entity.process_group_instance 
+              timeseries val = avg(dt.process.cpu.usage), by:{dt.entity.process_group_instance}
+              | lookup
+                [ fetch dt.entity.process_group_instance
                 | filter(matchesPhrase(tags,"DT_RELEASE_STAGE:${ReleaseStage}"))
                 | filter(matchesPhrase(tags,"DT_RELEASE_PRODUCT:${ReleaseProduct}"))
                 | filter(matchesPhrase(tags,"DT_RELEASE_VERSION:$version"))
-                ], sourceField:dt.entity.process_group_instance, lookupField:id 
-              | filterOut isNull(lookup.tags) 
-              | filterOut arrayAvg(val) == 0 
+                ], sourceField:dt.entity.process_group_instance, lookupField:id
+              | filterOut isNull(lookup.tags)
+              | filterOut arrayAvg(val) == 0
               | fields avg = arrayAvg(val)
-              | summarize latest_avg =takeFirst(avg)          
+              | summarize latest_avg =takeFirst(avg)
 
 
         # objective - dql - response time
@@ -100,9 +100,9 @@ Resources:
               | filter dt.process.name == "${ReleaseProduct}.${ReleaseStage}"
               | filter k8s.namespace.name == "${ReleaseStage}"
               | filter matchesPhrase(content, "/api/invoke")
-              | parse content, "DATA '/api/' DATA 'rt:' SPACE? FLOAT:responsetime " 
-              | filter isNotNull(responsetime) 
-              | summarize median(responsetime), alias:response_time         
+              | parse content, "DATA '/api/' DATA 'rt:' SPACE? FLOAT:responsetime "
+              | filter isNotNull(responsetime)
+              | summarize median(responsetime), alias:response_time
 
 
 Outputs:

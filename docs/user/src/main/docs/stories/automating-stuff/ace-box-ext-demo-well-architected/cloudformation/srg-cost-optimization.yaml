@@ -5,10 +5,10 @@ Description: |
   AWS Well-Architeced Framework Pillar 5: Cost Optimization
 
   This CloudFormation template was manually derived from the Monaco source files in the
-  `ace-box-ext-demo-well-architected` repository 
+  `ace-box-ext-demo-well-architected` repository
   (https://github.com/dynatrace-ace/ace-box-ext-demo-well-architected/tree/main/roles/my-use-case/files/monaco/well_architected_framework_validation)
   specifically:
-  
+
   * srg/cost/_config_template.yamlx
   * srg/cost/srg-cost.json
 
@@ -39,7 +39,7 @@ Resources:
       Tags:        !Ref Tags
       Variables:   [ { Name: "version", Definition: "1.0.0" } ]
       Objectives:
-        
+
         # objective - timeseries - cpu usage percent
         - Name:               Optimize container CPU limit
           Description: |
@@ -57,7 +57,7 @@ Resources:
                 [ fetch dt.entity.container_group_instance
                 | fields id, pgis=contains[dt.entity.process_group_instance],lifetime
                 | expand pgis
-                | lookup 
+                | lookup
                   [ fetch dt.entity.process_group_instance
                   | fields id, metadata, tags, lifetime
                   | filter(matchesPhrase(tags,"DT_RELEASE_STAGE:${ReleaseStage}"))
@@ -86,14 +86,14 @@ Resources:
           DqlQuery: !Sub
             - |
               timeseries disk_used = avg(dt.host.disk.used.percent) , by:{dt.entity.host}
-              | lookup 
+              | lookup
                 [ fetch dt.entity.host
                 | fields id, pgi=contains[dt.entity.process_group_instance]
                 ], sourceField:dt.entity.host, lookupField:id
               | filter dt.entity.host == lookup.id
               | expand lookup.pgi
               | fieldsAdd pgiStr=toString(lookup.pgi)
-              | lookup 
+              | lookup
                 [ fetch dt.entity.process_group_instance
                 | fieldsAdd tags
                 | filter(matchesPhrase(tags,"DT_RELEASE_STAGE:${ReleaseStage}"))

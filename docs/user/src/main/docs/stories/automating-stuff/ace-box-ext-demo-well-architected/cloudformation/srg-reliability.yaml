@@ -5,10 +5,10 @@ Description: |
   AWS Well-Architeced Framework Pillar 3: Reliability
 
   This CloudFormation template was manually derived from the Monaco source files in the
-  `ace-box-ext-demo-well-architected` repository 
+  `ace-box-ext-demo-well-architected` repository
   (https://github.com/dynatrace-ace/ace-box-ext-demo-well-architected/tree/main/roles/my-use-case/files/monaco/well_architected_framework_validation)
   specifically:
-  
+
   * srg/reliability/_config_template.yamlx
   * srg/reliability/srg-reliability.json
 
@@ -52,7 +52,7 @@ Resources:
               fetch logs
               | fields pgis = dt.entity.process_group_instance,content
               | expand pgis
-              | lookup 
+              | lookup
                 [ fetch dt.entity.process_group_instance
                 | fieldsAdd tags
                 | filter(matchesPhrase(tags,"DT_RELEASE_STAGE:${ReleaseStage}"))
@@ -64,7 +64,7 @@ Resources:
               | filter isNotNull(pg_pgi_id)
               | filter pgis == pg_pgi_id
               | filter matchesPhrase(content, "GET / ")
-              | parse content, "DATA 'status:' SPACE? INT:http_status " 
+              | parse content, "DATA 'status:' SPACE? INT:http_status "
               | filter isNotNull(http_status)
               | fieldsAdd success =  toLong(http_status < 400)
               | summarize successRate = sum(success)/count() * 100
@@ -81,13 +81,13 @@ Resources:
           DqlQuery: !Sub
             - |
               data record(default=0,id=1)
-              | lookup [timeseries val=avg(dt.kubernetes.container.oom_kills), 
+              | lookup [timeseries val=avg(dt.kubernetes.container.oom_kills),
               by:{dt.source_entity}
-              | lookup 
+              | lookup
                 [ fetch dt.entity.container_group_instance
                 | fields id, pgis=contains[dt.entity.process_group_instance],lifetime
                 | expand pgis
-                | lookup  
+                | lookup
                   [ fetch dt.entity.process_group_instance
                     | fields id, metadata, tags, lifetime
                     | filter(matchesPhrase(tags,"DT_RELEASE_STAGE:${ReleaseStage}"))

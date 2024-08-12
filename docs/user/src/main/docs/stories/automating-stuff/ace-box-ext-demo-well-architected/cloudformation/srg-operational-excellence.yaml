@@ -5,10 +5,10 @@ Description: |
   AWS Well-Architeced Framework Pillar 1: Operational Excellence
 
   This CloudFormation template was manually derived from the Monaco source files in the
-  `ace-box-ext-demo-well-architected` repository 
+  `ace-box-ext-demo-well-architected` repository
   (https://github.com/dynatrace-ace/ace-box-ext-demo-well-architected/tree/main/roles/my-use-case/files/monaco/well_architected_framework_validation)
   specifically:
-  
+
   * srg/opr-excel/_config_template.yamlx
   * srg/opr-excel/slo-apdex.json
   * srg/opr-excel/srg-opr-excel.json
@@ -71,8 +71,8 @@ Resources:
 
 
   # TODO: check other DT resources present in _config_template.yamlx:
-  # application-web 
-  # app-detection-rule 
+  # application-web
+  # app-detection-rule
 
 
 Outputs:

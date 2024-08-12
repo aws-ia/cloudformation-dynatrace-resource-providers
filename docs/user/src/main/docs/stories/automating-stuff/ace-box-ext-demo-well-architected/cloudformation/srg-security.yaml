@@ -5,10 +5,10 @@ Description: |
   AWS Well-Architeced Framework Pillar 2: Security
 
   This CloudFormation template was manually derived from the Monaco source files in the
-  `ace-box-ext-demo-well-architected` repository 
+  `ace-box-ext-demo-well-architected` repository
   (https://github.com/dynatrace-ace/ace-box-ext-demo-well-architected/tree/main/roles/my-use-case/files/monaco/well_architected_framework_validation)
   specifically:
-  
+
   * srg/security/_config_template.yamlx
   * srg/security/srg-security.json
 
@@ -47,22 +47,22 @@ Resources:
           DqlQuery: !Sub
             - |
               fetch events
-              | filter event.kind == "SECURITY_EVENT" 
-              | filter event.type == "VULNERABILITY_STATE_REPORT_EVENT" 
-              | filter event.level == "ENTITY" 
-              | filter vulnerability.resolution.status == "OPEN" 
+              | filter event.kind == "SECURITY_EVENT"
+              | filter event.type == "VULNERABILITY_STATE_REPORT_EVENT"
+              | filter event.level == "ENTITY"
+              | filter vulnerability.resolution.status == "OPEN"
               | summarize{
-              sc=takeFirst(vulnerability.davis_assessment.score), 
-              procs=takeFirst(affected_entity.affected_processes.ids)}, by: {vulnerability.id, affected_entity.id} 
+              sc=takeFirst(vulnerability.davis_assessment.score),
+              procs=takeFirst(affected_entity.affected_processes.ids)}, by: {vulnerability.id, affected_entity.id}
               | lookup
-                [ fetch dt.entity.process_group 
-                | fieldsAdd tags 
+                [ fetch dt.entity.process_group
+                | fieldsAdd tags
                 | filter(matchesPhrase(tags,"DT_RELEASE_STAGE:${ReleaseStage}"))
                 | filter(matchesPhrase(tags,"DT_RELEASE_PRODUCT:${ReleaseProduct}"))
                 | filter(matchesPhrase(tags,"DT_RELEASE_VERSION:$version"))
                 | summarize pg_id = takeFirst(id)
-                ], sourceField:affected_entity.id , lookupField:pg_id 
-              | filter affected_entity.id == toString(lookup.pg_id) 
+                ], sourceField:affected_entity.id , lookupField:pg_id
+              | filter affected_entity.id == toString(lookup.pg_id)
               | summarize maxScore=takeMax(sc)
 
 

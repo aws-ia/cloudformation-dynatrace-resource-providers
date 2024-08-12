@@ -5,10 +5,10 @@ Description: |
   AWS Well-Architected Framework: Six Pillars Validation
 
   This CloudFormation template was manually derived from the Monaco source files in the
-  `ace-box-ext-demo-well-architected` repository 
+  `ace-box-ext-demo-well-architected` repository
   (https://github.com/dynatrace-ace/ace-box-ext-demo-well-architected/tree/main/roles/my-use-case/files/monaco/well_architected_framework_validation)
   specifically:
-  
+
   * workflow/_config_wf_template.yamlx
   * workflow/wf-sixpillars.json
 
@@ -42,7 +42,7 @@ Resources:
       Actor:       !Ref Actor
       Owner:       !Ref Owner
       Title:       ??
-      Description: 
+      Description:
       IsPrivate:   false
 
       Trigger:
