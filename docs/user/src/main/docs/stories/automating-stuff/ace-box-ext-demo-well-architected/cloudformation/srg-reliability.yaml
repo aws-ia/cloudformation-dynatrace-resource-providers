@@ -16,10 +16,10 @@ Description: |
 Parameters:
 
   # Application metadata
-  ReleaseProduct:              { Type: String,       Default: "simplenode" }
-  ReleaseStage:                { Type: String,       Default: "test" }
-  UseCase:                     { Type: String,       Default: "sixpillars" }
-  Tags:                        { Type: List<String>, Default: [ "usecase:sixpillars" ] }
+  ReleaseProduct:              { Type: String,             Default: "simplenode" }
+  ReleaseStage:                { Type: String,             Default: "test" }
+  UseCase:                     { Type: String,             Default: "sixpillars" }
+  Tags:                        { Type: CommaDelimitedList, Default: "usecase:sixpillars" }
 
   # Objective thresholds
   TargetSuccessRate:           { Type: Number, Default: 95 }

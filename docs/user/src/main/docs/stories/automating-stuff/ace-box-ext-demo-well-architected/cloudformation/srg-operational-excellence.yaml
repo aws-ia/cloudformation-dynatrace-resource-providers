@@ -17,11 +17,11 @@ Description: |
 Parameters:
 
   # Application metadata
-  ReleaseProduct:              { Type: String,       Default: "simplenode" }
-  ReleaseStage:                { Type: String,       Default: "test" }
-  UseCase:                     { Type: String,       Default: "sixpillars" }
-  ApplicationName:             { Type: String,       Default: "simplenode-test-sixpillars" }
-  Tags:                        { Type: List<String>, Default: [ "usecase:sixpillars" ] }
+  ReleaseProduct:              { Type: String,             Default: "simplenode" }
+  ReleaseStage:                { Type: String,             Default: "test" }
+  UseCase:                     { Type: String,             Default: "sixpillars" }
+  ApplicationName:             { Type: String,             Default: "simplenode-test-sixpillars" }
+  Tags:                        { Type: CommaDelimitedList, Default: "usecase:sixpillars" }
 
   # Objective thresholds
   TargetApdex:                 { Type: Number, Default: 95 }
