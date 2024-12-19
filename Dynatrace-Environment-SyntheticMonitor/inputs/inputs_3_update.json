@@ -1,0 +1,48 @@
+{
+  "Name": "Dynatrace Browser Monitor 2 updated",
+  "FrequencyMin": 5,
+  "Type": "BROWSER",
+  "Enabled": true,
+  "KeyPerformanceMetrics": {
+    "LoadActionKpm": "VISUALLY_COMPLETE",
+    "XhrActionKpm": "VISUALLY_COMPLETE"
+  },
+  "Script": {
+    "Version": "1.0",
+    "Type": "availability",
+    "Configuration": {
+      "Device": {
+        "Mobile": true,
+        "TouchEnabled": true,
+        "Width": 1920,
+        "Height": 1080,
+        "ScaleFactor": 1
+      },
+      "Bandwidth": {
+        "Latency": 100,
+        "Download": 1000,
+        "Upload": 1000
+      }
+    },
+    "Events": [
+      {
+        "Description": "Test",
+        "Type": "navigate",
+        "Url": "http://example.com",
+        "Wait": {
+          "WaitFor": "page_complete"
+        }
+      }
+    ]
+  },
+  "Locations": ["GEOLOCATION-B1B096907F0E9A8C"],
+  "ManuallyAssignedApps": [],
+  "Tags": [
+    {
+      "Source": "AUTO",
+      "Context": "CONTEXTLESS",
+      "Key": "Resource Type",
+      "Value": "Dynatrace::Environment::SyntheticMonitor"
+    }
+  ]
+}

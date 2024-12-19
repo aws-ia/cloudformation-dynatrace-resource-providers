@@ -1,8 +1,8 @@
 {
-  "Name": "Dynatrace name",
+  "Name": "Dynatrace HTTP Monitor updated",
   "FrequencyMin": 10,
   "Type": "HTTP",
-  "Enabled": 123,
+  "Enabled": true,
   "AnomalyDetection": {
     "OutageHandling": {
       "GlobalOutage": true,
@@ -25,9 +25,28 @@
       ]
     }
   },
-  "Script": {},
-  "Locations": [],
+  "Script": {
+    "Version": "1.0",
+    "Requests": [
+      {
+        "Url": "https//:aws.amazon.com",
+        "Method": "GET",
+        "Description": "HTTP request test",
+        "Validation": {
+          "Rules": [
+            {
+              "Type": "httpStatusesList",
+              "Value": "200",
+              "PassIfFound": true
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "Locations": ["GEOLOCATION-B1B096907F0E9A8C"],
   "ManuallyAssignedApps": [],
+  "ManagementZones": [],
   "Tags": [
     {
       "Source": "AUTO",
