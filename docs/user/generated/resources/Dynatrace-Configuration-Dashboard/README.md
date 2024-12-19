@@ -14,7 +14,7 @@ To declare this entity in your AWS CloudFormation template, use the following sy
     "Properties" : {
         "<a href="#metadata" title="Metadata">Metadata</a>" : <i><a href="metadata.md">Metadata</a></i>,
         "<a href="#dashboardmetadata" title="DashboardMetadata">DashboardMetadata</a>" : <i><a href="dashboardmetadata.md">DashboardMetadata</a></i>,
-        "<a href="#tiles" title="Tiles">Tiles</a>" : <i>[ Map, ... ]</i>,
+        "<a href="#tiles" title="Tiles">Tiles</a>" : <i>[ <a href="tile.md">Tile</a>, ... ]</i>,
     }
 }
 </pre>
@@ -27,7 +27,7 @@ Properties:
     <a href="#metadata" title="Metadata">Metadata</a>: <i><a href="metadata.md">Metadata</a></i>
     <a href="#dashboardmetadata" title="DashboardMetadata">DashboardMetadata</a>: <i><a href="dashboardmetadata.md">DashboardMetadata</a></i>
     <a href="#tiles" title="Tiles">Tiles</a>: <i>
-      - Map</i>
+      - <a href="tile.md">Tile</a></i>
 </pre>
 
 ## Properties
@@ -58,7 +58,7 @@ The list of tiles on the dashboard.
 
 _Required_: Yes
 
-_Type_: List of Map
+_Type_: List of <a href="tile.md">Tile</a>
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
@@ -77,4 +77,8 @@ For more information about using the `Fn::GetAtt` intrinsic function, see [Fn::G
 #### Id
 
 The ID of the dashboard.
+
+#### ClusterVersion
+
+Returns the <code>ClusterVersion</code> value.
 

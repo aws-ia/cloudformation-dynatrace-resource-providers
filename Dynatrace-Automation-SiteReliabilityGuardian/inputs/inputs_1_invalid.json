@@ -1,0 +1,62 @@
+{
+  "Name": "Host utilization and saturation 3",
+  "Description": "Protect your infrastructure with resource consumption and saturation objectives for a dedicated host.",
+  "Tags": [
+    "Test:Test",
+    "Test2:Test2"
+  ],
+  "Variables": [],
+  "Objectives": [
+    {
+      "Name": "System load",
+      "Description": "The average number of processes that are being executed by CPU or waiting to be executed by CPU over the last minute.",
+      "ObjectiveType": "DQL",
+      "DqlQuery": "timeseries val = avg(dt.host.cpu.load), filter: in(dt.entity.host, {\"HOST-EE6367D3BE521767\"})\n| fields avg = arrayAvg(val)",
+      "ComparisonOperator": "LESS_THAN_OR_EQUAL",
+      "Target": 50.5,
+      "Warning": 45.5
+    },
+    {
+      "Name": "CPU I/O wait",
+      "Description": "The time when CPU was idle during which the system had an outstanding I/O request",
+      "ObjectiveType": "DQL",
+      "DqlQuery": "timeseries val = avg(dt.host.cpu.iowait), filter: in(dt.entity.host, {\"HOST-EE6367D3BE521767\"})\n| fields avg = arrayAvg(val)",
+      "ComparisonOperator": "LESS_THAN_OR_EQUAL",
+      "Target": 8,
+      "Warning": 5
+    },
+    {
+      "Name": "Memory used",
+      "Description": "The memory used by the host",
+      "ObjectiveType": "DQL",
+      "DqlQuery": "timeseries val = avg(dt.host.memory.used), filter: in(dt.entity.host, {\"HOST-EE6367D3BE521767\"})\n| fields avg = arrayAvg(val)",
+      "ComparisonOperator": "LESS_THAN_OR_EQUAL"
+    },
+    {
+      "Name": "Incoming traffic",
+      "Description": "The incoming traffic in kilobytes per second",
+      "ObjectiveType": "DQL",
+      "DqlQuery": "timeseries val = avg(dt.host.net.nic.traffic_in), filter: in(dt.entity.host, {\"HOST-EE6367D3BE521767\"})\n| fields avg = arrayAvg(val)/8/1000",
+      "ComparisonOperator": "LESS_THAN_OR_EQUAL",
+      "Target": 500,
+      "Warning": 450
+    },
+    {
+      "Name": "Outgoing traffic",
+      "Description": "The outgoing traffic in kilobytes per second",
+      "ObjectiveType": "DQL",
+      "DqlQuery": "timeseries val = avg(dt.host.net.nic.traffic_out), filter: in(dt.entity.host, {\"HOST-EE6367D3BE521767\"})\n| fields avg = arrayAvg(val)/8/1000",
+      "ComparisonOperator": "LESS_THAN_OR_EQUAL",
+      "Target": 500,
+      "Warning": 450
+    },
+    {
+      "Name": "Number of DAVIS problems",
+      "Description": "The detected DAVIS problems",
+      "ObjectiveType": "DQL",
+      "DqlQuery": "fetch events\n| filter event.kind==\"DAVIS_PROBLEM\"\n| filter in(dt.entity.host, {\"HOST-EE6367D3BE521767\"})\n| summarize count()",
+      "ComparisonOperator": "LESS_THAN_OR_EQUAL",
+      "Target": 1
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: |
+  AWS Well-Architeced Framework Pillar 4: Performance Efficiency
+
+  This CloudFormation template was manually derived from the Monaco source files in the
+  `ace-box-ext-demo-well-architected` repository
+  (https://github.com/dynatrace-ace/ace-box-ext-demo-well-architected/tree/main/roles/my-use-case/files/monaco/well_architected_framework_validation)
+  specifically:
+
+  * srg/perf/_config_template.yamlx
+  * srg/perf/srg-perf.json
+
+
+Parameters:
+
+  # Application metadata
+  ReleaseProduct:              { Type: String,             Default: "simplenode" }
+  ReleaseStage:                { Type: String,             Default: "test" }
+  UseCase:                     { Type: String,             Default: "sixpillars" }
+  Tags:                        { Type: CommaDelimitedList, Default: "usecase:sixpillars" }
+
+  # Objective thresholds
+  TargetMemUsage:              { Type: Number, Default: 0.5 }
+  WarningMemUsage:             { Type: Number, Default: 0.4 }
+
+  TargetCpuUsage:              { Type: Number, Default:  10 }
+  WarningCpuUsage:             { Type: Number, Default:   5 }
+
+  TargetRespTime:              { Type: Number, Default: 500 }
+  WarningRespTime:             { Type: Number, Default: 400 }
+
+
+Resources:
+
+  PerformanceEfficiencyGuardian:
+    Type:          Dynatrace::Automation::SiteReliabilityGuardian
+    Properties:
+      Name:        !Sub Six Pillars - Performance Efficiency - ${ReleaseProduct}
+      Description: Performance Guardian - Validate an application performance under high load
+      Tags:        !Ref Tags
+      Variables:   [ { Name: "version", Definition: "1.0.0" } ]
+      Objectives:
+
+        # objective - dql - memory usage
+        - Name:               Validate Process memory Usage
+          Description:        Check if process memory usage is in valid range
+          ObjectiveType:      DQL
+          ComparisonOperator: LESS_THAN_OR_EQUAL
+          Target:             !Ref TargetMemUsage
+          Warning:            !Ref WarningMemUsage
+          DqlQuery: !Sub
+            - |
+              timeseries val = avg(dt.process.memory.usage), by:{dt.entity.process_group_instance}
+              | lookup
+                [ fetch dt.entity.process_group_instance
+                | filter(matchesPhrase(tags,"DT_RELEASE_STAGE:${ReleaseStage}"))
+                | filter(matchesPhrase(tags,"DT_RELEASE_PRODUCT:${ReleaseProduct}"))
+                | filter(matchesPhrase(tags,"DT_RELEASE_VERSION:$version"))
+                ], sourceField:dt.entity.process_group_instance, lookupField:id
+              | filterOut isNull(lookup.tags)
+              | filterOut arrayAvg(val) == 0
+              | fields avg = arrayAvg(val)
+              | summarize latest_avg =takeFirst(avg)
+
+
+        # objective - dql - cpu usage
+        - Name:               Validate Process CPU Usage
+          Description:        Check if process CPU usage is in valid range
+          ObjectiveType:      DQL
+          ComparisonOperator: LESS_THAN_OR_EQUAL
+          Target:             !Ref TargetCpuUsage
+          Warning:            !Ref WarningCpuUsage
+          DqlQuery: !Sub
+            - |
+              timeseries val = avg(dt.process.cpu.usage), by:{dt.entity.process_group_instance}
+              | lookup
+                [ fetch dt.entity.process_group_instance
+                | filter(matchesPhrase(tags,"DT_RELEASE_STAGE:${ReleaseStage}"))
+                | filter(matchesPhrase(tags,"DT_RELEASE_PRODUCT:${ReleaseProduct}"))
+                | filter(matchesPhrase(tags,"DT_RELEASE_VERSION:$version"))
+                ], sourceField:dt.entity.process_group_instance, lookupField:id
+              | filterOut isNull(lookup.tags)
+              | filterOut arrayAvg(val) == 0
+              | fields avg = arrayAvg(val)
+              | summarize latest_avg =takeFirst(avg)
+
+
+        # objective - dql - response time
+        - Name:               Response time validation
+          # no description in srg-perf.json
+          ObjectiveType:      DQL
+          ComparisonOperator: LESS_THAN_OR_EQUAL
+          Target:             !Ref TargetRespTime
+          Warning:            !Ref WarningRespTime
+          DqlQuery: !Sub
+            - |
+              fetch logs
+              | filter dt.process.name == "${ReleaseProduct}.${ReleaseStage}"
+              | filter k8s.namespace.name == "${ReleaseStage}"
+              | filter matchesPhrase(content, "/api/invoke")
+              | parse content, "DATA '/api/' DATA 'rt:' SPACE? FLOAT:responsetime "
+              | filter isNotNull(responsetime)
+              | summarize median(responsetime), alias:response_time
+
+
+Outputs:
+  GuardianId:
+    Description: Object ID of the Performance Efficiency Guardian
+    Value:       !GetAtt PerformanceEfficiencyGuardian.ObjectId
+    Export:
+      Name:      !Sub ${ReleaseProduct}-${ReleaseStage}-PerformanceEfficiencyGuardianId

@@ -1,0 +1,51 @@
+{
+    "Actor": "DYNATRACE_USER_ID",
+    "Title": "CTv1 Workflow",
+    "Description": "Test workflow managed by CTv1 - UPDATED",
+    "IsPrivate": true,
+    "Owner": "DYNATRACE_USER_ID",
+    "Tasks": [
+        {
+            "Name": "http_request_1",
+            "Description": "Issue an HTTP request to any API",
+            "Action": "dynatrace.automations:http-function",
+            "Input": {
+                "url": "https://example.com",
+                "payload": "{}",
+                "failOnResponseCodes": "400-599"
+            },
+            "Position": {
+                "X": 0,
+                "Y": 1
+            }
+        },
+        {
+            "Name": "run_javascript_1",
+            "Description": "Build a custom task running js Code",
+            "Action": "dynatrace.automations:run-javascript",
+            "Input": {
+                "script": "// optional import of sdk modules\n          import { execution } from '@dynatrace-sdk/automation-utils';\n\n          export default async function ({ execution_id }) {\n            // your code goes here\n            // e.g. get the current execution\n            const ex = await execution(execution_id);\n            console.log('Automated script execution on behalf of', ex.trigger);\n            \n            return { triggeredBy: ex.trigger };\n          }"
+            },
+            "Position": {
+                "X": 0,
+                "Y": 2
+            }
+        }
+    ],
+    "Throttle": {
+        "IsLimitHit": false,
+        "LimitEvents": []
+    },
+    "Trigger": {
+        "EventTrigger": {
+            "IsActive": true,
+            "TriggerConfiguration": {
+                "Type": "event",
+                "Value": {
+                    "EventType": "events",
+                    "Query": "matchesPhrase(content, \"error\")"
+                }
+            }
+        }
+    }
+}

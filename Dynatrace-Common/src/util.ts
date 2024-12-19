@@ -1,4 +1,5 @@
 export enum CaseTransformer {
+    CAMEL_TO_PASCAL,
     PASCAL_TO_CAMEL,
     PASCAL_TO_SNAKE,
     SNAKE_TO_CAMEL,
@@ -130,6 +131,8 @@ export class Transformer {
      */
     public transform() {
         switch (this.caseTransformer) {
+            case CaseTransformer.CAMEL_TO_PASCAL:
+                return this.transformObjectKeys(this._object, key => key.substring(0, 1).toLocaleUpperCase() + key.substring(1));
             case CaseTransformer.PASCAL_TO_CAMEL:
                 return this.transformObjectKeys(this._object, key => key.substring(0, 1).toLocaleLowerCase() + key.substring(1));
             case CaseTransformer.PASCAL_TO_SNAKE:

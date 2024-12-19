@@ -12,11 +12,13 @@ To declare this entity in your AWS CloudFormation template, use the following sy
 {
     "Type" : "Dynatrace::Environment::Metric",
     "Properties" : {
-        "<a href="#id" title="Id">Id</a>" : <i>String</i>,
         "<a href="#displayname" title="DisplayName">DisplayName</a>" : <i>String</i>,
         "<a href="#unit" title="Unit">Unit</a>" : <i>String</i>,
         "<a href="#dimensions" title="Dimensions">Dimensions</a>" : <i>[ String, ... ]</i>,
         "<a href="#types" title="Types">Types</a>" : <i>[ String, ... ]</i>,
+        "<a href="#timeseriesid" title="TimeseriesId">TimeseriesId</a>" : <i>String</i>,
+        "<a href="#pluginid" title="PluginId">PluginId</a>" : <i>String</i>,
+        "<a href="#warnings" title="Warnings">Warnings</a>" : <i>[ String, ... ]</i>
     }
 }
 </pre>
@@ -26,28 +28,19 @@ To declare this entity in your AWS CloudFormation template, use the following sy
 <pre>
 Type: Dynatrace::Environment::Metric
 Properties:
-    <a href="#id" title="Id">Id</a>: <i>String</i>
     <a href="#displayname" title="DisplayName">DisplayName</a>: <i>String</i>
     <a href="#unit" title="Unit">Unit</a>: <i>String</i>
     <a href="#dimensions" title="Dimensions">Dimensions</a>: <i>
       - String</i>
     <a href="#types" title="Types">Types</a>: <i>
       - String</i>
+    <a href="#timeseriesid" title="TimeseriesId">TimeseriesId</a>: <i>String</i>
+    <a href="#pluginid" title="PluginId">PluginId</a>: <i>String</i>
+    <a href="#warnings" title="Warnings">Warnings</a>: <i>
+      - String</i>
 </pre>
 
 ## Properties
-
-#### Id
-
-The ID of the metric.
-
-_Required_: No
-
-_Type_: String
-
-_Pattern_: <code>^custom\:[A-Za-z\.\-\_]([A-Za-z0-9]|([\.\-\_][A-Za-z\.\-\_])){1,248}$</code>
-
-_Update requires_: [Replacement](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-replacement)
 
 #### DisplayName
 
@@ -57,9 +50,11 @@ _Required_: No
 
 _Type_: String
 
-_Maximum_: <code>256</code>
+_Minimum Length_: <code>1</code>
 
-_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
+_Maximum Length_: <code>256</code>
+
+_Update requires_: [Replacement](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-replacement)
 
 #### Unit
 
@@ -83,7 +78,7 @@ _Required_: No
 
 _Type_: List of String
 
-_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
+_Update requires_: [Replacement](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-replacement)
 
 #### Types
 
@@ -99,23 +94,51 @@ _Required_: No
 
 _Type_: List of String
 
+_Update requires_: [Replacement](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-replacement)
+
+#### TimeseriesId
+
+The ID of the metric.
+
+_Required_: No
+
+_Type_: String
+
+_Pattern_: <code>^custom\:([a-zA-Z][a-zA-Z0-9]*([\.\_\-][a-zA-Z])?)+$</code>
+
+_Update requires_: [Replacement](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-replacement)
+
+#### PluginId
+
+The ID of the plugin, where the metric originates.
+
+_Required_: No
+
+_Type_: String
+
+_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
+
+#### Warnings
+
+The warnings that occurred while creating the metric.
+
+_Required_: No
+
+_Type_: List of String
+
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
 ## Return Values
 
 ### Ref
 
-When you pass the logical ID of this resource to the intrinsic `Ref` function, Ref returns the Id.
+When you pass the logical ID of this resource to the intrinsic `Ref` function, Ref returns the TimeseriesId.
 
 ### Fn::GetAtt
 
 The `Fn::GetAtt` intrinsic function returns a value for a specified attribute of this type. The following are the available attributes and sample return values.
 
 For more information about using the `Fn::GetAtt` intrinsic function, see [Fn::GetAtt](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getatt.html).
-
-#### TimeseriesId
-
-The ID of the metric.
 
 #### AggregationTypes
 
@@ -128,12 +151,4 @@ The feature, where the metric originates.
 #### DetailedSource
 
 The feature, where the metric originates.
-
-#### PluginId
-
-The ID of the plugin, where the metric originates.
-
-#### Warnings
-
-The warnings that occurred while creating the metric.
 

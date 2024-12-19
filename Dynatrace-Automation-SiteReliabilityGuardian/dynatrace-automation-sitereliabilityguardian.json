@@ -1,0 +1,197 @@
+{
+    "typeName": "Dynatrace::Automation::SiteReliabilityGuardian",
+    "description": "Manage a Site Reliability Guardian in Dynatrace",
+    "sourceUrl": "https://github.com/aws-ia/cloudformation-dynatrace-resource-providers.git",
+    "documentationUrl": "https://github.com/aws-ia/cloudformation-dynatrace-resource-providers",
+    "definitions": {
+        "DynatraceOAuthAccess": {
+            "type": "object",
+            "properties": {
+                "ClientId": {
+                    "description": "oAuth client ID",
+                    "type": "string"
+                },
+                "ClientSecret": {
+                    "description": "oAuth client secret",
+                    "type": "string"
+                },
+                "Endpoint": {
+                    "description": "Endpoint URL to access Dynatrace API",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "ClientId",
+                "ClientSecret",
+                "Endpoint"
+            ],
+            "additionalProperties": false
+        },
+        "Tag": {
+            "type": "string"
+        },
+        "Variable": {
+            "type": "object",
+            "properties": {
+                "Name": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_]+$",
+                    "maxLength": 200,
+                    "minLength": 1
+                },
+                "Definition": {
+                    "type": "string",
+                    "maxLength": 1000,
+                    "minLength": 1
+                }
+            },
+            "required": [
+                "Name",
+                "Definition"
+            ],
+            "additionalProperties": false
+        },
+        "Objective": {
+            "type": "object",
+            "properties": {
+                "Name": {
+                    "type": "string",
+                    "maxLength": 200,
+                    "minLength": 1
+                },
+                "Description": {
+                    "type": "string",
+                    "maxLength": 250,
+                    "minLength": 1
+                },
+                "ObjectiveType": {
+                    "type": "string",
+                    "enum": [
+                        "DQL",
+                        "REFERENCE_SLO"
+                    ]
+                },
+                "ComparisonOperator": {
+                    "type": "string",
+                    "enum": [
+                        "GREATER_THAN_OR_EQUAL",
+                        "LESS_THAN_OR_EQUAL"
+                    ]
+                },
+                "DqlQuery": {
+                    "type": "string",
+                    "maxLength": 2000,
+                    "minLength": 1
+                },
+                "Target": {
+                    "type": "number"
+                },
+                "Warning": {
+                    "type": "number"
+                },
+                "ReferenceSlo": {
+                    "type": "string",
+                    "description": "Please enter the metric key of your desired SLO. SLO metric keys have to start with 'func:slo.'",
+                    "maxLength": 2000,
+                    "minLength": 1
+                }
+            },
+            "required": [
+                "Name",
+                "ObjectiveType",
+                "ComparisonOperator"
+            ],
+            "additionalProperties": false
+        }
+    },
+    "typeConfiguration": {
+        "properties": {
+            "DynatraceOAuthAccess": {
+                "$ref": "#/definitions/DynatraceOAuthAccess"
+            }
+        },
+        "additionalProperties": false,
+        "required": [
+            "DynatraceOAuthAccess"
+        ]
+    },
+    "properties": {
+        "Name": {
+            "description": "The name of the Site Reliability Guardian.",
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1
+        },
+        "Description": {
+            "description": "The description of the Site Reliability Guardian.",
+            "type": "string",
+            "maxLength": 250,
+            "minLength": 1
+        },
+        "Tags": {
+            "description": "Define key/value pairs that further describe this guardian.",
+            "type": "array",
+            "uniqueItems": true,
+            "insertionOrder": false,
+            "items": {
+                "$ref": "#/definitions/Tag"
+            }
+        },
+        "Variables": {
+            "description": "Define variables for dynamically defining DQL queries",
+            "type": "array",
+            "uniqueItems": false,
+            "insertionOrder": false,
+            "items": {
+                "$ref": "#/definitions/Variable"
+            }
+        },
+        "Objectives": {
+            "description": "Objectives are means for measuring the performance, availability, capacity, and security of your services.",
+            "type": "array",
+            "uniqueItems": false,
+            "insertionOrder": false,
+            "items": {
+                "$ref": "#/definitions/Objective"
+            }
+        },
+        "ObjectId": {
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "Name",
+        "Tags",
+        "Variables",
+        "Objectives"
+    ],
+    "primaryIdentifier": [
+        "/properties/ObjectId"
+    ],
+    "readOnlyProperties": [
+        "/properties/ObjectId"
+    ],
+    "handlers": {
+        "create": {
+            "permissions": [
+            ]
+        },
+        "read": {
+            "permissions": [
+            ]
+        },
+        "update": {
+            "permissions": [
+            ]
+        },
+        "delete": {
+            "permissions": [
+            ]
+        },
+        "list": {
+            "permissions": [
+            ]
+        }
+    }
+}

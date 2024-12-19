@@ -9,11 +9,24 @@ import {AbstractBaseResource} from "./abstract-base-resource";
 
 export abstract class AbstractDynatraceResource<ResourceModelType extends BaseModel, GetResponseData, CreateResponseData, UpdateResponseData, TypeConfigurationM> extends AbstractBaseResource<ResourceModelType, GetResponseData, CreateResponseData, UpdateResponseData, AxiosError<ApiErrorResponse>, TypeConfigurationM> {
 
-    processRequestException(e: AxiosError<ApiErrorResponse>, request: ResourceHandlerRequest<ResourceModelType>) {
+    processRequestException(e: AxiosError<ApiErrorResponse | ApiErrorResponse[]>, request: ResourceHandlerRequest<ResourceModelType>) {
         const apiErrorResponse = e.response?.data;
+
+        if (Array.isArray(apiErrorResponse)) {
+            apiErrorResponse.forEach(aer => this.processApiErrorResponse(e, request, aer));
+        }
+        this.processApiErrorResponse(e, request, apiErrorResponse as ApiErrorResponse);
+    }
+
+    processApiErrorResponse(e: AxiosError<ApiErrorResponse | ApiErrorResponse[]>, request: ResourceHandlerRequest<ResourceModelType>, apiErrorResponse: ApiErrorResponse) {
         let errorMessage = apiErrorResponse?.error.message || e.message;
+
         if (Array.isArray(apiErrorResponse?.error.constraintViolations)) {
             errorMessage += '\n' + apiErrorResponse.error.constraintViolations.map(cv => `[PATH: ${cv.path}] ${cv.message}`).join('\n');
+        }
+
+        if (apiErrorResponse?.error.details) {
+            errorMessage += '\n' + Object.entries(apiErrorResponse.error.details).map(([path, detail]) => `[PATH: ${path}] ${JSON.stringify(detail)}`).join('\n');
         }
 
         const status = e.status

@@ -1,7 +1,7 @@
 ### base ignores
 *.zip
 
-
+rpdk.log
 
 
 ### Linux https://github.com/github/gitignore/blob/main/Global/Linux.gitignore
