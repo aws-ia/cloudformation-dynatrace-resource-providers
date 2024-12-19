@@ -1,0 +1,41 @@
+{
+    "Actor": "DYNATRACE_USER_ID",
+    "Owner": "DYNATRACE_USER_ID",
+    "Title": "Well-architected Six Pillars Evaluation - Sustainability",
+    "Description": "Well-architected Six Pillars Workflow with Guardians by Cloudformation",
+    "IsPrivate": false,
+    "Trigger": {
+        "EventTrigger": {
+            "IsActive": true,
+            "TriggerConfiguration": {
+                "Type": "event",
+                "Value": {
+                    "EventType": "bizevents",
+                    "Query": "event.type == \"guardian.validation.triggered\" \n AND tag.service==\"RELEASE_PRODUCT\" AND tag.stage==\"RELEASE_STAGE\""
+                }
+            }
+        }
+    },
+    "Tasks": [
+        {
+            "Name": "sustainability",
+            "Description": "Sustainability Validation",
+            "Action": "dynatrace.site.reliability.guardian:validate-guardian-action",
+            "Input": {
+                "objectId": "SustainabilitySRG.ObjectId",
+                "executionId": "{{ execution().id }}",
+                "expressionTo": "{{ event()['timeframe.to'] }}",
+                "expressionFrom": "{{ event()['timeframe.from'] }}",
+                "timeframeSelector": {
+                    "to": "now",
+                    "from_": "now-40m"
+                },
+                "timeframeInputType": "expression"
+            },
+            "Position": {
+                "X": 0,
+                "Y": 4
+            }
+        }
+    ]
+}

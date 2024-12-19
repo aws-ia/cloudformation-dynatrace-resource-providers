@@ -1,0 +1,700 @@
+{
+  "typeName": "Dynatrace::Automation::Workflow",
+  "description": "The Workflows app is a powerful tool that lets you automatically act on monitoring data",
+  "sourceUrl": "https://docs.dynatrace.com/docs/platform-modules/automations/workflows",
+  "definitions": {
+    "Condition": {
+      "type": "object",
+      "properties": {
+        "Custom": {
+          "type": "string",
+          "description": "A custom condition that needs to be met for the current task to get executed"
+        },
+        "Else": {
+          "type": "string",
+          "description": "Possible values are SKIP and STOP",
+          "enum": [
+            "SKIP",
+            "STOP"
+          ]
+        },
+        "States": {
+          "type": "object",
+          "description": "key/value pairs where the key is the name of another task and the value the status it needs to be for the current task to get executed. Possible values are SUCCESS, ERROR, ANY, OK (Success or Skipped) and NOK (Error or Cancelled)"
+        }
+      },
+      "required": [
+        "States"
+      ],
+      "additionalProperties": false
+    },
+    "CronTrigger": {
+      "type": "object",
+      "properties": {
+        "Type": {
+          "type": "string",
+          "enum": [
+            "cron"
+          ]
+        },
+        "Cron": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Type",
+        "Cron"
+      ],
+      "additionalProperties": false
+    },
+    "DavisEventName": {
+      "type": "object",
+      "properties": {
+        "Match": {
+          "type": "string",
+          "enum": [
+            "Contains",
+            "Equals"
+          ]
+        },
+        "Name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Match",
+        "Name"
+      ],
+      "additionalProperties": false
+    },
+    "DavisEventConfig": {
+      "type": "object",
+      "properties": {
+        "CustomFilters": {
+          "type": "string"
+        },
+        "EntityTags": {
+          "type": "object"
+        },
+        "EntityTagsMatch": {
+          "type": "string",
+          "enum": [
+            "All",
+            "Any"
+          ]
+        },
+        "Names": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DavisEventName"
+          },
+          "insertionOrder": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "DavisEventTrigger": {
+      "type": "object",
+      "properties": {
+        "Type": {
+          "type": "string",
+          "enum": [
+            "davis-event"
+          ]
+        },
+        "Value": {
+          "$ref": "#/definitions/DavisEventConfig"
+        }
+      },
+      "required": [
+        "Type",
+        "Value"
+      ],
+      "additionalProperties": false
+    },
+    "DavisProblemCategories": {
+      "type": "object",
+      "properties": {
+        "Availability": {
+          "type": "boolean"
+        },
+        "Custom": {
+          "type": "boolean"
+        },
+        "Error": {
+          "type": "boolean"
+        },
+        "Info": {
+          "type": "boolean"
+        },
+        "MonitoringUnavailable": {
+          "type": "boolean"
+        },
+        "Resource": {
+          "type": "boolean"
+        },
+        "Slowdown": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "DavisProblemConfig": {
+      "type": "object",
+      "properties": {
+        "Categories": {
+          "$ref": "#/definitions/DavisProblemCategories"
+        },
+        "CustomFilters": {
+          "type": "string"
+        },
+        "EntityTags": {
+          "type": "object"
+        },
+        "EntityTagsMatch": {
+          "type": "string",
+          "enum": [
+            "All",
+            "Any"
+          ]
+        },
+        "OnProblemClose": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "Categories"
+      ],
+      "additionalProperties": false
+    },
+    "DavisProblemTrigger": {
+      "type": "object",
+      "properties": {
+        "Type": {
+          "type": "string",
+          "enum": [
+            "davis-problem"
+          ]
+        },
+        "Value": {
+          "$ref": "#/definitions/DavisProblemConfig"
+        }
+      },
+      "required": [
+        "Type",
+        "Value"
+      ],
+      "additionalProperties": false
+    },
+    "DynatraceOAuthAccess": {
+      "type": "object",
+      "properties": {
+        "ClientId": {
+          "description": "oAuth client ID",
+          "type": "string"
+        },
+        "ClientSecret": {
+          "description": "oAuth client secret",
+          "type": "string"
+        },
+        "Endpoint": {
+          "description": "Endpoint URL to access Dynatrace API",
+          "type": "string"
+        }
+      },
+      "required": [
+        "ClientId",
+        "ClientSecret",
+        "Endpoint"
+      ],
+      "additionalProperties": false
+    },
+    "EventQuery": {
+      "type": "object",
+      "properties": {
+        "EventType": {
+          "type": "string",
+          "enum": [
+            "bizevents",
+            "events"
+          ]
+        },
+        "Query": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Type",
+        "Value"
+      ],
+      "additionalProperties": false
+    },
+    "EventTrigger": {
+      "type": "object",
+      "properties": {
+        "Type": {
+          "type": "string",
+          "enum": [
+            "event"
+          ]
+        },
+        "Value": {
+          "$ref": "#/definitions/EventQuery"
+        }
+      },
+      "required": [
+        "Type",
+        "Value"
+      ],
+      "additionalProperties": false
+    },
+    "EventTriggerConfig": {
+      "type": "object",
+      "description": "If specified the workflow is getting triggered based on events",
+      "additionalProperties": false,
+      "properties": {
+        "Names": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DavisEventName"
+          },
+          "insertionOrder": true
+        },        "Categories": {
+          "$ref": "#/definitions/DavisProblemCategories"
+        },
+        "CustomFilters": {
+          "type": "string"
+        },
+        "EntityTags": {
+          "type": "object"
+        },
+        "EntityTagsMatch": {
+          "type": "string",
+          "enum": [
+            "All",
+            "Any"
+          ]
+        },
+        "OnProblemClose": {
+          "type": "boolean",
+          "default": false
+        },
+        "EventType": {
+          "type": "string",
+          "enum": [
+            "bizevents",
+            "events"
+          ]
+        },
+        "Query": {
+          "type": "string"
+        }
+      }
+    },
+    "EventTriggerRequest": {
+      "type": "object",
+      "properties": {
+        "IsActive": {
+          "type": "boolean",
+          "description": "If specified the workflow is getting triggered based on a schedule"
+        },
+        "TriggerConfiguration": {
+          "type": "object",
+          "properties": {
+            "Type": {
+              "type": "string",
+              "enum": [
+                "davis-event",
+                "davis-problem",
+                "event"
+              ]
+            },
+            "Value": {
+              "$ref": "#/definitions/EventTriggerConfig"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "IntervalTrigger": {
+      "type": "object",
+      "properties": {
+        "BetweenEnd": {
+          "type": "string"
+        },
+        "BetweenStart": {
+          "type": "string"
+        },
+        "IntervalMinutes": {
+          "type": "integer"
+        },
+        "Type": {
+          "type": "string",
+          "enum": [
+            "interval"
+          ]
+        }
+      },
+      "required": [
+        "IntervalMinutes",
+        "Type"
+      ],
+      "additionalProperties": false
+    },
+    "Position": {
+      "type": "object",
+      "description": "Layouting information about the task tile when visualized. If not specified Dynatrace will position the task tiles automatically",
+      "properties": {
+        "X": {
+          "type": "integer",
+          "description": "x-coordinate for layouting"
+        },
+        "Y": {
+          "type": "integer",
+          "description": "y-coordinate for layouting"
+        }
+      },
+      "required": [
+        "X",
+        "Y"
+      ],
+      "additionalProperties": false
+    },
+    "Retry": {
+      "type": "object",
+      "description": "Configure whether to automatically rerun the task on failure. If not specified no retries will be attempted",
+      "properties": {
+        "Count": {
+          "type": "string",
+          "description": "Specifies a maximum number of times that a task can be repeated in case it fails on execution. You can specify either a number between 1 and 99 here or use an expression",
+          "default": "1"
+        },
+        "Delay": {
+          "type": "string",
+          "description": "Specifies a delay in seconds between subsequent task retries. You can specify either a number between 1 and 3600 here or an expression ({{...}})",
+          "default": "1"
+        },
+        "FailedLoopIterationsOnly": {
+          "type": "boolean",
+          "description": "Specifies whether retrying the failed iterations or the whole loop",
+          "default": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "ScheduleFilterParameters": {
+      "type": "object",
+      "properties": {
+        "Count": {
+          "type": "integer",
+          "default": 10
+        },
+        "EarliestStart": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "EarliestStartTime": {
+          "type": "string",
+          "pattern": "\\d{2}:\\d{2}:\\d{2}"
+        },
+        "ExcludeDates": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "insertionOrder": false
+        },
+        "IncludeDates": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "insertionOrder": false
+        },
+        "Until": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ScheduleRequest": {
+      "type": "object",
+      "properties": {
+        "FilterParameters": {
+          "$ref": "#/definitions/ScheduleFilterParameters"
+        },
+        "Input": {
+          "type": "object"
+        },
+        "IsActive": {
+          "type": "boolean"
+        },
+        "NextExecution": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "Rule": {
+          "type": "string"
+        },
+        "Timezone": {
+          "type": "string",
+          "description": "Timezone identifier, e.g. Europe/London"
+        },
+        "Trigger": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/CronTrigger"
+            },
+            {
+              "$ref": "#/definitions/IntervalTrigger"
+            },
+            {
+              "$ref": "#/definitions/TimeTrigger"
+            }
+          ]
+        }
+      },
+      "required": [
+        "Trigger"
+      ],
+      "additionalProperties": false
+    },
+    "Task": {
+      "type": "object",
+      "dependencies": {
+        "WithItems": [
+          "Concurrency"
+        ]
+      },
+      "properties": {
+        "Action": {
+          "type": "string",
+          "description": "Currently known and supported values are dynatrace.automations:http-function, dynatrace.automations:run-javascript and dynatrace.automations:execute-dql-query",
+          "enum": [
+            "dynatrace.automations:http-function",
+            "dynatrace.automations:run-javascript",
+            "dynatrace.automations:execute-dql-query",
+            "dynatrace.site.reliability.guardian:validate-guardian-action"
+          ]
+        },
+        "Active": {
+          "type": "boolean",
+          "description": "Specifies whether a task should be skipped as a no operation or not"
+        },
+        "Concurrency": {
+          "type": "integer",
+          "description": "Required if 'WithItems' is specified. By default loops execute sequentially with concurrency set to 1. You can increase how often it runs in parallel"
+        },
+        "Condition": {
+          "$ref": "#/definitions/Condition"
+        },
+        "Description": {
+          "type": "string",
+          "description": "A description for this task"
+        },
+        "Input": {
+          "type": "object"
+        },
+        "Name": {
+          "type": "string",
+          "description": "The name of the task"
+        },
+        "Position": {
+          "$ref": "#/definitions/Position"
+        },
+        "Retry": {
+          "$ref": "#/definitions/Retry"
+        },
+        "Timeout": {
+          "type": "integer",
+          "description": "Specifies a default task timeout in seconds. 15 * 60 (15min) is used when not set.",
+          "minimum": 1,
+          "maximum": 604800
+        },
+        "WithItems": {
+          "type": "string",
+          "description": "Iterates over items in a list, allowing actions to be executed repeatedly. Example: Specifying item in [1, 2, 3] here will execute the task three times for the numbers 1, 2 and 3 - with the current number available for scripting using the expression {{ _.item }}"
+        }
+      },
+      "required": [
+        "Action",
+        "Name"
+      ],
+      "additionalProperties": false
+    },
+    "ThrottleLimitEvent": {
+      "type": "object",
+      "properties": {
+        "Limit": {
+          "type": "integer"
+        },
+        "TimeLeftInSeconds": {
+          "type": "integer"
+        },
+        "Timestamp": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "Limit",
+        "TimeLeftInSeconds",
+        "Timestamp"
+      ],
+      "additionalProperties": false
+    },
+    "ThrottleRequest": {
+      "type": "object",
+      "properties": {
+        "IsLimitHit": {
+          "type": "boolean"
+        },
+        "LimitEvents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ThrottleLimitEvent"
+          },
+          "insertionOrder": true
+        }
+      },
+      "required": [
+        "IsLimitHit"
+      ],
+      "additionalProperties": false
+    },
+    "TimeTrigger": {
+      "type": "object",
+      "properties": {
+        "Time": {
+          "type": "string"
+        },
+        "Type": {
+          "type": "string",
+          "enum": [
+            "time"
+          ]
+        }
+      },
+      "required": [
+        "Time",
+        "Type"
+      ],
+      "additionalProperties": false
+    },
+    "TriggerRequest": {
+      "type": "object",
+      "description": "Configures how executions of the workflows are getting triggered. If no trigger is specified it means the workflow is getting manually triggered",
+      "properties": {
+        "EventTrigger": {
+          "$ref": "#/definitions/EventTriggerRequest"
+        },
+        "Schedule": {
+          "$ref": "#/definitions/ScheduleRequest"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "typeConfiguration": {
+    "properties": {
+      "DynatraceOAuthAccess": {
+        "$ref": "#/definitions/DynatraceOAuthAccess"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "DynatraceOAuthAccess"
+    ]
+  },
+  "properties": {
+    "Actor": {
+      "type": "string",
+      "description": "The user context the executions of the workflow will happen with"
+    },
+    "Description": {
+      "type": "string",
+      "description": "An optional description for the workflow"
+    },
+    "Id": {
+      "type": "string",
+      "description": "The ID of this resource"
+    },
+    "IsPrivate": {
+      "type": "boolean",
+      "description": "Defines whether this workflow is private to the owner or not",
+      "default": true
+    },
+    "Owner": {
+      "type": "string",
+      "description": "The ID of the owner of this workflow"
+    },
+    "OwnerType": {
+      "type": "string",
+      "enum": [
+        "USER",
+        "GROUP"
+      ]
+    },
+    "SchemaVersion": {
+      "type": "integer"
+    },
+    "Tasks": {
+      "type": "array",
+      "description": "The tasks to run for every execution of this workflow",
+      "items": {
+        "$ref": "#/definitions/Task"
+      },
+      "minItems": 1,
+      "insertionOrder": true
+    },
+    "Throttle": {
+      "$ref": "#/definitions/ThrottleRequest"
+    },
+    "Title": {
+      "type": "string",
+      "description": "The title / name of the workflow"
+    },
+    "Trigger": {
+      "$ref": "#/definitions/TriggerRequest"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "Title",
+    "Tasks"
+  ],
+  "primaryIdentifier": [
+    "/properties/Id"
+  ],
+  "readOnlyProperties": [
+    "/properties/Id",
+    "/properties/OwnerType",
+    "/properties/SchemaVersion"
+  ],
+  "tagging": {
+    "taggable": false
+  },
+  "handlers": {
+    "create": {
+      "permissions": []
+    },
+    "read": {
+      "permissions": []
+    },
+    "update": {
+      "permissions": []
+    },
+    "delete": {
+      "permissions": []
+    },
+    "list": {
+      "permissions": []
+    }
+  }
+}

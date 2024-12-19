@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
-Description: AWS SAM template for the Dynatrace::Environment::ServiceLevelObjective resource type
+Description: AWS SAM template for the Dynatrace::Automation::SiteReliabilityGuardian resource type
 
 Globals:
   Function:
@@ -11,14 +11,14 @@ Resources:
   TestEntrypoint:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: dist/Dynatrace-Environment-ServiceLevelObjective/src/handlers.testEntrypoint
+      Handler: dist/Dynatrace-Automation-SiteReliabilityGuardian/src/handlers.testEntrypoint
       Runtime: nodejs20.x
       CodeUri: ./
 
   TypeFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: dist/Dynatrace-Environment-ServiceLevelObjective/src/handlers.entrypoint
+      Handler: dist/Dynatrace-Automation-SiteReliabilityGuardian/src/handlers.entrypoint
       Runtime: nodejs20.x
       CodeUri: ./
 

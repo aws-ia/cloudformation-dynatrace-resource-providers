@@ -1,0 +1,83 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: |
+  AWS Well-Architeced Framework Pillar 1: Operational Excellence
+
+  This CloudFormation template was manually derived from the Monaco source files in the
+  `ace-box-ext-demo-well-architected` repository
+  (https://github.com/dynatrace-ace/ace-box-ext-demo-well-architected/tree/main/roles/my-use-case/files/monaco/well_architected_framework_validation)
+  specifically:
+
+  * srg/opr-excel/_config_template.yamlx
+  * srg/opr-excel/slo-apdex.json
+  * srg/opr-excel/srg-opr-excel.json
+
+
+Parameters:
+
+  # Application metadata
+  ReleaseProduct:              { Type: String,             Default: "simplenode" }
+  ReleaseStage:                { Type: String,             Default: "test" }
+  UseCase:                     { Type: String,             Default: "sixpillars" }
+  ApplicationName:             { Type: String,             Default: "simplenode-test-sixpillars" }
+  Tags:                        { Type: CommaDelimitedList, Default: "usecase:sixpillars" }
+
+  # Objective thresholds
+  TargetApdex:                 { Type: Number, Default: 95 }
+  WarningApdex:                { Type: Number, Default: 97 }
+
+  TargetSloApdex:              { Type: Number, Default: 80 }
+  WarningSloApdex:             { Type: Number, Default: 85 }
+
+
+Resources:
+
+  ApdexSlo:
+    Type:               Dynatrace::Environment::ServiceLevelObjective
+    Properties:
+      Name:             !Sub ${ReleaseProduct}_${ReleaseStage}_slo_apdex_${UseCase}
+      # no description in slo-apdex.json, and customDescription is null
+      MetricName:       !Sub ${ReleaseProduct}_${ReleaseStage}_slo_apdex_${UseCase}
+      MetricExpression: (100)*(builtin:apps.web.actionCount.category:filter(eq(\"Apdex category\",SATISFIED)):splitBy())/(builtin:apps.web.actionCount.category:splitBy())
+      EvaluationType:   AGGREGATE
+      Filter:           !Sub type("APPLICATION"),entityName.equals("${ApplicationName}")
+      # TODO: investigate evaluationWindow in _config_template.yaml
+      EvaluationWindow: -15m
+      Target:           !Ref TargetApdex
+      Warning:          !Ref WarningApdex
+      # TODO: investigate errorBudgetBurnRate in _config_template.yaml
+
+
+  OperationalExcellenceGuardian:
+    Type:          Dynatrace::Automation::SiteReliabilityGuardian
+    Properties:
+      Name:        !Sub Six Pillars - Operational Excellence - ${ReleaseProduct}
+      Description: Security Guardian - Perform Security Checks of an application
+      Tags:        !Ref Tags
+      Variables:   [ { Name: "version", Definition: "1.0.0" } ]
+      Objectives:
+
+        - Name:               Apdex Rating validation
+          # null description in srg-opr-excel.json
+          ObjectiveType:      REFERENCE_SLO
+          # TODO: check this
+          ReferenceSlo: !Sub
+            - func:slo.${SloName}
+            - SloName: !GetAtt ApdexSlo.Name
+          ComparisonOperator: GREATER_THAN_OR_EQUAL
+          Target:             !Ref TargetSloApdex
+          Warning:            !Ref WarningSloApdex
+
+
+  # TODO: check other DT resources present in _config_template.yamlx:
+  # application-web
+  # app-detection-rule
+
+
+Outputs:
+  GuardianId:
+    Description: Object ID of the Operational Excellence Guardian
+    Value:       !GetAtt OperationalExcellenceGuardian.ObjectId
+    Export:
+      Name:      !Sub ${ReleaseProduct}-${ReleaseStage}-OperationalExcellenceGuardianId

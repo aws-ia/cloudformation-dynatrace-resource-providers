@@ -1,6 +1,4 @@
-# Dynatrace::Environment::SyntheticMonitor ManagementZone
-
-Tag with source of a Dynatrace entity.
+# Dynatrace::Automation::Workflow TimeTrigger
 
 ## Syntax
 
@@ -10,23 +8,21 @@ To declare this entity in your AWS CloudFormation template, use the following sy
 
 <pre>
 {
-    "<a href="#id" title="Id">Id</a>" : <i>String</i>,
-    "<a href="#name" title="Name">Name</a>" : <i>String</i>
+    "<a href="#time" title="Time">Time</a>" : <i>String</i>,
+    "<a href="#type" title="Type">Type</a>" : <i>String</i>
 }
 </pre>
 
 ### YAML
 
 <pre>
-<a href="#id" title="Id">Id</a>: <i>String</i>
-<a href="#name" title="Name">Name</a>: <i>String</i>
+<a href="#time" title="Time">Time</a>: <i>String</i>
+<a href="#type" title="Type">Type</a>: <i>String</i>
 </pre>
 
 ## Properties
 
-#### Id
-
-The ID of the management zone.
+#### Time
 
 _Required_: Yes
 
@@ -34,13 +30,13 @@ _Type_: String
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
-#### Name
-
-The name of the management zone.
+#### Type
 
 _Required_: Yes
 
 _Type_: String
+
+_Allowed Values_: <code>time</code>
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
