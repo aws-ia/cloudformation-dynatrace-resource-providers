@@ -2,7 +2,7 @@
     "artifact_type": "RESOURCE",
     "typeName": "Dynatrace::Configuration::Dashboard",
     "language": "typescript",
-    "runtime": "nodejs14.x",
+    "runtime": "nodejs20.x",
     "entrypoint": "dist/Dynatrace-Configuration-Dashboard/src/handlers.entrypoint",
     "testEntrypoint": "dist/Dynatrace-Configuration-Dashboard/src/handlers.testEntrypoint",
     "settings": {
