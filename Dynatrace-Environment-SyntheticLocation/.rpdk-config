@@ -2,7 +2,7 @@
     "artifact_type": "RESOURCE",
     "typeName": "Dynatrace::Environment::SyntheticLocation",
     "language": "typescript",
-    "runtime": "nodejs14.x",
+    "runtime": "nodejs20.x",
     "entrypoint": "dist/Dynatrace-Environment-SyntheticLocation/src/handlers.entrypoint",
     "testEntrypoint": "dist/Dynatrace-Environment-SyntheticLocation/src/handlers.testEntrypoint",
     "settings": {
