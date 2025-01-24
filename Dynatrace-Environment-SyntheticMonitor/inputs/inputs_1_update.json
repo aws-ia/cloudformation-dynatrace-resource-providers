@@ -1,6 +1,6 @@
 {
-  "Name": "Dynatrace HTTP Monitor updated",
-  "FrequencyMin": 10,
+  "Name": "Dynatrace HTTP Monitor",
+  "FrequencyMin": 5,
   "Type": "HTTP",
   "Enabled": true,
   "AnomalyDetection": {
@@ -29,6 +29,11 @@
     "Version": "1.0",
     "Requests": [
       {
+        "Configuration": {
+          "AcceptAnyCertificate": true,
+          "FollowRedirects": true,
+          "ShouldNotPersistSensitiveData": false
+        },
         "Url": "https//:aws.amazon.com",
         "Method": "GET",
         "Description": "HTTP request test",
@@ -46,6 +51,7 @@
   },
   "Locations": ["GEOLOCATION-B1B096907F0E9A8C"],
   "ManuallyAssignedApps": [],
+  "AutomaticallyAssignedApps": [],
   "ManagementZones": [],
   "Tags": [
     {
@@ -54,5 +60,6 @@
       "Key": "Resource Type",
       "Value": "Dynatrace::Environment::SyntheticMonitor"
     }
-  ]
+  ],
+  "Events": []
 }
