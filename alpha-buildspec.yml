@@ -44,7 +44,7 @@ phases:
       - echo Starting SAM build...
       - sam build --debug TypeFunction
       - echo Debugging cfn submit...
-      - /bin/bash -c npm install --optional && sam build --debug --build-dir /codebuild/output/src1275017046/src/Dynatrace-Environment-SyntheticMonitor/build TypeFunction
+      - /bin/bash -c "npm install --optional && sam build --debug --build-dir /codebuild/output/src1275017046/src/Dynatrace-Environment-SyntheticMonitor/build TypeFunction"
       - cfn submit --dry-run
       - nohup sam local start-lambda &
       - sleep 10
