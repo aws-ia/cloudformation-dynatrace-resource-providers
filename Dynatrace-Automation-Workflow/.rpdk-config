@@ -2,7 +2,7 @@
     "artifact_type": "RESOURCE",
     "typeName": "Dynatrace::Automation::Workflow",
     "language": "typescript",
-    "runtime": "nodejs18.x",
+    "runtime": "nodejs20.x",
     "entrypoint": "dist/Dynatrace-Automation-Workflow/src/handlers.entrypoint",
     "testEntrypoint": "dist/Dynatrace-Automation-Workflow/src/handlers.testEntrypoint",
     "settings": {

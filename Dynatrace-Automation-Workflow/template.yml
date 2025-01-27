@@ -12,13 +12,13 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: dist/Dynatrace-Automation-Workflow/src/handlers.testEntrypoint
-      Runtime: nodejs18.x
+      Runtime: nodejs20.x
       CodeUri: ./
 
   TypeFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: dist/Dynatrace-Automation-Workflow/src/handlers.entrypoint
-      Runtime: nodejs18.x
+      Runtime: nodejs20.x
       CodeUri: ./
 
