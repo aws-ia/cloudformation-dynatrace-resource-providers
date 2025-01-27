@@ -33,9 +33,11 @@ phases:
       - echo Debug SAM build...
       - sam --version
       - which sam
-      - sudo rm -rf $(!!)
+      - ls -l /usr/local/bin/sam
+      - sudo rm -rf /usr/local/bin/sam
+      - sudo rm -rf /usr/local/aws-sam-cli
       - curl https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip -O -L
-      - unzip -q aws-sam-cli-linux-x86_64.zip -d sam-installation
+      - unzip -q -o aws-sam-cli-linux-x86_64.zip -d sam-installation
       - sudo ./sam-installation/install
       - sam --version
       - which sam
