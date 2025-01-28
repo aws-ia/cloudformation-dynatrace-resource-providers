@@ -9,7 +9,10 @@ from botocore.exceptions import ClientError
 def get_secret():
     "Get the secret from secrets manager"
 
+    type_name = os.environ['TYPE_NAME']
     secret_name = "dynatrace-type-configuration"
+    if not type_name == None and "Workflow" in type_name:
+        secret_name = "dynatrace-type-configuration-apps"
     region_name = "us-east-1"
     session = boto3.session.Session()
     client = session.client(

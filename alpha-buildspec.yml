@@ -20,11 +20,21 @@ phases:
 
   build:
     commands:
+      - pip uninstall aws-sam-cli -y
+      - cfn --version
+      - pip show cloudformation-cli-typescript-plugin
+      - pip show cloudformation-cli
+      - pip install cloudformation-cli -U
+      - pip install cloudformation-cli-typescript-plugin -U
+      - pip show cloudformation-cli-typescript-plugin
+      - pip show cloudformation-cli
       - echo Entered the build phase...
       - npm install && npm run build
       - cd $RESOURCE_PATH
       - TYPE_NAME=$(cat .rpdk-config | jq -r .typeName)
       - echo "TYPE_NAME is $TYPE_NAME"
+      - export TYPE_NAME=$TYPE_NAME
+      - printenv TYPE_NAME
       - ./setup.sh
       - cfn validate
       - cfn generate
@@ -56,5 +66,3 @@ artifacts:
   files:
     - $BUILD_FILE_NAME 
   name: extensions-build
-
-

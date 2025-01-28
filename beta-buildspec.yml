@@ -26,6 +26,8 @@ phases:
       - npm install && npm run build
       - cd $RESOURCE_PATH
       - TYPE_NAME=$(cat .rpdk-config | jq -r .typeName)
+      - export TYPE_NAME=$TYPE_NAME
+      - printenv TYPE_NAME
       - ./setup.sh
       - cfn validate
       - cfn generate
