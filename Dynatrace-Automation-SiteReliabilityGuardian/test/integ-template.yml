@@ -1,0 +1,21 @@
+Resources:
+  IntegrationSRG:
+    Type: Dynatrace::Automation::SiteReliabilityGuardian
+    Properties:
+      Name: "Integration test SRG"
+      Description: "Protect your infrastructure with resource consumption and saturation objectives for a dedicated host."
+      Tags: 
+        - "Test:Test"
+      Variables: []
+      Objectives: 
+        - Name: "System load"
+          Description: "The average number of processes that are being executed by CPU or waiting to be executed by CPU over the last minute."
+          ObjectiveType: "DQL"
+          DqlQuery: "timeseries val = avg(dt.host.cpu.load), filter: in(dt.entity.host, {\"HOST-EE6367D3BE521767\"})\n| fields avg = arrayAvg(val)"
+          ComparisonOperator: "LESS_THAN_OR_EQUAL"
+          Target: 50.5,
+          Warning: 45.5
+
+Outputs:
+  WorkflowId:
+    Value: !GetAtt IntegrationSRG.ObjectId
