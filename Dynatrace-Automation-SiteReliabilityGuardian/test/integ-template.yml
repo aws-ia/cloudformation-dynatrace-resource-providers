@@ -13,7 +13,7 @@ Resources:
           ObjectiveType: "DQL"
           DqlQuery: "timeseries val = avg(dt.host.cpu.load), filter: in(dt.entity.host, {\"HOST-EE6367D3BE521767\"})\n| fields avg = arrayAvg(val)"
           ComparisonOperator: "LESS_THAN_OR_EQUAL"
-          Target: 50.5,
+          Target: 50.5
           Warning: 45.5
 
 Outputs:
