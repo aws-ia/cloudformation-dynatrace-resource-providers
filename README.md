@@ -10,9 +10,6 @@ See the [end-user documentation](docs/user/src/main/docs) including:
 There is also [developer documentation](docs/dev) available
 if you are interested in building or contributing.
 
-There is also [developer documentation](docs/dev) available
-if you are interested in building or contributing.
-
 | Resource | Description | Documentation |
 | --- | --- | --- |
 | Dynatrace::Configuration::Dashboard | This resource type manages a [Dynatrace Dashboard][3] | [/Dynatrace-Configuration-Dashboard][4] |
