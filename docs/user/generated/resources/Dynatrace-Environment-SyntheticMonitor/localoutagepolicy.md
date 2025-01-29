@@ -30,7 +30,7 @@ To declare this entity in your AWS CloudFormation template, use the following sy
 
 The number of affected locations to trigger an alert.
 
-_Required_: Yes
+_Required_: No
 
 _Type_: Integer
 
@@ -40,7 +40,7 @@ _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormati
 
 The number of consecutive fails to trigger an alert.
 
-_Required_: Yes
+_Required_: No
 
 _Type_: Integer
 

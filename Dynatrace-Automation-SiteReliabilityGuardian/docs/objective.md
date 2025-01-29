@@ -15,7 +15,8 @@ To declare this entity in your AWS CloudFormation template, use the following sy
     "<a href="#dqlquery" title="DqlQuery">DqlQuery</a>" : <i>String</i>,
     "<a href="#target" title="Target">Target</a>" : <i>Double</i>,
     "<a href="#warning" title="Warning">Warning</a>" : <i>Double</i>,
-    "<a href="#referenceslo" title="ReferenceSlo">ReferenceSlo</a>" : <i>String</i>
+    "<a href="#referenceslo" title="ReferenceSlo">ReferenceSlo</a>" : <i>String</i>,
+    "<a href="#autoadaptivethresholdenabled" title="AutoAdaptiveThresholdEnabled">AutoAdaptiveThresholdEnabled</a>" : <i>Boolean</i>
 }
 </pre>
 
@@ -30,6 +31,7 @@ To declare this entity in your AWS CloudFormation template, use the following sy
 <a href="#target" title="Target">Target</a>: <i>Double</i>
 <a href="#warning" title="Warning">Warning</a>: <i>Double</i>
 <a href="#referenceslo" title="ReferenceSlo">ReferenceSlo</a>: <i>String</i>
+<a href="#autoadaptivethresholdenabled" title="AutoAdaptiveThresholdEnabled">AutoAdaptiveThresholdEnabled</a>: <i>Boolean</i>
 </pre>
 
 ## Properties
@@ -117,6 +119,16 @@ _Type_: String
 _Minimum Length_: <code>1</code>
 
 _Maximum Length_: <code>2000</code>
+
+_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
+
+#### AutoAdaptiveThresholdEnabled
+
+Auto-adaptive thresholds are a dynamic approach to baselining where the reference value for detecting anomalies changes over time. 
+
+_Required_: No
+
+_Type_: Boolean
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 

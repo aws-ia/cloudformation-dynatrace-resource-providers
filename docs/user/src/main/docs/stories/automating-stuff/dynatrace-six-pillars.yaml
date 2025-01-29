@@ -45,10 +45,7 @@ Resources:
       Name:        My new real-user experience objective
       Description: This is an Apdex rating experience SLO
       MetricName:  !Ref ApdexRatingSloMetricName
-      MetricExpression: |
-        (100)
-        * (builtin:apps.web.actionCount.category:filter(eq("Apdex category",SATISFIED)):splitBy())
-        / (builtin:apps.web.actionCount.category:splitBy())
+      MetricExpression: '(100)*(builtin:apps.web.actionCount.category:filter(eq("Apdex category",SATISFIED)):splitBy())/(builtin:apps.web.actionCount.category:splitBy())'
       Timeframe:   -1w
       Filter:      'type("APPLICATION"),entityName.equals("myApplication")'
       Target:      !Ref TargetApdexRating
@@ -126,6 +123,7 @@ Resources:
       Objectives:
         - Name:          Availability validation
           Description:   Success Rate – Availability Validation with Synthetic Monitoring
+          AutoAdaptiveThresholdEnabled: True
           ObjectiveType: DQL
           ComparisonOperator: LESS_THAN_OR_EQUAL
           Target:        !Ref TargetAvailability

@@ -26,7 +26,7 @@ To declare this entity in your AWS CloudFormation template, use the following sy
 
 Alert if all locations are unable to access the web application X times consecutively.
 
-_Required_: Yes
+_Required_: No
 
 _Type_: Integer
 

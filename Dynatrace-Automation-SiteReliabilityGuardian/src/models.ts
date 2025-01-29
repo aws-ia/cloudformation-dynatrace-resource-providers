@@ -174,6 +174,15 @@ export class Objective extends BaseModel {
         }
     )
     referenceSlo?: Optional<string>;
+    @Expose({ name: 'AutoAdaptiveThresholdEnabled' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(Boolean, 'autoAdaptiveThresholdEnabled', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    autoAdaptiveThresholdEnabled?: Optional<boolean>;
 
 }
 

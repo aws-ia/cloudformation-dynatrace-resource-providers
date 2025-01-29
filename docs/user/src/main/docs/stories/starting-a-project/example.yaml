@@ -16,7 +16,7 @@ Resources:
   TimeToCompletionMetric:
     Type: Dynatrace::Environment::Metric
     Properties:
-      Id: custom:kpis.timeToCompletion
+      TimeseriesId: custom:kpis.timeToCompletion
       DisplayName: Average time for a customer to complete the sales process, from cart
       Unit: Second (s)
       Dimensions:
@@ -27,7 +27,7 @@ Resources:
   SuccessCountMetric:
     Type: Dynatrace::Environment::Metric
     Properties:
-      Id: custom:kpis.successCount
+      TimeseriesId: custom:kpis.successCount
       DisplayName: Number of people having something in their cart and completing the sale
       Unit: Count (count)
       Dimensions:
@@ -38,7 +38,7 @@ Resources:
   DropCountMetric:
     Type: Dynatrace::Environment::Metric
     Properties:
-      Id: custom:kpis.dropCount
+      TimeseriesId: custom:kpis.dropCount
       DisplayName: Number of people having something in their cart, to failing to complete the sale
       Unit: Count (count)
       Dimensions:
@@ -81,19 +81,19 @@ Resources:
             - Type: TOTAL
               ValueMs: 100
       Script:
-        version: 1.0
-        requests:
-          - url: https://aws.amazon.com
-            method: GET
-            description: HTTP request test
-            validation:
-              rules:
-                - type: httpStatusesList
-                  value: 500, 400
-                  passIfFound: false
-                - type: httpStatusesList
-                  value: 200, 204, 302
-                  passIfFound: true
+        Version: 1.0
+        Requests:
+          - Url: https://aws.amazon.com
+            Method: GET
+            Description: HTTP request test
+            Validation:
+              Rules:
+                - Type: httpStatusesList
+                  Value: 500, 400
+                  PassIfFound: false
+                - Type: httpStatusesList
+                  Value: 200, 204, 302
+                  PassIfFound: true
       Locations:
         - !Ref ActiveGateLocation
 
@@ -126,54 +126,54 @@ Resources:
           - CloudFormation
           - Dynatrace
       Tiles:
-        - name: Sales failure
-          tileType: SLO
-          configured: true
-          bounds:
-            top: 0
-            left: 0
-            width: 304
-            height: 152
-          tileFilter:
-            timeframe: -1w
-          assignedEntities:
+        - Name: Sales failure
+          TileType: SLO
+          Configured: true
+          Bounds:
+            Top: 0
+            Left: 0
+            Width: 304
+            Height: 152
+          TileFilter:
+            Timeframe: -1w
+          AssignedEntities:
             - !Ref SaleFailureServiceLevelObjective
-          metric: METRICS=true;LEGEND=true;PROBLEMS=true;decimals=10;customTitle=Overall sale failure;
-        - name: Uptime
-          tileType: SYNTHETIC_HTTP_MONITOR
-          configured: true
-          bounds:
-            top: 0
-            left: 304
-            width: 304
-            height: 304
-          assignedEntities:
+          Metric: METRICS=true;LEGEND=true;PROBLEMS=true;decimals=10;customTitle=Overall sale failure;
+        - Name: Uptime
+          TileType: SYNTHETIC_HTTP_MONITOR
+          Configured: true
+          Bounds:
+            Top: 0
+            Left: 304
+            Width: 304
+            Height: 304
+          AssignedEntities:
             - !Ref HealthMonitor
-        - name: Completion time
-          tileType: DATA_EXPLORER
-          configured: true
-          bounds:
-            top: 152
-            left: 0
-            width: 304
-            height: 304
-          customName: Data explorer results
-          queries:
-            - id: A
-              metric: ext:kpis.timeToCompletion
-              timeAggregation: DEFAULT
-              sortBy: DESC
-              limit: 100
-              enabled: true
-          visualConfig:
-            type: GRAPH_CHART
-            global:
-              hideLegend: false
-            rules:
-              - matcher: "A:"
-                properties:
-                  color: DEFAULT
-            axes:
+        - Name: Completion time
+          TileType: DATA_EXPLORER
+          Configured: true
+          Bounds:
+            Top: 152
+            Left: 0
+            Width: 304
+            Height: 304
+          CustomName: Data explorer results
+          Queries:
+            - Id: A
+              Metric: ext:kpis.timeToCompletion
+              TimeAggregation: DEFAULT
+              SortBy: DESC
+              Limit: 100
+              Enabled: true
+          VisualConfig:
+            Type: GRAPH_CHART
+            Global:
+              HideLegend: false
+            Rules:
+              - Matcher: "A:"
+                Properties:
+                  Color: DEFAULT
+            Axes:
               xAxis:
                 displayName: ""
                 visible: true

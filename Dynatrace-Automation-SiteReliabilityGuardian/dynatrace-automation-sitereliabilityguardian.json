@@ -94,6 +94,11 @@
                     "description": "Please enter the metric key of your desired SLO. SLO metric keys have to start with 'func:slo.'",
                     "maxLength": 2000,
                     "minLength": 1
+                },
+                "AutoAdaptiveThresholdEnabled": {
+                    "type": "boolean",
+                    "description": "Auto-adaptive thresholds are a dynamic approach to baselining where the reference value for detecting anomalies changes over time. "
+
                 }
             },
             "required": [

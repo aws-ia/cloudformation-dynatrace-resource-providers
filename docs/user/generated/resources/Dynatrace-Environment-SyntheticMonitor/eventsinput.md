@@ -53,13 +53,13 @@ To declare this entity in your AWS CloudFormation template, use the following sy
 
 #### Type
 
-The type of synthetic event. Depending on the value slected here, different parameters will be considered, see reference for more info: https://docs.dynatrace.com/docs/platform-modules/digital-experience/synthetic-monitoring/browser-monitors/script-mode-for-browser-monitor-configuration
+The type of synthetic event. Depending on the value selected here, different parameters will be considered, see reference for more info: https://docs.dynatrace.com/docs/platform-modules/digital-experience/synthetic-monitoring/browser-monitors/script-mode-for-browser-monitor-configuration
 
 _Required_: No
 
 _Type_: String
 
-_Allowed Values_: <code>navigate</code> | <code>click</code> | <code>tap</code> | <code>javascript</code> | <code>seclectOption</code> | <code>cookie</code> | <code>keystrokes</code>
+_Allowed Values_: <code>navigate</code> | <code>click</code> | <code>tap</code> | <code>javascript</code> | <code>selectOption</code> | <code>cookie</code> | <code>keystrokes</code>
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
