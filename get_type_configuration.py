@@ -13,6 +13,8 @@ def get_secret():
     secret_name = "dynatrace-type-configuration"
     if not type_name == None and "Workflow" in type_name:
         secret_name = "dynatrace-type-configuration-apps"
+    if not type_name == None and "Guardian" in type_name:
+        secret_name = "dynatrace-type-configuration-live"
     region_name = "us-east-1"
     session = boto3.session.Session()
     client = session.client(

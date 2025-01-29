@@ -36,7 +36,7 @@ cfn generate
 # Create the package
 echo "About to run cfn submit --dry-run to create the package"
 echo ""
-cfn submit --dry-run
+cfn submit --dry-run -vv
 echo ""
 
 TYPE_NAME=$(cat .rpdk-config | jq -r .typeName)
