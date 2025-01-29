@@ -24,7 +24,7 @@ class Resource extends AbstractDynatraceResource<ResourceModel, SRGPayload, SRGP
     async get(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<SRGPayload> {
         const response = await this.newOauthClient(typeConfiguration, ["app-engine:apps:run", "settings:objects:read"]).doRequest<SRGPayload>(
             'get',
-            `/api/v2/settings/objects/${model.objectId}`);
+            `/platform/classic/environment-api/v2/settings/objects/${model.objectId}`);
 
         return response.data;
     }
@@ -32,7 +32,7 @@ class Resource extends AbstractDynatraceResource<ResourceModel, SRGPayload, SRGP
     async list(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<ResourceModel[]> {
         return await this.newOauthClient(typeConfiguration, ["app-engine:apps:run", "settings:objects:read"]).paginate<SRGsPayload, ResourceModel>(
             'get',
-            `/api/v2/settings/objects?schemaIds=app:dynatrace.site.reliability.guardian:guardians`,
+            `/platform/classic/environment-api/v2/settings/objects?schemaIds=app:dynatrace.site.reliability.guardian:guardians`,
             pagedResponse => pagedResponse.data
                 ? pagedResponse.data.items.map(srg => this.setModelFrom(model, srg))
                 : []);
@@ -41,7 +41,7 @@ class Resource extends AbstractDynatraceResource<ResourceModel, SRGPayload, SRGP
     async create(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<SRGPayload> {
         const response = await this.newOauthClient(typeConfiguration, ["settings:objects:write", "app-engine:apps:run"]).doRequest<SRGPayload[]>(
             'post',
-            `/api/v2/settings/objects`,
+            `/platform/classic/environment-api/v2/settings/objects`,
             {},
             [{
                 value: Transformer.for(model.toJSON())
@@ -65,7 +65,7 @@ class Resource extends AbstractDynatraceResource<ResourceModel, SRGPayload, SRGP
 
         const response = await this.newOauthClient(typeConfiguration, ["settings:objects:write", "app-engine:apps:run"]).doRequest<SRGPayload>(
             'put',
-            `/api/v2/settings/objects/${model.objectId}`,
+            `/platform/classic/environment-api/v2/settings/objects/${model.objectId}`,
             {},
             body);
         return response.data;
@@ -74,7 +74,7 @@ class Resource extends AbstractDynatraceResource<ResourceModel, SRGPayload, SRGP
     async delete(model: ResourceModel, typeConfiguration?: TypeConfigurationModel): Promise<void> {
         await this.newOauthClient(typeConfiguration, ["settings:objects:write", "app-engine:apps:run"]).doRequest<SRGPayload>(
             'delete',
-            `/api/v2/settings/objects/${model.objectId}`);
+            `/platform/classic/environment-api/v2/settings/objects/${model.objectId}`);
     }
 
     newModel(partial?: any): ResourceModel {
