@@ -22,6 +22,14 @@ phases:
 
   build:
     commands:
+      - pip uninstall aws-sam-cli -y
+      - cfn --version
+      - pip show cloudformation-cli-typescript-plugin
+      - pip show cloudformation-cli
+      - pip install cloudformation-cli -U
+      - pip install cloudformation-cli-typescript-plugin -U
+      - pip show cloudformation-cli-typescript-plugin
+      - pip show cloudformation-cli
       - echo Entered the build phase...
       - npm install && npm run build
       - cd $RESOURCE_PATH
@@ -32,7 +40,18 @@ phases:
       - cfn validate
       - cfn generate
       - npm install && npm run build
-      - cfn submit --set-default
+      - echo Debug SAM build...
+      - sam --version
+      - which sam
+      - ls -l /usr/local/bin/sam
+      - sudo rm -rf /usr/local/bin/sam
+      - sudo rm -rf /usr/local/aws-sam-cli
+      - curl https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip -O -L
+      - unzip -q -o aws-sam-cli-linux-x86_64.zip -d sam-installation
+      - sudo ./sam-installation/install
+      - sam --version
+      - which sam
+      - cfn submit --set-default -vv
       - python ../get_type_configuration.py
       - aws cloudformation set-type-configuration --type RESOURCE --type-name $TYPE_NAME --configuration-alias default --configuration $(cat /root/.cfn-cli/typeConfiguration.json| jq -c "")
       - INTEG_STACK_NAME="integ-$(echo $RESOURCE_PATH | tr '[:upper:]' '[:lower:]')"
@@ -49,5 +68,3 @@ artifacts:
   files:
     - $BUILD_FILE_NAME 
   name: extensions-build
-
-

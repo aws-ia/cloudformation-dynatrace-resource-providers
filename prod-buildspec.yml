@@ -19,6 +19,14 @@ phases:
       - ls
   build:
     commands:
+      - pip uninstall aws-sam-cli -y
+      - cfn --version
+      - pip show cloudformation-cli-typescript-plugin
+      - pip show cloudformation-cli
+      - pip install cloudformation-cli -U
+      - pip install cloudformation-cli-typescript-plugin -U
+      - pip show cloudformation-cli-typescript-plugin
+      - pip show cloudformation-cli
       - echo Entered the build phase...
       - npm install && npm run build
       - cd $RESOURCE_PATH
@@ -26,6 +34,17 @@ phases:
       - ls
       - npm install && npm run build
       - ./setup.sh
+      - echo Debug SAM build...
+      - sam --version
+      - which sam
+      - ls -l /usr/local/bin/sam
+      - sudo rm -rf /usr/local/bin/sam
+      - sudo rm -rf /usr/local/aws-sam-cli
+      - curl https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip -O -L
+      - unzip -q -o aws-sam-cli-linux-x86_64.zip -d sam-installation
+      - sudo ./sam-installation/install
+      - sam --version
+      - which sam
       - ../publish-resource-regions.sh
     finally:
       - cat rpdk.log
