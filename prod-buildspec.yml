@@ -45,6 +45,8 @@ phases:
       - sudo ./sam-installation/install
       - sam --version
       - which sam
+      - export TYPE_NAME=$(cat .rpdk-config | jq -r .typeName)
+      - printenv TYPE_NAME
       - ../publish-resource-regions.sh
     finally:
       - cat rpdk.log
